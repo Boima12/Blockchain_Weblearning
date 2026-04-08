@@ -1,16 +1,19 @@
-# React + Vite
+# Blockchain Weblearning
+- Dự án bài tập lớn cho học phần Chuyên đề Blockchain
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<br> <br> <br>
 
-Currently, two official plugins are available:
+# Cách chạy
+1. Chạy lần lượt các lệnh sau đây trong terminal có directory là project root của Blockchain_Weblearning
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+# Tải các thư viện node liên quan (chỉ cần chạy 1 lần duy nhất)
+npm install
 
-## React Compiler
+# Host chương trình local
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. lên http://localhost:5173/ để xem, xong rồi thì vào terminal Ctrl + C để tắt local host
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+<br> <br> <br>
