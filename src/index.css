@@ -1,0 +1,8 @@
+html, body {
+  margin: 0;  /* body margin issue */
+  padding: 0;
+  height: 100%;
+
+  /* overflow-x: hidden will disable scroll tracking for somereason(not sure why? need more investigate), recommend use the line below inside App.module.css or App.scss */ 
+  /* overflow-x: hidden; */     /* position: fixed; issue */
+}

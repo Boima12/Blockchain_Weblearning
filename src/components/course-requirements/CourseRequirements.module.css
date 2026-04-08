@@ -1,0 +1,17 @@
+.mainContainer {
+    margin-top: 1rem;
+}
+
+.header {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+.requirementsList {
+    list-style: disc;
+}
+
+.requirement {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

@@ -1,0 +1,215 @@
+.nav {
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    background-color: #fff;
+    box-shadow: 0px 3px 5px #c3c2c2;
+    height: 6rem;
+    padding: 0 1rem 0 1rem;
+    z-index: 9999;
+    margin-bottom: 0.3rem;
+
+    top: 0;
+    position: sticky;
+
+    .ul {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+        li.coursesButton button {
+            cursor: pointer;
+        }
+
+        li.profileButton button {
+            display: inline-block;
+
+            width: 5rem;
+            height: 41px;
+            overflow: hidden;
+            cursor: pointer;
+
+            background-color: transparent;
+            border: 1px solid black;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px;
+
+            color: #000;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        li.walletLogoutButton button {
+            display: inline-block;
+
+            width: 11rem;
+            height: 41px;
+            overflow: hidden;
+            cursor: pointer;
+
+            background-color: #000;
+            border: 1px solid black;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px;
+
+            color: #fff;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+
+.coursesButton,
+.profileButton,
+.walletLogoutButton,
+.langButton,
+.teachOnUdemyButton,
+.createCourseButton {
+    /* font-size: 0.8rem !important; */
+    display: none !important;
+}
+
+.menuButton button,
+.searchButton button,
+.cartButton button {
+    display: block;
+    text-align: center;
+    margin: 0 auto 0 auto;
+    background-color: transparent;
+    border: none;
+}
+
+.logo {
+    flex-grow: 2;
+}
+
+.logo img {
+    display: block;
+    width: 5rem;
+}
+
+.nav li {
+    display: flex;
+    justify-content: center;
+    min-width: auto;
+    padding: 0.5rem;
+}
+
+.nav li button {
+    display: flex;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.nav button i:hover {
+    cursor: pointer;
+}
+
+.cartButton i {
+    font-size: 1.2rem;
+}
+
+@media only screen and (min-width: 800px) {
+    .searchButton,
+    .menuButton {
+        display: none !important;
+    }
+
+    .coursesButton,
+    .profileButton,
+    .walletLogoutButton,
+    .langButton {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo {
+        flex-grow: initial;
+    }
+
+    .coursesButton button {
+        border: none;
+        background-color: transparent;
+        padding: 10px;
+    }
+
+    .coursesButton button:hover,
+    .cartButton button:hover,
+    .createCourseButton button:hover {
+        color: #401b9c;
+    }
+
+    .profileButton button:hover {
+        background-color: whitesmoke;
+    }
+
+    .walletLogoutButton button {
+        min-width: 6rem;
+        background-color: #000;
+        color: #fff;
+    }
+
+    .langButton button {
+        font-size: 1.5rem;
+        padding: 10px;
+        background-color: transparent;
+    }
+}
+
+@media only screen and (min-width: 921px) {
+    .cartButton i {
+        font-size: 1.5rem;
+    }
+
+    .teachOnUdemyButton {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .teachOnUdemyButton button {
+        background-color: transparent;
+        border: none;
+        /* font-size: 0.8rem !important; */
+        min-width: 8rem;
+        cursor: pointer;
+    }
+
+    .teachOnUdemyButton button:hover {
+        color: #401b9c;
+    }
+}
+
+@media only screen and (min-width: 1081px) {
+    .createCourseButton {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .createCourseButton button {
+        background-color: transparent;
+        border: none;
+        min-width: 8rem !important;
+        /* font-size: 0.8rem !important; */
+        cursor: pointer;
+    }
+
+    .teachOnUdemyButton button:hover {
+        color: #401b9c;
+    }
+}
