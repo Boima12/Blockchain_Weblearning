@@ -1,7 +1,8 @@
 .main {
-    padding: 3rem;
+  padding: 3rem;
+}
+.main .message {
+  text-align: center;
 }
 
-.message {
-    text-align: center;
-}
+/*# sourceMappingURL=SingleCoursePage.module.css.map */
