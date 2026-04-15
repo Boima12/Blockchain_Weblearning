@@ -2,10 +2,12 @@ import React from 'react';
 import styles from './NavBar.module.css';
 import SearchBar from '../search-bar/SearchBar';
 import { useNavigate } from 'react-router-dom';
+import { formatWalletAddress, getAppState } from '../../utils/appLocalState';
 
 function NavBar() {
 
     const navigate = useNavigate();
+    const walletAddress = getAppState().profile.walletAddress;
 
     return (
         <nav className={styles.nav}>
@@ -34,6 +36,7 @@ function NavBar() {
                     <button
                         type='button'
                         name='create-course-button'
+                        onClick={() => navigate('/create-course')}
                     >
                         Create Course
                     </button>
@@ -43,6 +46,7 @@ function NavBar() {
                     <button
                         type='button'
                         name='profile-button'
+                        onClick={() => navigate('/profile')}
                     >
                         Profile
                     </button>
@@ -52,8 +56,9 @@ function NavBar() {
                     <button
                         type='button'
                         name='wallet-logout-button'
+                        onClick={() => navigate('/profile')}
                     >
-                        Wallet name and logout
+                        {formatWalletAddress(walletAddress)}
                     </button>
                 </li>
             </ul>

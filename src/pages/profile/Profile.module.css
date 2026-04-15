@@ -1,3 +1,328 @@
 
+.main_Profile {
+	min-height: calc(100vh - 6rem);
+	padding: 1.5rem;
+	background: linear-gradient(180deg, #f9f6ff 0%, #ffffff 50%);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-/*# sourceMappingURL=Profile.module.css.map */
+.profileHeader {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.profileIdentityCard {
+	display: flex;
+	gap: 1.5rem;
+	padding: 1.5rem;
+	border: 1px solid #e5def8;
+	border-radius: 1rem;
+	background-color: #ffffff;
+	box-shadow: 0 8px 24px rgba(72, 54, 122, 0.08);
+}
+
+.avatar {
+	width: 4.5rem;
+	min-width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 999px;
+	background-color: #1c1d1f;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.8rem;
+	font-weight: 700;
+}
+
+.identityMeta {
+	flex: 1;
+}
+
+.identityMeta h1 {
+	margin: 0;
+	color: #1c1d1f;
+	font-size: 2rem;
+}
+
+.identityMeta p {
+	margin: 0.35rem 0;
+	color: #53535a;
+}
+
+.identityLabel {
+	text-transform: uppercase;
+	letter-spacing: 0.1rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: #7647ea;
+}
+
+.walletAddress {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.4rem 0.6rem;
+	border-radius: 0.5rem;
+	background-color: #f1eaff;
+	color: #4f358c;
+	font-weight: 600;
+}
+
+.profileActions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.profileActions button,
+.emptyState button,
+.formActions button,
+.actionsRow button {
+	border: 1px solid #1c1d1f;
+	background-color: #fff;
+	color: #1c1d1f;
+	min-height: 2.5rem;
+	padding: 0.5rem 0.9rem;
+	border-radius: 0.5rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: all 0.25s ease;
+}
+
+.profileActions button:hover,
+.emptyState button:hover,
+.formActions button:hover,
+.actionsRow button:hover {
+	transform: translateY(-1px);
+	border-color: #6d42d8;
+	color: #6d42d8;
+}
+
+.statCards {
+	margin-top: 1rem;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+.statCards article {
+	background-color: #fff;
+	border: 1px solid #e9e9f3;
+	border-radius: 0.8rem;
+	padding: 1rem;
+}
+
+.statCards article p {
+	margin: 0;
+	font-size: 0.9rem;
+	color: #5f5f69;
+}
+
+.statCards article h3 {
+	margin: 0.35rem 0 0;
+	font-size: 2rem;
+	color: #1c1d1f;
+}
+
+.editSection,
+.contentSection {
+	max-width: 1200px;
+	margin: 1rem auto 0;
+	background-color: #fff;
+	border-radius: 1rem;
+	border: 1px solid #ecebf4;
+	box-shadow: 0 8px 24px rgba(72, 54, 122, 0.04);
+	padding: 1.25rem;
+}
+
+.editSection h2 {
+	margin: 0 0 1rem;
+}
+
+.editSection form {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.65rem;
+}
+
+.editSection label {
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #30303a;
+}
+
+.editSection input,
+.editSection textarea {
+	border: 1px solid #d6d4e0;
+	border-radius: 0.5rem;
+	min-height: 2.5rem;
+	padding: 0.5rem 0.75rem;
+	font-size: 1rem;
+}
+
+.editSection textarea {
+	min-height: 6rem;
+	resize: vertical;
+}
+
+.editSection input:focus,
+.editSection textarea:focus {
+	outline: 2px solid #a98cf0;
+	border-color: #8b63f6;
+}
+
+.formActions {
+	display: flex;
+	gap: 0.75rem;
+	margin-top: 0.5rem;
+}
+
+.tabBar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	margin-bottom: 1rem;
+}
+
+.tabBar button {
+	border: 1px solid #d8d4e8;
+	background: #f9f8ff;
+	color: #2f3040;
+	min-height: 2.35rem;
+	padding: 0.35rem 0.85rem;
+	border-radius: 999px;
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.activeTab {
+	background: #1c1d1f !important;
+	color: #fff !important;
+	border-color: #1c1d1f !important;
+}
+
+.inactiveTab:hover {
+	border-color: #7f5cdb;
+	color: #5a33c0;
+}
+
+.itemsGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 1rem;
+}
+
+.courseCard {
+	border: 1px solid #e6e6ef;
+	border-radius: 0.9rem;
+	overflow: hidden;
+	background-color: #ffffff;
+}
+
+.courseCard img {
+	width: 100%;
+	display: block;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+}
+
+.courseCardBody {
+	padding: 0.8rem;
+}
+
+.courseCardBody h3 {
+	margin: 0.25rem 0;
+	font-size: 1.05rem;
+	color: #1f2023;
+}
+
+.courseCardBody p {
+	margin: 0.25rem 0;
+	color: #5d5e67;
+	font-size: 0.9rem;
+}
+
+.cardLabel {
+	margin: 0;
+	color: #5c37c4 !important;
+	font-size: 0.75rem !important;
+	text-transform: uppercase;
+	letter-spacing: 0.08rem;
+	font-weight: 700;
+}
+
+.actionsRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.75rem;
+}
+
+.progressRow {
+	margin-top: 0.5rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.progressTrack {
+	flex: 1;
+	height: 0.5rem;
+	border-radius: 999px;
+	background-color: #efecf8;
+	overflow: hidden;
+}
+
+.progressFill {
+	height: 100%;
+	background: linear-gradient(90deg, #6736db 0%, #a971ff 100%);
+}
+
+.emptyState {
+	border: 1px dashed #cfc8e6;
+	border-radius: 0.9rem;
+	padding: 1.2rem;
+	background-color: #fcfbff;
+}
+
+.emptyState h3 {
+	margin: 0;
+	color: #2d2e36;
+}
+
+.emptyState p {
+	margin-top: 0.5rem;
+	margin-bottom: 1rem;
+	color: #5b5d68;
+}
+
+@media only screen and (max-width: 900px) {
+	.profileIdentityCard {
+		flex-direction: column;
+	}
+
+	.profileActions {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.statCards {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.main_Profile {
+		padding: 0.9rem;
+	}
+
+	.editSection,
+	.contentSection,
+	.profileIdentityCard {
+		padding: 0.9rem;
+	}
+
+	.formActions {
+		flex-direction: column;
+	}
+}
