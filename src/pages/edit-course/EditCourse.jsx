@@ -1,22 +1,24 @@
-import styles from './CreateCourse.module.css';
-import { useNavigate } from 'react-router-dom';
-import BasicInfoStep from './components/BasicInfoStep';
-import CurriculumStep from './components/CurriculumStep';
-import PricingStep from './components/PricingStep';
-import ReviewStep from './components/ReviewStep';
-import { STEP_ITEMS } from './createCourseConstants';
-import useCreateCourseWizard from './hooks/useCreateCourseWizard';
+import styles from '../create-course/CreateCourse.module.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import BasicInfoStep from '../create-course/components/BasicInfoStep';
+import CurriculumStep from '../create-course/components/CurriculumStep';
+import PricingStep from '../create-course/components/PricingStep';
+import ReviewStep from '../create-course/components/ReviewStep';
+import { STEP_ITEMS } from '../create-course/createCourseConstants';
+import useEditCourseWizard from './hooks/useEditCourseWizard';
 
-function Co_CreateCourse() {
+function Co_EditCourse() {
     const navigate = useNavigate();
+    const { courseId } = useParams();
 
     const {
+        hasCourse,
+        sourceCourse,
         activeStep,
         draft,
         errors,
         feedback,
         finalPrice,
-        publishedCourseId,
         setActiveStep,
         setErrors,
         setDraftField,
@@ -31,10 +33,9 @@ function Co_CreateCourse() {
         updateLessonField,
         onNext,
         onBack,
-        onSaveDraft,
-        onPublishCourse,
-        onStartNewDraft,
-    } = useCreateCourseWizard();
+        onResetChanges,
+        onSaveChanges,
+    } = useEditCourseWizard(courseId);
 
     const feedbackClass =
         feedback.type === 'error'
@@ -86,18 +87,53 @@ function Co_CreateCourse() {
         return <ReviewStep draft={draft} finalPrice={finalPrice} />;
     };
 
+    if (!hasCourse) {
+        return (
+            <main className={styles.main_CreateCourse}>
+                <section className={styles.wizardShell}>
+                    <div className={styles.wizardHeader}>
+                        <p className={styles.badge}>Edit Course</p>
+                        <h1>Course Not Found</h1>
+                        <p>
+                            This course does not exist in your created course list.
+                        </p>
+                    </div>
+
+                    <footer className={styles.footerActions}>
+                        <div className={styles.leftActions}>
+                            <button
+                                type='button'
+                                className={styles.secondaryButton}
+                                onClick={() => navigate('/profile')}
+                            >
+                                Back to Profile
+                            </button>
+                            <button
+                                type='button'
+                                className={styles.primaryButton}
+                                onClick={() => navigate('/create-course')}
+                            >
+                                Create New Course
+                            </button>
+                        </div>
+                    </footer>
+                </section>
+            </main>
+        );
+    }
+
     return (
         <main className={styles.main_CreateCourse}>
             <section className={styles.wizardShell}>
                 <div className={styles.wizardHeader}>
                     <p className={styles.badge}>Creator Studio</p>
-                    <h1>Create Course Wizard</h1>
+                    <h1>Edit Course Wizard</h1>
                     <p>
-                        Build your course from idea to publish in 4 guided steps.
+                        Editing: <strong>{sourceCourse?.title ?? 'Untitled Course'}</strong> ({sourceCourse?.status ?? 'Draft'})
                     </p>
                 </div>
 
-                <nav className={styles.stepper} aria-label='Create Course Steps'>
+                <nav className={styles.stepper} aria-label='Edit Course Steps'>
                     {STEP_ITEMS.map((stepItem, index) => {
                         const className = [
                             styles.stepItem,
@@ -139,20 +175,10 @@ function Co_CreateCourse() {
                         <button
                             type='button'
                             className={styles.secondaryButton}
-                            onClick={onSaveDraft}
+                            onClick={onResetChanges}
                         >
-                            Save Draft
+                            Reset Changes
                         </button>
-
-                        {publishedCourseId ? (
-                            <button
-                                type='button'
-                                className={styles.secondaryButton}
-                                onClick={onStartNewDraft}
-                            >
-                                Start New Draft
-                            </button>
-                        ) : null}
                     </div>
 
                     <div className={styles.rightActions}>
@@ -186,9 +212,9 @@ function Co_CreateCourse() {
                             <button
                                 type='button'
                                 className={styles.primaryButton}
-                                onClick={onPublishCourse}
+                                onClick={onSaveChanges}
                             >
-                                Publish Course
+                                Save Changes
                             </button>
                         )}
                     </div>
@@ -198,4 +224,4 @@ function Co_CreateCourse() {
     );
 }
 
-export default Co_CreateCourse;
+export default Co_EditCourse;

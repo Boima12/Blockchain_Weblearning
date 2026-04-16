@@ -248,13 +248,20 @@ function Co_Profile() {
                             <h3>{course.title ?? 'Untitled Course'}</h3>
                             <p>Category: {course.category ?? 'Uncategorized'}</p>
                             <p>
-                                Lessons: {getLessonCount(course)} | Price: ${' '}
-                                {Number(course.price ?? 0).toFixed(2)}
+                                Lessons: {getLessonCount(course)} | Price:{' '}
+                                {Number(course.price ?? 0).toFixed(2)}{' '}
+                                {course.token ?? 'MATIC'}
                             </p>
                             <div className={styles.actionsRow}>
                                 <button
                                     type='button'
-                                    onClick={() => navigate('/create-course')}
+                                    onClick={() =>
+                                        navigate(
+                                            course.id
+                                                ? `/edit-course/${course.id}`
+                                                : '/create-course',
+                                        )
+                                    }
                                 >
                                     Edit Course
                                 </button>

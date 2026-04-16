@@ -9,6 +9,7 @@ import SingleCoursePage from './pages/single-course-page/SingleCoursePage';
 import NavBar from './components/nav-bar/NavBar';
 import Co_Profile from './pages/profile/Profile';
 import Co_CreateCourse from './pages/create-course/CreateCourse';
+import Co_EditCourse from './pages/edit-course/EditCourse';
 import Co_LearnCourse from './pages/learn-course/LearnCourse';
 import Co_Certificate from './pages/certificate/Certificate';
 
@@ -33,6 +34,15 @@ createRoot(document.getElementById("root")).render(
                         <>
                             <NavBar />
                             <Co_CreateCourse />
+                        </>
+                    }
+                />
+                <Route
+                    path="/edit-course/:courseId"
+                    element={
+                        <>
+                            <NavBar />
+                            <Co_EditCourse />
                         </>
                     }
                 />
@@ -69,6 +79,15 @@ createRoot(document.getElementById("root")).render(
                         <>
                             <NavBar />
                             <Co_CreateCourse />
+                        </>
+                    }
+                />
+                <Route
+                    path="/Blockchain-Weblearning/edit-course/:courseId"
+                    element={
+                        <>
+                            <NavBar />
+                            <Co_EditCourse />
                         </>
                     }
                 />
