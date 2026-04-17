@@ -1,9 +1,9 @@
 import styles from './Profile.module.css';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import usePublishedCourses from '../../hooks/usePublishedCourses';
 import {
     formatWalletAddress,
-    getAllCourses,
     getAppState,
     updateAppState,
 } from '../../utils/appLocalState';
@@ -58,8 +58,22 @@ function Co_Profile() {
     const [draftProfile, setDraftProfile] = useState(() => ({
         ...getAppState().profile,
     }));
+    const { courses: allCourses, error: catalogError } = usePublishedCourses();
 
-    const allCourses = useMemo(() => getAllCourses(), []);
+    const myPublishedCourses = useMemo(
+        () =>
+            allCourses.filter(
+                (course) =>
+                    String(course?.ownerWalletAddress ?? '') ===
+                    String(appState.profile.walletAddress ?? ''),
+            ),
+        [allCourses, appState.profile.walletAddress],
+    );
+
+    const createdCourses = useMemo(
+        () => [...appState.createdCourses, ...myPublishedCourses],
+        [appState.createdCourses, myPublishedCourses],
+    );
 
     const purchasedCourses = useMemo(
         () =>
@@ -74,9 +88,12 @@ function Co_Profile() {
                     title: itemCourse?.title ?? `Course ${index + 1}`,
                     instructor:
                         itemCourse?.visible_instructors?.[0]?.title ??
+                        itemCourse?.ownerDisplayName ??
                         'Unknown Instructor',
                     thumbnail:
-                        itemCourse?.image_304x171 ?? itemCourse?.image_480x270,
+                        itemCourse?.image_304x171 ??
+                        itemCourse?.thumbnailUrl ??
+                        itemCourse?.image_480x270,
                     enrolledAt: purchaseItem.enrolledAt,
                     progress:
                         appState.learningProgress?.[String(purchaseItem.courseId)]
@@ -216,7 +233,7 @@ function Co_Profile() {
     };
 
     const renderCreatedCourses = () => {
-        if (appState.createdCourses.length === 0) {
+        if (createdCourses.length === 0) {
             return (
                 <div className={styles.emptyState}>
                     <h3>No courses created yet</h3>
@@ -236,7 +253,7 @@ function Co_Profile() {
 
         return (
             <div className={styles.itemsGrid}>
-                {appState.createdCourses.map((course, index) => (
+                {createdCourses.map((course, index) => (
                     <article
                         key={course.id ?? `${course.title}-${index}`}
                         className={styles.courseCard}
@@ -284,7 +301,13 @@ function Co_Profile() {
                     </p>
                     <button
                         type='button'
-                        onClick={() => navigate('/learn-course/8324')}
+                        onClick={() =>
+                            navigate(
+                                allCourses[0]?.id
+                                    ? `/learn-course/${allCourses[0].id}`
+                                    : '/',
+                            )
+                        }
                     >
                         Start Learning
                     </button>
@@ -348,6 +371,10 @@ function Co_Profile() {
     return(
         <main className={styles.main_Profile}>
             <section className={styles.profileHeader}>
+                {catalogError ? (
+                    <p className={styles.catalogError}>can't fetch data from MongoDB</p>
+                ) : null}
+
                 <div className={styles.profileIdentityCard}>
                     <div className={styles.avatar}>
                         {appState.profile.displayName?.[0] ?? 'B'}
@@ -381,7 +408,7 @@ function Co_Profile() {
                 <div className={styles.statCards}>
                     <article>
                         <p>Created Courses</p>
-                        <h3>{appState.createdCourses.length}</h3>
+                        <h3>{createdCourses.length}</h3>
                     </article>
                     <article>
                         <p>Purchased Courses</p>

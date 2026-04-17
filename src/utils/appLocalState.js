@@ -1,16 +1,4 @@
-import coursesJson from '../materials/data.json';
-
 const APP_STORAGE_KEY = 'bwl.frontend.state.v1';
-
-const COURSE_SECTIONS = Object.values(coursesJson?.data ?? {});
-const COURSE_CATALOG = COURSE_SECTIONS.flatMap((section) => section?.items ?? []);
-
-const getSeedPurchases = () =>
-    COURSE_CATALOG.slice(0, 3).map((course, index) => ({
-        courseId: course.id,
-        enrolledAt: new Date(Date.now() - index * 86400000).toISOString(),
-        progress: index === 0 ? 33 : index === 1 ? 12 : 0,
-    }));
 
 const DEFAULT_PROFILE = {
     displayName: 'Blockchain Student',
@@ -22,10 +10,51 @@ const DEFAULT_PROFILE = {
 
 const DEFAULT_APP_STATE = {
     profile: DEFAULT_PROFILE,
+    // Keep local drafts only. Published courses are persisted in MongoDB.
     createdCourses: [],
-    purchasedCourses: getSeedPurchases(),
+    purchasedCourses: [],
     learningProgress: {},
     certificates: [],
+};
+
+const normalizeCreatedCourses = (createdCourses) => {
+    if (!Array.isArray(createdCourses)) {
+        return DEFAULT_APP_STATE.createdCourses;
+    }
+
+    return createdCourses.filter(
+        (course) => String(course?.status ?? 'Draft') !== 'Published',
+    );
+};
+
+const normalizePurchasedCourses = (purchasedCourses) => {
+    if (!Array.isArray(purchasedCourses)) {
+        return DEFAULT_APP_STATE.purchasedCourses;
+    }
+
+    return purchasedCourses
+        .filter((purchaseItem) => purchaseItem?.courseId)
+        .map((purchaseItem) => ({
+            courseId: purchaseItem.courseId,
+            enrolledAt: purchaseItem.enrolledAt ?? new Date().toISOString(),
+            progress: Number(purchaseItem.progress ?? 0),
+        }));
+};
+
+const normalizeLearningProgress = (learningProgress) => {
+    if (!learningProgress || typeof learningProgress !== 'object') {
+        return DEFAULT_APP_STATE.learningProgress;
+    }
+
+    return { ...learningProgress };
+};
+
+const normalizeCertificates = (certificates) => {
+    if (!Array.isArray(certificates)) {
+        return DEFAULT_APP_STATE.certificates;
+    }
+
+    return certificates.filter((certificate) => certificate?.courseId);
 };
 
 const normalizeState = (input = {}) => ({
@@ -33,25 +62,76 @@ const normalizeState = (input = {}) => ({
         ...DEFAULT_PROFILE,
         ...(input.profile ?? {}),
     },
-    createdCourses: Array.isArray(input.createdCourses)
-        ? input.createdCourses
-        : DEFAULT_APP_STATE.createdCourses,
-    purchasedCourses: Array.isArray(input.purchasedCourses)
-        ? input.purchasedCourses
-        : DEFAULT_APP_STATE.purchasedCourses,
-    learningProgress:
-        input.learningProgress && typeof input.learningProgress === 'object'
-            ? input.learningProgress
-            : DEFAULT_APP_STATE.learningProgress,
-    certificates: Array.isArray(input.certificates)
-        ? input.certificates
-        : DEFAULT_APP_STATE.certificates,
+    createdCourses: normalizeCreatedCourses(input.createdCourses),
+    purchasedCourses: normalizePurchasedCourses(input.purchasedCourses),
+    learningProgress: normalizeLearningProgress(input.learningProgress),
+    certificates: normalizeCertificates(input.certificates),
 });
 
-export const getAllCourses = () => COURSE_CATALOG;
+const toCourseIdSet = (catalogCourses = []) =>
+    new Set(
+        catalogCourses
+            .map((course) => String(course?.id ?? '').trim())
+            .filter(Boolean),
+    );
 
-export const getCourseById = (courseId) =>
-    COURSE_CATALOG.find((course) => String(course.id) === String(courseId));
+export const reconcileCatalogLinkedState = (catalogCourses = []) => {
+    const validCourseIds = toCourseIdSet(catalogCourses);
+
+    if (validCourseIds.size === 0) {
+        return getAppState();
+    }
+
+    return updateAppState((currentState) => {
+        const currentPurchased = normalizePurchasedCourses(
+            currentState.purchasedCourses,
+        );
+        const currentLearningProgress = normalizeLearningProgress(
+            currentState.learningProgress,
+        );
+        const currentCertificates = normalizeCertificates(
+            currentState.certificates,
+        );
+
+        const nextPurchased = currentPurchased.filter((purchaseItem) =>
+            validCourseIds.has(String(purchaseItem.courseId)),
+        );
+
+        const nextLearningProgress = Object.entries(currentLearningProgress).reduce(
+            (accumulator, [courseId, value]) => {
+                if (validCourseIds.has(String(courseId))) {
+                    accumulator[courseId] = value;
+                }
+                return accumulator;
+            },
+            {},
+        );
+
+        const nextCertificates = currentCertificates.filter((certificate) =>
+            validCourseIds.has(String(certificate.courseId)),
+        );
+
+        const learningProgressChanged =
+            Object.keys(nextLearningProgress).length !==
+            Object.keys(currentLearningProgress).length;
+
+        const hasChanges =
+            nextPurchased.length !== currentPurchased.length ||
+            nextCertificates.length !== currentCertificates.length ||
+            learningProgressChanged;
+
+        if (!hasChanges) {
+            return currentState;
+        }
+
+        return {
+            ...currentState,
+            purchasedCourses: nextPurchased,
+            learningProgress: nextLearningProgress,
+            certificates: nextCertificates,
+        };
+    });
+};
 
 export const getAppState = () => {
     if (typeof window === 'undefined') {

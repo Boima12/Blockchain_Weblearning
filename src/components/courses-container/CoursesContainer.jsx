@@ -25,7 +25,9 @@ const CoursesContainer = ({courses}) => {
     const safeCourses = Array.isArray(courses) ? courses : [];
 
     const coursesCards = safeCourses
-        .filter((course) => course.title.toLowerCase().includes(searchTerm))
+        .filter((course) =>
+            String(course?.title ?? '').toLowerCase().includes(searchTerm),
+        )
         .map((course) => {
             return (
                 <Card

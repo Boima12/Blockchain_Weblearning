@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import usePublishedCourses from '../../../hooks/usePublishedCourses';
 import { getAppState, updateAppState } from '../../../utils/appLocalState';
 import {
     buildLearningCourseData,
@@ -21,12 +22,17 @@ const getPurchaseProgress = (purchasedCourses, courseIdKey) =>
 
 function useLearnCoursePlayer(courseId) {
     const courseIdKey = String(courseId ?? '');
+    const {
+        courses: catalogCourses,
+        isLoading: isCatalogLoading,
+        error: catalogError,
+    } = usePublishedCourses();
     const [appState, setAppState] = useState(() => getAppState());
     const [selectedLessonId, setSelectedLessonId] = useState(null);
 
     const learningData = useMemo(
-        () => buildLearningCourseData(appState, courseIdKey),
-        [appState, courseIdKey],
+        () => buildLearningCourseData(appState, courseIdKey, catalogCourses),
+        [appState, catalogCourses, courseIdKey],
     );
 
     const allLessons = learningData.allLessons;
@@ -298,6 +304,8 @@ function useLearnCoursePlayer(courseId) {
 
     return {
         courseIdKey,
+        isCatalogLoading,
+        catalogError,
         status: learningData.status,
         source: learningData.source,
         course: learningData.course,

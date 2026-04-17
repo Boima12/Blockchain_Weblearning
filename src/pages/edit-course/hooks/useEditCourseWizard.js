@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
+import usePublishedCourses from '../../../hooks/usePublishedCourses';
 import { getAppState, updateAppState } from '../../../utils/appLocalState';
+import { upsertPublishedCourse } from '../../../utils/publishedCoursesApi';
 import { STEP_ITEMS } from '../../create-course/createCourseConstants';
 import {
     buildCourseRecord,
@@ -16,26 +18,73 @@ import {
 
 const EMPTY_FEEDBACK = { type: 'info', message: '' };
 
-const findCreatedCourseById = (courseId) =>
-    getAppState().createdCourses.find(
+const findEditableCourseById = (courseId, appState, publishedCourses) => {
+    const profileWalletAddress = String(appState?.profile?.walletAddress ?? '');
+
+    const localDraft = (appState?.createdCourses ?? []).find(
         (course) => String(course.id) === String(courseId),
     );
 
+    if (localDraft) {
+        return {
+            sourceType: 'draft',
+            course: localDraft,
+        };
+    }
+
+    const publishedCourse = publishedCourses.find(
+        (course) => String(course.id) === String(courseId),
+    );
+
+    if (!publishedCourse) {
+        return null;
+    }
+
+    const ownerWalletAddress = String(
+        publishedCourse.ownerWalletAddress ?? '',
+    );
+
+    if (ownerWalletAddress && ownerWalletAddress !== profileWalletAddress) {
+        return null;
+    }
+
+    return {
+        sourceType: 'published',
+        course: publishedCourse,
+    };
+};
+
 function useEditCourseWizard(courseId) {
-    const sourceCourse = useMemo(
-        () => findCreatedCourseById(courseId),
-        [courseId],
+    const {
+        courses: publishedCourses,
+        isLoading: isCatalogLoading,
+        error: catalogError,
+    } = usePublishedCourses();
+
+    const appStateSnapshot = useMemo(() => getAppState(), []);
+
+    const sourceEntry = useMemo(
+        () => findEditableCourseById(courseId, appStateSnapshot, publishedCourses),
+        [appStateSnapshot, courseId, publishedCourses],
+    );
+
+    const sourceCourse = sourceEntry?.course ?? null;
+    const sourceType = sourceEntry?.sourceType ?? null;
+
+    const initialEmptyDraft = useMemo(() => createDraftTemplate(), []);
+    const sourceDraft = useMemo(
+        () => (sourceCourse ? normalizeDraft(sourceCourse) : null),
+        [sourceCourse],
     );
 
     const [activeStep, setActiveStep] = useState(0);
-    const [draft, setDraft] = useState(() =>
-        sourceCourse ? normalizeDraft(sourceCourse) : createDraftTemplate(),
-    );
-    const [originalDraft, setOriginalDraft] = useState(() =>
-        sourceCourse ? normalizeDraft(sourceCourse) : null,
-    );
+    const [draftState, setDraftState] = useState(null);
+    const [originalDraftState, setOriginalDraftState] = useState(null);
     const [errors, setErrors] = useState({});
     const [feedback, setFeedback] = useState(EMPTY_FEEDBACK);
+
+    const draft = draftState ?? sourceDraft ?? initialEmptyDraft;
+    const originalDraft = originalDraftState ?? sourceDraft;
 
     const finalPrice = useMemo(
         () => calculateFinalPrice(draft.price, draft.discount),
@@ -43,39 +92,44 @@ function useEditCourseWizard(courseId) {
     );
 
     const setDraftField = (field, value) => {
-        setDraft((previous) => ({
-            ...previous,
+        setDraftState((previous) => ({
+            ...(previous ?? draft),
             [field]: value,
         }));
     };
 
     const setListField = (listName, index, value) => {
-        setDraft((previous) => {
-            const nextList = [...previous[listName]];
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            const nextList = [...baseDraft[listName]];
             nextList[index] = value;
             return {
-                ...previous,
+                ...baseDraft,
                 [listName]: nextList,
             };
         });
     };
 
     const addListField = (listName) => {
-        setDraft((previous) => ({
-            ...previous,
-            [listName]: [...previous[listName], ''],
-        }));
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            return {
+                ...baseDraft,
+                [listName]: [...baseDraft[listName], ''],
+            };
+        });
     };
 
     const removeListField = (listName, index) => {
-        setDraft((previous) => {
-            if (previous[listName].length <= 1) {
-                return previous;
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            if (baseDraft[listName].length <= 1) {
+                return baseDraft;
             }
 
             return {
-                ...previous,
-                [listName]: previous[listName].filter(
+                ...baseDraft,
+                [listName]: baseDraft[listName].filter(
                     (_, currentIndex) => currentIndex !== index,
                 ),
             };
@@ -83,35 +137,42 @@ function useEditCourseWizard(courseId) {
     };
 
     const updateModuleTitle = (moduleId, nextTitle) => {
-        setDraft((previous) => ({
-            ...previous,
-            curriculum: previous.curriculum.map((moduleItem) =>
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            return {
+                ...baseDraft,
+                curriculum: baseDraft.curriculum.map((moduleItem) =>
                 moduleItem.id === moduleId
                     ? { ...moduleItem, title: nextTitle }
                     : moduleItem,
             ),
-        }));
+            };
+        });
     };
 
     const addModule = () => {
-        setDraft((previous) => ({
-            ...previous,
-            curriculum: [
-                ...previous.curriculum,
-                createModule(previous.curriculum.length + 1),
-            ],
-        }));
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            return {
+                ...baseDraft,
+                curriculum: [
+                    ...baseDraft.curriculum,
+                    createModule(baseDraft.curriculum.length + 1),
+                ],
+            };
+        });
     };
 
     const removeModule = (moduleId) => {
-        setDraft((previous) => {
-            if (previous.curriculum.length <= 1) {
-                return previous;
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            if (baseDraft.curriculum.length <= 1) {
+                return baseDraft;
             }
 
             return {
-                ...previous,
-                curriculum: previous.curriculum.filter(
+                ...baseDraft,
+                curriculum: baseDraft.curriculum.filter(
                     (moduleItem) => moduleItem.id !== moduleId,
                 ),
             };
@@ -119,9 +180,11 @@ function useEditCourseWizard(courseId) {
     };
 
     const addLesson = (moduleId) => {
-        setDraft((previous) => ({
-            ...previous,
-            curriculum: previous.curriculum.map((moduleItem) =>
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            return {
+                ...baseDraft,
+                curriculum: baseDraft.curriculum.map((moduleItem) =>
                 moduleItem.id === moduleId
                     ? {
                         ...moduleItem,
@@ -129,13 +192,16 @@ function useEditCourseWizard(courseId) {
                     }
                     : moduleItem,
             ),
-        }));
+            };
+        });
     };
 
     const removeLesson = (moduleId, lessonId) => {
-        setDraft((previous) => ({
-            ...previous,
-            curriculum: previous.curriculum.map((moduleItem) => {
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            return {
+                ...baseDraft,
+                curriculum: baseDraft.curriculum.map((moduleItem) => {
                 if (moduleItem.id !== moduleId) {
                     return moduleItem;
                 }
@@ -151,13 +217,16 @@ function useEditCourseWizard(courseId) {
                     ),
                 };
             }),
-        }));
+            };
+        });
     };
 
     const updateLessonField = (moduleId, lessonId, fieldName, value) => {
-        setDraft((previous) => ({
-            ...previous,
-            curriculum: previous.curriculum.map((moduleItem) => {
+        setDraftState((previous) => {
+            const baseDraft = previous ?? draft;
+            return {
+                ...baseDraft,
+                curriculum: baseDraft.curriculum.map((moduleItem) => {
                 if (moduleItem.id !== moduleId) {
                     return moduleItem;
                 }
@@ -174,7 +243,8 @@ function useEditCourseWizard(courseId) {
                     ),
                 };
             }),
-        }));
+            };
+        });
     };
 
     const validateCurrentStep = () => {
@@ -241,7 +311,9 @@ function useEditCourseWizard(courseId) {
             return;
         }
 
-        setDraft(normalizeDraft(originalDraft));
+        const normalized = normalizeDraft(originalDraft);
+        setDraftState(normalized);
+        setOriginalDraftState(normalized);
         setErrors({});
         setFeedback({
             type: 'info',
@@ -249,7 +321,7 @@ function useEditCourseWizard(courseId) {
         });
     };
 
-    const onSaveChanges = () => {
+    const onSaveChanges = async () => {
         if (!sourceCourse) {
             setFeedback({
                 type: 'error',
@@ -273,29 +345,50 @@ function useEditCourseWizard(courseId) {
             nextCourseRecord.publishedAt = sourceCourse.publishedAt;
         }
 
-        updateAppState((currentState) => ({
-            ...currentState,
-            createdCourses: currentState.createdCourses.map((course) =>
-                String(course.id) === String(sourceCourse.id)
-                    ? {
-                        ...course,
-                        ...nextCourseRecord,
-                    }
-                    : course,
-            ),
-        }));
+        if (sourceType === 'published') {
+            try {
+                const profile = getAppState().profile;
+                await upsertPublishedCourse(nextCourseRecord, profile);
+            } catch (error) {
+                setFeedback({
+                    type: 'error',
+                    message:
+                        error instanceof Error
+                            ? error.message
+                            : 'Unable to update published course in MongoDB.',
+                });
+                return;
+            }
+        } else {
+            updateAppState((currentState) => ({
+                ...currentState,
+                createdCourses: currentState.createdCourses.map((course) =>
+                    String(course.id) === String(sourceCourse.id)
+                        ? {
+                            ...course,
+                            ...nextCourseRecord,
+                        }
+                        : course,
+                ),
+            }));
+        }
 
         const normalizedSaved = normalizeDraft(nextCourseRecord);
-        setOriginalDraft(normalizedSaved);
-        setDraft(normalizedSaved);
+        setOriginalDraftState(normalizedSaved);
+        setDraftState(normalizedSaved);
         setFeedback({
             type: 'success',
-            message: 'Course updated successfully.',
+            message:
+                sourceType === 'published'
+                    ? 'Published course updated in MongoDB successfully.'
+                    : 'Course updated successfully.',
         });
     };
 
     return {
         hasCourse: Boolean(sourceCourse),
+        isCatalogLoading,
+        catalogError,
         sourceCourse,
         activeStep,
         draft,

@@ -3,7 +3,8 @@ import styles from './StickyCardContent.module.css';
 import ThisCourseIncludes from '../this-course-includes/ThisCourseIncludes';
 
 function StickyCardContent({details, additionalDetails}) {
-    const {image_750x422: image} = details;
+    const image =
+        details?.image_750x422 ?? details?.thumbnailUrl ?? details?.image_480x270;
 
     const [hidden, toggleHidden] = useState(false);
 

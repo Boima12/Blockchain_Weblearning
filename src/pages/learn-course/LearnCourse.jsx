@@ -1,5 +1,6 @@
 import styles from './LearnCourse.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import LoadingSpinner from '../../components/loading-spinner/LoadingSpinner';
 import LearnCourseStateView from './components/LearnCourseStateView';
 import LearnCourseHero from './components/LearnCourseHero';
 import LearnCourseLessonRail from './components/LearnCourseLessonRail';
@@ -13,6 +14,8 @@ function Co_LearnCourse() {
 
     const {
         courseIdKey,
+        isCatalogLoading,
+        catalogError,
         status,
         source,
         course,
@@ -29,6 +32,24 @@ function Co_LearnCourse() {
         onSelectLesson,
         onMarkLessonComplete,
     } = useLearnCoursePlayer(courseId);
+
+    if (isCatalogLoading && status !== 'ready') {
+        return <LoadingSpinner />;
+    }
+
+    if (catalogError && status !== 'ready') {
+        return (
+            <LearnCourseStateView
+                badge='Data Error'
+                title="can't fetch data from MongoDB"
+                description="can't fetch data from MongoDB"
+                primaryLabel='Open Profile'
+                onPrimaryClick={() => navigate('/profile')}
+                secondaryLabel='Browse Courses'
+                onSecondaryClick={() => navigate('/')}
+            />
+        );
+    }
 
     if (status === 'notFound') {
         return (

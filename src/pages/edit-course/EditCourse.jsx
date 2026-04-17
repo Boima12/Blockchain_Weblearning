@@ -4,6 +4,7 @@ import BasicInfoStep from '../create-course/components/BasicInfoStep';
 import CurriculumStep from '../create-course/components/CurriculumStep';
 import PricingStep from '../create-course/components/PricingStep';
 import ReviewStep from '../create-course/components/ReviewStep';
+import LoadingSpinner from '../../components/loading-spinner/LoadingSpinner';
 import { STEP_ITEMS } from '../create-course/createCourseConstants';
 import useEditCourseWizard from './hooks/useEditCourseWizard';
 
@@ -13,6 +14,8 @@ function Co_EditCourse() {
 
     const {
         hasCourse,
+        isCatalogLoading,
+        catalogError,
         sourceCourse,
         activeStep,
         draft,
@@ -86,6 +89,35 @@ function Co_EditCourse() {
 
         return <ReviewStep draft={draft} finalPrice={finalPrice} />;
     };
+
+    if (isCatalogLoading && !hasCourse) {
+        return <LoadingSpinner />;
+    }
+
+    if (catalogError && !hasCourse) {
+        return (
+            <main className={styles.main_CreateCourse}>
+                <section className={styles.wizardShell}>
+                    <div className={styles.wizardHeader}>
+                        <p className={styles.badge}>Edit Course</p>
+                        <h1>can't fetch data from MongoDB</h1>
+                    </div>
+
+                    <footer className={styles.footerActions}>
+                        <div className={styles.leftActions}>
+                            <button
+                                type='button'
+                                className={styles.secondaryButton}
+                                onClick={() => navigate('/profile')}
+                            >
+                                Back to Profile
+                            </button>
+                        </div>
+                    </footer>
+                </section>
+            </main>
+        );
+    }
 
     if (!hasCourse) {
         return (

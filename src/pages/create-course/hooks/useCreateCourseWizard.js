@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { updateAppState } from '../../../utils/appLocalState';
+import { getAppState, updateAppState } from '../../../utils/appLocalState';
+import { upsertPublishedCourse } from '../../../utils/publishedCoursesApi';
 import { STEP_ITEMS } from '../createCourseConstants';
 import {
     buildCourseRecord,
@@ -212,18 +213,18 @@ function useCreateCourseWizard() {
         return true;
     };
 
-    const persistCourse = (status) => {
-        const courseRecord = buildCourseRecord(draft, status);
+    const persistDraftCourse = () => {
+        const draftRecord = buildCourseRecord(draft, 'Draft');
 
         updateAppState((currentState) => ({
             ...currentState,
             createdCourses: upsertCreatedCourse(
                 currentState.createdCourses,
-                courseRecord,
+                draftRecord,
             ),
         }));
 
-        return courseRecord;
+        return draftRecord;
     };
 
     const onNext = () => {
@@ -244,7 +245,7 @@ function useCreateCourseWizard() {
     };
 
     const onSaveDraft = () => {
-        const draftRecord = persistCourse('Draft');
+        const draftRecord = persistDraftCourse();
 
         const nextDraft = {
             ...draft,
@@ -262,7 +263,7 @@ function useCreateCourseWizard() {
         setPublishedCourseId(null);
     };
 
-    const onPublishCourse = () => {
+    const onPublishCourse = async () => {
         if (!validateAllSteps()) {
             setFeedback({
                 type: 'error',
@@ -271,7 +272,29 @@ function useCreateCourseWizard() {
             return;
         }
 
-        const publishedRecord = persistCourse('Published');
+        const publishedRecord = buildCourseRecord(draft, 'Published');
+
+        try {
+            const profile = getAppState().profile;
+            await upsertPublishedCourse(publishedRecord, profile);
+
+            updateAppState((currentState) => ({
+                ...currentState,
+                createdCourses: currentState.createdCourses.filter(
+                    (course) =>
+                        String(course.id) !== String(publishedRecord.id),
+                ),
+            }));
+        } catch (error) {
+            setFeedback({
+                type: 'error',
+                message:
+                    error instanceof Error
+                        ? error.message
+                        : 'Publishing failed. Ensure Vite dev server is running with a valid MongoDB connection.',
+            });
+            return;
+        }
 
         const nextDraft = {
             ...draft,
@@ -286,7 +309,7 @@ function useCreateCourseWizard() {
         setFeedback({
             type: 'success',
             message:
-                'Course published successfully. It now appears in your Profile page.',
+                'Course published to MongoDB successfully.',
         });
     };
 

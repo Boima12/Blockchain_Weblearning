@@ -1,4 +1,3 @@
-import { getCourseById } from '../../utils/appLocalState';
 import { FALLBACK_VIDEO_LIBRARY } from './learnCourseConstants';
 
 export const toSafeText = (value, fallback = '') => {
@@ -220,7 +219,7 @@ const getInstructorLabel = (catalogCourse) => {
         : 'Unknown Instructor';
 };
 
-export const buildLearningCourseData = (appState, courseIdKey) => {
+export const buildLearningCourseData = (appState, courseIdKey, catalogCourses) => {
     const createdCourse = appState.createdCourses.find(
         (course) => String(course.id) === courseIdKey,
     );
@@ -252,7 +251,9 @@ export const buildLearningCourseData = (appState, courseIdKey) => {
         };
     }
 
-    const catalogCourse = getCourseById(courseIdKey);
+    const catalogCourse = (Array.isArray(catalogCourses) ? catalogCourses : []).find(
+        (course) => String(course?.id) === String(courseIdKey),
+    );
 
     if (!catalogCourse) {
         return {
@@ -269,7 +270,15 @@ export const buildLearningCourseData = (appState, courseIdKey) => {
         (purchaseItem) => String(purchaseItem.courseId) === courseIdKey,
     );
 
-    if (!purchaseRecord) {
+    const isOwnerCourse =
+        String(catalogCourse?.ownerWalletAddress ?? '') ===
+        String(appState?.profile?.walletAddress ?? '');
+
+    const hasEmbeddedCurriculum =
+        Array.isArray(catalogCourse?.curriculum) &&
+        catalogCourse.curriculum.length > 0;
+
+    if (!purchaseRecord && !isOwnerCourse) {
         return {
             status: 'locked',
             source: 'catalog',
@@ -284,31 +293,39 @@ export const buildLearningCourseData = (appState, courseIdKey) => {
         };
     }
 
-    const { modules, allLessons } = buildCatalogCurriculum(catalogCourse);
+    const { modules, allLessons } = hasEmbeddedCurriculum
+        ? buildCreatedCurriculum(catalogCourse)
+        : buildCatalogCurriculum(catalogCourse);
 
     return {
         status: 'ready',
-        source: 'catalog',
+        source: hasEmbeddedCurriculum ? 'created' : 'catalog',
         course: {
             id: String(catalogCourse.id),
             title: toSafeText(catalogCourse.title, 'Course'),
             subtitle: toSafeText(catalogCourse.headline),
-            instructor: getInstructorLabel(catalogCourse),
+            instructor: toSafeText(
+                catalogCourse.ownerDisplayName,
+                getInstructorLabel(catalogCourse),
+            ),
             imageUrl: toSafeText(
                 catalogCourse.image_750x422 || catalogCourse.image_304x171,
             ),
             level: toSafeText(catalogCourse.instructional_level, 'All Levels'),
-            language: toSafeText(catalogCourse.locale?.title, 'English'),
+            language: toSafeText(
+                catalogCourse.language,
+                toSafeText(catalogCourse.locale?.title, 'English'),
+            ),
             category: toSafeText(
-                catalogCourse.context_info?.label?.title,
-                'Web Development',
+                catalogCourse.category,
+                toSafeText(catalogCourse.context_info?.label?.title, 'Web Development'),
             ),
         },
         modules,
         allLessons,
         startingPercent: Number(
             appState.learningProgress?.[courseIdKey]?.percent ??
-                purchaseRecord.progress ??
+                purchaseRecord?.progress ??
                 0,
         ),
     };
