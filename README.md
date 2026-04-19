@@ -1,6 +1,7 @@
 # Blockchain Weblearning
 - Dự án bài tập lớn cho học phần Chuyên đề Blockchain
 
+
 <br> <br> <br>
 
 # Cách chạy
@@ -15,6 +16,17 @@ npm run dev
 ```
 
 2. lên http://localhost:5173/ để xem, xong rồi thì vào terminal Ctrl + C để tắt local host
+
+
+<br> <br> <br>
+
+- cập nhật mới nhất từ GitHub vào branch main <br>
+```
+git checkout main
+git fetch --all --prune
+git pull origin main
+```
+
 
 <br> <br> <br>
 
