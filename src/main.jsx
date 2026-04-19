@@ -13,6 +13,7 @@ import Co_EditCourse from './pages/edit-course/EditCourse';
 import Co_LearnCourse from './pages/learn-course/LearnCourse';
 import Co_Certificate from './pages/certificate/Certificate';
 import Co_BuyCourse from './pages/buy-course/BuyCourse';
+import Co_Login from './pages/login/Login';
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
@@ -75,6 +76,15 @@ createRoot(document.getElementById("root")).render(
                     }
                 />
                 <Route
+                    path="/login"
+                    element={
+                        <>
+                            <NavBar />
+                            <Co_Login />
+                        </>
+                    }
+                />
+                <Route
                     path="/Blockchain-Weblearning/profile"
                     element={
                         <>
@@ -98,6 +108,15 @@ createRoot(document.getElementById("root")).render(
                         <>
                             <NavBar />
                             <Co_EditCourse />
+                        </>
+                    }
+                />
+                <Route
+                    path="/Blockchain-Weblearning/login"
+                    element={
+                        <>
+                            <NavBar />
+                            <Co_Login />
                         </>
                     }
                 />

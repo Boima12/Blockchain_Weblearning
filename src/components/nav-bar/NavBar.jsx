@@ -2,13 +2,36 @@ import React from 'react';
 import styles from './NavBar.module.css';
 import SearchBar from '../search-bar/SearchBar';
 import { useNavigate } from 'react-router-dom';
-import { formatWalletAddress, getAppState } from '../../utils/appLocalState';
+import {
+    clearAuthSession,
+    formatWalletAddress,
+    getAppState,
+    getAuthSession,
+    resetAppState,
+} from '../../utils/appLocalState';
 import blockchainWeblearningIcon from '../../assets/Blockchain_weblearning_icon.png';
+import { logoutUserAccount } from '../../utils/userAccountApi';
 
 function NavBar() {
 
     const navigate = useNavigate();
-    const walletAddress = getAppState().profile.walletAddress;
+    const authSession = getAuthSession();
+
+    const isAuthenticated = Boolean(authSession?.accountId);
+    const walletAddress =
+        authSession?.walletAddress || getAppState().profile.walletAddress;
+
+    const onLogout = async () => {
+        try {
+            await logoutUserAccount();
+        } catch {
+            // Proceed with local logout even when network request fails.
+        }
+
+        clearAuthSession();
+        resetAppState();
+        navigate('/login');
+    };
 
     return (
         <nav className={styles.nav}>
@@ -37,7 +60,13 @@ function NavBar() {
                     <button
                         type='button'
                         name='create-course-button'
-                        onClick={() => navigate('/create-course')}
+                        onClick={() =>
+                            navigate(
+                                isAuthenticated
+                                    ? '/create-course'
+                                    : '/login',
+                            )
+                        }
                     >
                         Create Course
                     </button>
@@ -47,9 +76,11 @@ function NavBar() {
                     <button
                         type='button'
                         name='profile-button'
-                        onClick={() => navigate('/profile')}
+                        onClick={() =>
+                            navigate(isAuthenticated ? '/profile' : '/login')
+                        }
                     >
-                        Profile
+                        {isAuthenticated ? 'Profile' : 'Login'}
                     </button>
                 </li>
 
@@ -57,9 +88,15 @@ function NavBar() {
                     <button
                         type='button'
                         name='wallet-logout-button'
-                        onClick={() => navigate('/profile')}
+                        onClick={() =>
+                            isAuthenticated
+                                ? onLogout()
+                                : navigate('/login')
+                        }
                     >
-                        {formatWalletAddress(walletAddress)}
+                        {isAuthenticated
+                            ? `Logout (${formatWalletAddress(walletAddress)})`
+                            : 'Register / Login'}
                     </button>
                 </li>
             </ul>

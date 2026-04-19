@@ -1,4 +1,5 @@
 const APP_STORAGE_KEY = 'bwl.frontend.state.v1';
+const AUTH_STORAGE_KEY = 'bwl.auth.session.v1';
 
 const DEFAULT_PROFILE = {
     displayName: 'Blockchain Student',
@@ -68,6 +69,23 @@ const normalizeState = (input = {}) => ({
     certificates: normalizeCertificates(input.certificates),
 });
 
+const normalizeAuthSession = (input = {}) => {
+    const accountId = String(input?.accountId ?? '').trim();
+    if (!accountId) {
+        return null;
+    }
+
+    return {
+        accountId,
+        displayName: String(input.displayName ?? '').trim(),
+        email: String(input.email ?? '').trim().toLowerCase(),
+        walletAddress: String(input.walletAddress ?? '').trim(),
+        loggedInAt:
+            String(input.loggedInAt ?? '').trim() ||
+            new Date().toISOString(),
+    };
+};
+
 const toCourseIdSet = (catalogCourses = []) =>
     new Set(
         catalogCourses
@@ -133,6 +151,98 @@ export const reconcileCatalogLinkedState = (catalogCourses = []) => {
     });
 };
 
+export const getAuthSession = () => {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+
+    try {
+        const rawValue = window.localStorage.getItem(AUTH_STORAGE_KEY);
+        if (!rawValue) {
+            return null;
+        }
+
+        return normalizeAuthSession(JSON.parse(rawValue));
+    } catch {
+        return null;
+    }
+};
+
+export const saveAuthSession = (nextSession) => {
+    const normalized = normalizeAuthSession(nextSession);
+
+    if (typeof window === 'undefined') {
+        return normalized;
+    }
+
+    if (!normalized) {
+        window.localStorage.removeItem(AUTH_STORAGE_KEY);
+        return null;
+    }
+
+    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(normalized));
+    return normalized;
+};
+
+export const clearAuthSession = () => {
+    if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(AUTH_STORAGE_KEY);
+    }
+};
+
+const syncStateToAccountIfAuthenticated = (statePayload) => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    const session = getAuthSession();
+    if (!session?.accountId) {
+        return;
+    }
+
+    fetch(`/api/user-account/${session.accountId}/state`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(statePayload),
+    }).catch(() => {
+        // Keep UI responsive even when sync fails; local state is still updated.
+    });
+};
+
+export const resetAppState = () => saveAppState(DEFAULT_APP_STATE);
+
+export const loadAppStateFromAccount = (accountPayload = {}) => {
+    const profilePayload =
+        accountPayload?.profile && typeof accountPayload.profile === 'object'
+            ? accountPayload.profile
+            : {};
+
+    const nextState = {
+        profile: {
+            ...DEFAULT_PROFILE,
+            ...profilePayload,
+        },
+        createdCourses: Array.isArray(accountPayload.createdCourses)
+            ? accountPayload.createdCourses
+            : [],
+        purchasedCourses: Array.isArray(accountPayload.purchasedCourses)
+            ? accountPayload.purchasedCourses
+            : [],
+        learningProgress:
+            accountPayload.learningProgress &&
+            typeof accountPayload.learningProgress === 'object'
+                ? accountPayload.learningProgress
+                : {},
+        certificates: Array.isArray(accountPayload.certificates)
+            ? accountPayload.certificates
+            : [],
+    };
+
+    return saveAppState(nextState);
+};
+
 export const getAppState = () => {
     if (typeof window === 'undefined') {
         return DEFAULT_APP_STATE;
@@ -161,6 +271,7 @@ export const saveAppState = (nextState) => {
 
     const normalized = normalizeState(nextState);
     window.localStorage.setItem(APP_STORAGE_KEY, JSON.stringify(normalized));
+    syncStateToAccountIfAuthenticated(normalized);
     return normalized;
 };
 

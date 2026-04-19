@@ -1,0 +1,174 @@
+.main_login {
+	min-height: calc(100vh - 6rem);
+	padding: 1.4rem;
+	background: radial-gradient(circle at 10% 0%, #eef2ff 0%, #ffffff 45%);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.shell {
+	max-width: 760px;
+	margin: 0 auto;
+	border: 1px solid #e3e7f5;
+	border-radius: 1rem;
+	background-color: #ffffff;
+	box-shadow: 0 10px 30px rgba(45, 67, 120, 0.08);
+	padding: 1.2rem;
+}
+
+.header {
+	margin-bottom: 0.9rem;
+}
+
+.header h1 {
+	margin: 0.4rem 0;
+	color: #1d1f28;
+}
+
+.header p {
+	margin: 0;
+	color: #505565;
+}
+
+.badge {
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	padding: 0.28rem 0.6rem;
+	border-radius: 999px;
+	background: #e6ecff;
+	color: #26408c;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06rem;
+	text-transform: uppercase;
+}
+
+.tabRow {
+	display: flex;
+	gap: 0.6rem;
+	margin-bottom: 1rem;
+}
+
+.tabRow button {
+	min-height: 2.4rem;
+	padding: 0.45rem 1rem;
+	border-radius: 999px;
+	border: 1px solid #d7dff4;
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.activeTab {
+	background-color: #1f2c59;
+	color: #fff;
+	border-color: #1f2c59;
+}
+
+.inactiveTab {
+	background-color: #f7f9ff;
+	color: #2f3d68;
+}
+
+.form {
+	display: grid;
+	gap: 0.7rem;
+}
+
+.form label {
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: #2d3650;
+}
+
+.form input {
+	min-height: 2.5rem;
+	border-radius: 0.6rem;
+	border: 1px solid #d2daf1;
+	padding: 0.5rem 0.7rem;
+	font-size: 1rem;
+}
+
+.form input:focus {
+	outline: 2px solid #8fa8f4;
+	border-color: #6d87d4;
+}
+
+.primaryButton,
+.secondaryButton {
+	min-height: 2.6rem;
+	border-radius: 0.6rem;
+	border: none;
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.primaryButton {
+	margin-top: 0.35rem;
+	color: #fff;
+	background: linear-gradient(90deg, #1f2c59 0%, #2c4aa8 100%);
+}
+
+.secondaryButton {
+	color: #1f2c59;
+	background: #eef3ff;
+	border: 1px solid #ccd6f2;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.feedback {
+	margin: 0 0 0.9rem;
+	padding: 0.65rem 0.8rem;
+	border-radius: 0.65rem;
+	border: 1px solid transparent;
+	font-weight: 600;
+}
+
+.feedbackError {
+	background: #fff5f5;
+	border-color: #f5c0c0;
+	color: #922525;
+}
+
+.feedbackSuccess {
+	background: #f1fff3;
+	border-color: #b6ebbe;
+	color: #236d30;
+}
+
+.feedbackInfo {
+	background: #f5f8ff;
+	border-color: #ced8f6;
+	color: #2d3f72;
+}
+
+.loggedInCard {
+	border: 1px solid #dde5f6;
+	border-radius: 0.85rem;
+	background: #f9fbff;
+	padding: 0.9rem;
+}
+
+.loggedInCard h2 {
+	margin: 0;
+}
+
+.loggedInCard p {
+	margin: 0.45rem 0;
+	color: #424e6d;
+}
+
+.actions {
+	margin-top: 0.8rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.actions button {
+	padding: 0.45rem 0.85rem;
+}

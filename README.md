@@ -17,3 +17,5 @@ npm run dev
 2. lên http://localhost:5173/ để xem, xong rồi thì vào terminal Ctrl + C để tắt local host
 
 <br> <br> <br>
+
+<b>Note: Thỉnh thoảng lần đầu chạy có gặp thông báo "Can't fetch from MongoDB" thì chờ một síu để app kết nối với MongoDB rồi click lại 1 lần nữa là được</b>
