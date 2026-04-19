@@ -20,7 +20,7 @@ npm run dev
 
 <br> <br> <br>
 
-- cập nhật mới nhất từ GitHub vào branch main <br>
+# Cách cập nhật mới nhất từ GitHub vào branch main <br>
 ```
 git checkout main
 git fetch --all --prune
