@@ -3,8 +3,27 @@ import {List, ListItem, ListItemIcon, ListItemText} from '@mui/material';
 import styles from './CourseRequirements.module.css';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-function CourseRequirements({details}) {
-    const {prerequisites: requirements} = details;
+const getRequirements = (courseDetails) => {
+    if (
+        Array.isArray(courseDetails?.requirements) &&
+        courseDetails.requirements.length > 0
+    ) {
+        return courseDetails.requirements;
+    }
+
+    if (
+        Array.isArray(courseDetails?.prerequisites) &&
+        courseDetails.prerequisites.length > 0
+    ) {
+        return courseDetails.prerequisites;
+    }
+
+    return ['No formal prerequisites. Bring consistency and curiosity.'];
+};
+
+function CourseRequirements({courseDetails}) {
+    const requirements = getRequirements(courseDetails);
+
     return (
         <main className={styles.mainContainer}>
             <p className={styles.header}>Requirements</p>

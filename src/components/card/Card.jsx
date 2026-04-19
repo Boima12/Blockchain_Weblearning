@@ -4,10 +4,27 @@ import StarsRating from '../stars-rating/StarsRating';
 import {useNavigate} from 'react-router-dom';
 
 const Card = ({course}) => {
-    const {title, visible_instructors, image_304x171: image, rating} = course;
-    const instructors = visible_instructors
-        .map((instructor) => instructor.title)
-        .join(', ');
+    const title = course?.title ?? 'Untitled Course';
+
+    const instructors = Array.isArray(course?.visible_instructors)
+        ? course.visible_instructors
+            .map((instructor) => instructor?.title ?? instructor?.name)
+            .filter(Boolean)
+            .join(', ')
+        : '';
+
+    const instructorLabel = instructors || course?.ownerDisplayName || 'Unknown Instructor';
+    const image = course?.image_304x171 ?? course?.thumbnailUrl ?? course?.image_480x270;
+
+    const ratingValue = Number(course?.rating ?? 4.5);
+    const ratingLabel = Number.isFinite(ratingValue)
+        ? ratingValue.toPrecision(2)
+        : '4.5';
+
+    const priceLabel =
+        typeof course?.price === 'number'
+            ? `${course.price.toFixed(2)} ${course?.token ?? 'MATIC'}`
+            : '$15';
 
     const [anchorEl] = useState(null);
     
@@ -15,7 +32,7 @@ const Card = ({course}) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/Udemy-Clone-ReactJS/courses/${course.id}`);
+        navigate(`/Blockchain-Weblearning/courses/${course.id}`);
     };
 
     return (
@@ -35,10 +52,10 @@ const Card = ({course}) => {
                     </figure>
                     <section className={styles.body}>
                         <p className={styles.title}>{title}</p>
-                        <p className={styles.instructors}>{instructors}</p>
-                        <p className={styles.rating}>{rating.toPrecision(2)}</p>
-                        <StarsRating rating={rating}/>
-                        <p className={styles.price}>$15</p>
+                        <p className={styles.instructors}>{instructorLabel}</p>
+                        <p className={styles.rating}>{ratingLabel}</p>
+                        <StarsRating rating={ratingValue}/>
+                        <p className={styles.price}>{priceLabel}</p>
                     </section>
                 </article>
             </div>

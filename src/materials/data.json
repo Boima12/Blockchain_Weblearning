@@ -1,1627 +1,390 @@
 {
   "data": {
-    "js_res": {
-      "id": 6368,
+    "published_res": {
+      "id": "published-courses",
+      "title": "Blockchain Published Courses",
+      "header": "Build real Web3 skills with project-first courses",
+      "description": "Courses published from Creator Studio are stored in this repository dataset.",
       "items": [
         {
-          "id": 8324,
-          "url": "/course/beginning-javascript/",
-          "title": "Javascript for Beginners",
+          "id": "4f11a0d1-75bc-42ad-8f7e-08e8135fd660",
+          "url": "/course/boima-zero-to-hero/",
+          "title": "Boima Zero To Hero",
           "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.5140595,
-          "created": "2011-06-28T08:26:18Z",
-          "is_paid": true,
-          "headline": "Learn javascript online and supercharge your web design with this Javascript for beginners training course.",
-          "learn_url": "/course/beginning-javascript/learn/",
-          "avg_rating": 4.46463,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/8324_fa84_13.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/8324_fa84_13.jpg",
-          "num_reviews": 865,
-          "preview_url": "/course/8324/preview/",
-          "tracking_id": "nE9vj3cdQASaMUf69QTFXw",
-          "content_info": "3 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/8324_fa84_13.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/8324_fa84_13.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/8324_fa84_13.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/8324_fa84_13.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/8324_fa84_13.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2011-07-09T05:43:31Z",
-          "caption_locales": [
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 8273,
-          "published_title": "beginning-javascript",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2020-10-03",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.5140595,
-          "caption_languages": [
-            "English [Auto]"
-          ],
-          "content_info_short": "3 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Extensive, informative and interesting video lecture",
-            "Complete Code demonstrated in lecture",
-            "Lab Exercises"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "All Levels",
-          "visible_instructors": [
-            {
-              "id": 11439,
-              "url": "/user/marklassoff/",
-              "name": "Tech Learning",
-              "title": "Tech Learning Network",
-              "_class": "user",
-              "initials": "TN",
-              "job_title": "Career Building Digital Skills Training",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/11439_12bd_13.jpg",
-              "display_name": "Tech Learning Network",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/11439_12bd_13.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 48,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "All Levels",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 63612,
-          "url": "/course/1-hour-javascript/",
-          "title": "1 Hour JavaScript",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.38133,
-          "created": "2013-07-03T12:57:58Z",
-          "is_paid": true,
-          "headline": "Learn how to code in JavaScript in 1 hour. This class is set up for complete beginners!",
-          "learn_url": "/course/1-hour-javascript/learn/",
-          "avg_rating": 4.29,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/63612_8797_4.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/63612_8797_4.jpg",
-          "num_reviews": 1906,
-          "preview_url": "/course/63612/preview/",
-          "tracking_id": "u5thFiwEQYiz_IrIr3_axw",
-          "content_info": "1 total hour",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/63612_8797_4.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/63612_8797_4.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/63612_8797_4.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/63612_8797_4.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/63612_8797_4.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2013-07-04T15:27:02Z",
-          "caption_locales": [
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 67610,
-          "published_title": "1-hour-javascript",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2013-07-04",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.38133,
-          "caption_languages": [
-            "English [Auto]"
-          ],
-          "content_info_short": "1 hour",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Learn the basics of JavaScript",
-            "Learn the basics of programming"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "Beginner Level",
-          "visible_instructors": [
-            {
-              "id": 55737,
-              "url": "/user/johnbura/",
-              "name": "John",
-              "title": "John Bura",
-              "_class": "user",
-              "initials": "JB",
-              "job_title": "Best Selling Instructor Web/App/Game Developer 700k Students",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/55737_2d11_6.jpg",
-              "display_name": "John Bura",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/55737_2d11_6.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 18,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "Beginner",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 364426,
-          "url": "/course/understand-javascript/",
-          "title": "JavaScript: Understanding the Weird Parts",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.7382283,
-          "created": "2014-12-06T03:59:18Z",
-          "is_paid": true,
-          "headline": "An advanced JavaScript course for everyone! Scope, closures, prototypes, 'this', build your own framework, and more.",
-          "learn_url": "/course/understand-javascript/learn/",
-          "avg_rating": 4.71822,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/364426_2991_6.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/364426_2991_6.jpg",
-          "num_reviews": 45321,
-          "preview_url": "/course/364426/preview/",
-          "tracking_id": "XuoZbACORwCP49u_YrgeYQ",
-          "content_info": "12 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/364426_2991_6.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/364426_2991_6.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/364426_2991_6.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/364426_2991_6.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/364426_2991_6.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2015-03-12T23:19:54Z",
-          "caption_locales": [
-            {
-              "title": "Deutsch",
-              "_class": "locale",
-              "locale": "de_DE",
-              "english_title": "German"
-            },
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            },
-            {
-              "title": "Español (España)",
-              "_class": "locale",
-              "locale": "es_ES",
-              "english_title": "Spanish (Spain)"
-            },
-            {
-              "title": "Français (France)",
-              "_class": "locale",
-              "locale": "fr_FR",
-              "english_title": "French (France)"
-            },
-            {
-              "title": "Bahasa Indonesia",
-              "_class": "locale",
-              "locale": "id_ID",
-              "english_title": "Indonesian"
-            },
-            {
-              "title": "Italiano",
-              "_class": "locale",
-              "locale": "it_IT",
-              "english_title": "Italian"
-            },
-            {
-              "title": "Polski",
-              "_class": "locale",
-              "locale": "pl_PL",
-              "english_title": "Polish"
-            },
-            {
-              "title": "Português (Brasil)",
-              "_class": "locale",
-              "locale": "pt_BR",
-              "english_title": "Portuguese (Brazil)"
-            },
-            {
-              "title": "Română",
-              "_class": "locale",
-              "locale": "ro_RO",
-              "english_title": "Romanian"
-            },
-            {
-              "title": "ภาษาไทย",
-              "_class": "locale",
-              "locale": "th_TH",
-              "english_title": "Thai"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 178541,
-          "published_title": "understand-javascript",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2022-07-28",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.7382283,
-          "caption_languages": [
-            "English",
-            "French [Auto]",
-            "German [Auto]",
-            "Indonesian [Auto]",
-            "Italian [Auto]",
-            "Polish [Auto]",
-            "Portuguese [Auto]",
-            "Romanian [Auto]",
-            "Spanish [Auto]",
-            "Thai [Auto]"
-          ],
-          "content_info_short": "12 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Grasp how Javascript works and it's fundamental concepts",
-            "Write solid, good Javascript code",
-            "Understand advanced concepts such as closures, prototypal inheritance, IIFEs, and much more."
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "All Levels",
-          "visible_instructors": [
-            {
-              "id": 2467626,
-              "url": "/user/anthonypalicea/",
-              "name": "Anthony",
-              "title": "Anthony Alicea",
-              "_class": "user",
-              "initials": "AA",
-              "job_title": "Software Developer, Architect, and UX Designer",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/2467626_f2e0_3.jpg",
-              "display_name": "Anthony Alicea",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/2467626_f2e0_3.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 89,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "All Levels",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 405818,
-          "url": "/course/javascript-for-beginners-introduction-learn-fast-easy/",
-          "title": "Javascript for Beginners Learn by Doing Practical Exercises",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.3135533,
-          "created": "2015-01-27T23:47:31Z",
-          "is_paid": true,
-          "headline": "JavaScript for Beginners : Work closely with me doing exercises & learn more. I make Javascript easy for you guaranteed.",
-          "learn_url": "/course/javascript-for-beginners-introduction-learn-fast-easy/learn/",
-          "avg_rating": 4.3768973,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/405818_aa3f_3.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/405818_aa3f_3.jpg",
-          "num_reviews": 14261,
-          "preview_url": "/course/405818/preview/",
-          "tracking_id": "LuE6CcvtQK6tO-JVPLQ8Fw",
-          "content_info": "4 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/405818_aa3f_3.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/405818_aa3f_3.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/405818_aa3f_3.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/405818_aa3f_3.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/405818_aa3f_3.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2015-01-31T02:24:19Z",
-          "caption_locales": [
-            {
-              "title": "Deutsch",
-              "_class": "locale",
-              "locale": "de_DE",
-              "english_title": "German"
-            },
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            },
-            {
-              "title": "Español (España)",
-              "_class": "locale",
-              "locale": "es_ES",
-              "english_title": "Spanish (Spain)"
-            },
-            {
-              "title": "Français (France)",
-              "_class": "locale",
-              "locale": "fr_FR",
-              "english_title": "French (France)"
-            },
-            {
-              "title": "Bahasa Indonesia",
-              "_class": "locale",
-              "locale": "id_ID",
-              "english_title": "Indonesian"
-            },
-            {
-              "title": "Italiano",
-              "_class": "locale",
-              "locale": "it_IT",
-              "english_title": "Italian"
-            },
-            {
-              "title": "Português (Brasil)",
-              "_class": "locale",
-              "locale": "pt_BR",
-              "english_title": "Portuguese (Brazil)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 35212,
-          "published_title": "javascript-for-beginners-introduction-learn-fast-easy",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2022-01-20",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.3135533,
-          "caption_languages": [
-            "English [Auto]",
-            "French [Auto]",
-            "German [Auto]",
-            "Indonesian [Auto]",
-            "Italian [Auto]",
-            "Portuguese [Auto]",
-            "Spanish [Auto]"
-          ],
-          "content_info_short": "4 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Learn to write JavaScript functions",
-            "Learn to write Javascript arrays",
-            "Learn to write  Javascript loops"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "All Levels",
-          "visible_instructors": [
-            {
-              "id": 6772884,
-              "url": "/user/edwin166/",
-              "name": "Edwin",
-              "title": "Edwin Diaz",
-              "_class": "user",
-              "initials": "ED",
-              "job_title": "Web Developer & Premium Instructor - 800,000 students",
-              "image_50x50": "https://img-b.udemycdn.com/user/50x50/6772884_fcfc_2.jpg",
-              "display_name": "Edwin Diaz",
-              "image_100x100": "https://img-b.udemycdn.com/user/100x100/6772884_fcfc_2.jpg"
-            },
-            {
-              "id": 34613172,
-              "url": "/user/coding-faculty/",
-              "name": "Coding Faculty",
-              "title": "Coding Faculty Solutions",
-              "_class": "user",
-              "initials": "CS",
-              "job_title": "Coding Faculty",
-              "image_50x50": "https://img-b.udemycdn.com/user/50x50/34613172_6fb4.jpg",
-              "display_name": "Coding Faculty Solutions",
-              "image_100x100": "https://img-b.udemycdn.com/user/100x100/34613172_6fb4.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 31,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "All Levels",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 426196,
-          "url": "/course/javascript-from-beginner-to-expert-bring-life-to-your-site/",
-          "title": "JavaScript from Beginner to Expert",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.248461,
-          "created": "2015-02-18T19:16:27Z",
-          "is_paid": true,
-          "headline": "Become a JavaScript expert in 30 days, even if you are a JS beginner. Become a front-end developer of websites in JS",
-          "learn_url": "/course/javascript-from-beginner-to-expert-bring-life-to-your-site/learn/",
-          "avg_rating": 4.243243,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/426196_3cb8_4.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/426196_3cb8_4.jpg",
-          "num_reviews": 1160,
-          "preview_url": "/course/426196/preview/",
-          "tracking_id": "15tDw5qzS1OEHmr0AW3vLg",
-          "content_info": "12.5 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/426196_3cb8_4.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/426196_3cb8_4.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/426196_3cb8_4.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/426196_3cb8_4.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/426196_3cb8_4.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2015-05-18T21:54:08Z",
-          "caption_locales": [
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 9834,
-          "published_title": "javascript-from-beginner-to-expert-bring-life-to-your-site",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2022-08-01",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.248461,
+          "rating": 4.7,
+          "headline": "BLang",
+          "content_info": "3 lessons",
+          "image_304x171": "https://gateway.pinata.cloud/ipfs/bafkreiexztpmwkeclmekqxezwwzicfrkpnsikcxwl5kcgzxamuevywqtja",
+          "image_480x270": "https://gateway.pinata.cloud/ipfs/bafkreiexztpmwkeclmekqxezwwzicfrkpnsikcxwl5kcgzxamuevywqtja",
+          "image_750x422": "https://gateway.pinata.cloud/ipfs/bafkreiexztpmwkeclmekqxezwwzicfrkpnsikcxwl5kcgzxamuevywqtja",
+          "num_subscribers": 0,
+          "last_update_date": "2026-04-16",
           "caption_languages": [
             "English"
           ],
-          "content_info_short": "12.5 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
           "objectives_summary": [
-            "You will be able to create tooltips, slideshows, galleries with thumbnails and many more",
-            "You will understand events, variables, objects, arrays, functions, loops, conditional statements, DOM, RegExp, Cookies and use that info in your scripts.",
-            "You will know how to pre-validate all kind of forms and give users information if something is wrong without reloading the website"
+            "Become cooler",
+            "Become Smarter (Depend on Student)"
           ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
+          "visible_instructors": [
+            {
+              "id": "0xA4f0fA32F7bA19EfA72fD8B601845513d19b42ag",
+              "name": "Boima",
+              "title": "Boima",
+              "display_name": "Boima"
+            }
+          ],
           "instructional_level": "All Levels",
-          "visible_instructors": [
-            {
-              "id": 621716,
-              "url": "/user/arkadiuszwodarczyk/",
-              "name": "Arkadiusz",
-              "title": "Arkadiusz Włodarczyk",
-              "_class": "user",
-              "initials": "AW",
-              "job_title": "Excellent teacher, Expert in Programming",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/621716_0514_3.jpg",
-              "display_name": "Arkadiusz Włodarczyk",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/621716_0514_3.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 92,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
           "instructional_level_simple": "All Levels",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 584494,
-          "url": "/course/javascript-for-kids/",
-          "title": "JavaScript for Kids: Code Your Own Games and Apps at Any Age",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.4525256,
-          "created": "2015-08-16T12:34:15Z",
-          "is_paid": true,
-          "headline": "JavaScript coding course for beginners of all ages, build your own interactive games and apps in JavaScript!",
-          "learn_url": "/course/javascript-for-kids/learn/",
-          "avg_rating": 4.428571,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/584494_f309_6.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/584494_f309_6.jpg",
-          "num_reviews": 803,
-          "preview_url": "/course/584494/preview/",
-          "tracking_id": "JzoIPI0mScWJ9832XgxGrQ",
-          "content_info": "6.5 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/584494_f309_6.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/584494_f309_6.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/584494_f309_6.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/584494_f309_6.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/584494_f309_6.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2020-01-02T23:51:01Z",
-          "caption_locales": [
+          "subtitle": "BLang",
+          "category": "Blockchain",
+          "level": "All Levels",
+          "language": "English",
+          "thumbnailUrl": "https://gateway.pinata.cloud/ipfs/bafkreiexztpmwkeclmekqxezwwzicfrkpnsikcxwl5kcgzxamuevywqtja",
+          "description": "This course tell you how amazing Boima is. From the superfire to the roof, im kinda write everything to test this description out.",
+          "objectives": [
+            "Become cooler",
+            "Become Smarter (Depend on Student)"
+          ],
+          "requirements": [
+            "know how to use Java or React programming language"
+          ],
+          "curriculum": [
             {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 2678,
-          "published_title": "javascript-for-kids",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2020-01-02",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.4525256,
-          "caption_languages": [
-            "Englisch [autom.]"
-          ],
-          "content_info_short": "6.5 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Code your own apps and games in JavaScript for Mac, Windows, or Linux, for beginners of all ages",
-            "Create fun, playable games like a Guessing Game and a Bubble Draw app!",
-            "Draw colorful graphics in JavaScript, including a new bonus Snake video game, great for beginners of any age"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "Beginner Level",
-          "visible_instructors": [
-            {
-              "id": 12796044,
-              "url": "/user/brysonpayne/",
-              "name": "Bryson",
-              "title": "Bryson Payne",
-              "_class": "user",
-              "initials": "BP",
-              "job_title": "Best-Selling Author & Professor w/students in 178 countries",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/12796044_b6aa_5.jpg",
-              "display_name": "Bryson Payne",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/12796044_b6aa_5.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 43,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "Beginner",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 670034,
-          "url": "/course/javascript-advanced/",
-          "title": "Advanced Javascript",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.619156,
-          "created": "2015-11-15T01:57:14Z",
-          "is_paid": true,
-          "headline": "In only seven hours you will learn enough javascript to transform from a Junior JS Dev into a Senior JS Guru",
-          "learn_url": "/course/javascript-advanced/learn/",
-          "avg_rating": 4.5513244,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/670034_ce04_6.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/670034_ce04_6.jpg",
-          "num_reviews": 7449,
-          "preview_url": "/course/670034/preview/",
-          "tracking_id": "LuCHTVh7Tb2ucBdmIrlA8w",
-          "content_info": "6.5 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/670034_ce04_6.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/670034_ce04_6.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/670034_ce04_6.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/670034_ce04_6.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/670034_ce04_6.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2015-11-21T06:56:33Z",
-          "caption_locales": [
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            },
-            {
-              "title": "Português (Brasil)",
-              "_class": "locale",
-              "locale": "pt_BR",
-              "english_title": "Portuguese (Brazil)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 30713,
-          "published_title": "javascript-advanced",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2020-02-19",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.619156,
-          "caption_languages": [
-            "English [Auto]",
-            "Portuguese [Auto]"
-          ],
-          "content_info_short": "6.5 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Impress interviewers with knowledge about advanced JavaScript features",
-            "Confidently Interview other JavaScript candidates",
-            "Pass stage one JavaScript telephone interviews"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "Intermediate Level",
-          "visible_instructors": [
-            {
-              "id": 133370,
-              "url": "/user/asimhussain/",
-              "name": "Asim",
-              "title": "Asim Hussain",
-              "_class": "user",
-              "initials": "AH",
-              "job_title": "Conference speaker, published author & passionate teacher",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/133370_bfff_10.jpg",
-              "display_name": "Asim Hussain",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/133370_bfff_10.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 47,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "Intermediate",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 695656,
-          "url": "/course/javascriptcourse/",
-          "title": "The Complete JavaScript Course For Web Development Beginners",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.4476566,
-          "created": "2015-12-12T14:39:04Z",
-          "is_paid": true,
-          "headline": "In this course students will learn the basics of JavaScript and beyond to help them in their web development needs",
-          "learn_url": "/course/javascriptcourse/learn/",
-          "avg_rating": 4.2222223,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/695656_4395_7.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/695656_4395_7.jpg",
-          "num_reviews": 1833,
-          "preview_url": "/course/695656/preview/",
-          "tracking_id": "XWCFxF8QQbukePIXCr-ErQ",
-          "content_info": "4 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/695656_4395_7.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/695656_4395_7.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/695656_4395_7.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/695656_4395_7.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/695656_4395_7.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2015-12-29T17:20:32Z",
-          "caption_locales": [
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 89598,
-          "published_title": "javascriptcourse",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2016-01-14",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.4476566,
-          "caption_languages": [
-            "English [Auto]"
-          ],
-          "content_info_short": "4 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Learn the basics of JavaScript",
-            "Learn basic syntax to write JavaScript code",
-            "Learn basic structure of JavaScript code"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "All Levels",
-          "visible_instructors": [
-            {
-              "id": 8527674,
-              "url": "/user/josephparys/",
-              "name": "Joe",
-              "title": "Joe Parys",
-              "_class": "user",
-              "initials": "JP",
-              "job_title": "Top-Rated Instructor, 800,000+ Students",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/8527674_829c_15.jpg",
-              "display_name": "Joe Parys",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/8527674_829c_15.jpg"
-            },
-            {
-              "id": 18558450,
-              "url": "/user/a9ff8aeb-0700-4b60-950d-ffdce7bf69bc/",
-              "name": "Ashutosh",
-              "title": "Ashutosh Pawar",
-              "_class": "user",
-              "initials": "AP",
-              "job_title": "Entrepreneur, Python, Java & Android Geek",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/18558450_3457_6.jpg",
-              "display_name": "Ashutosh Pawar",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/18558450_3457_6.jpg"
-            },
-            {
-              "id": 23441044,
-              "url": "/user/joe-parys-academy/",
-              "name": "Joe Parys",
-              "title": "Joe Parys Support",
-              "_class": "user",
-              "initials": "JS",
-              "job_title": "Best-Selling Instructor Proudly Serving 500,000+ Students",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/23441044_0d50_8.jpg",
-              "display_name": "Joe Parys Support",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/23441044_0d50_8.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 46,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "All Levels",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 851712,
-          "url": "/course/the-complete-javascript-course/",
-          "title": "The Complete JavaScript Course 2022: From Zero to Expert!",
-          "_class": "course",
-          "badges": [
-            {
-              "id": "aef7ad9c902345a9bcf51041697e387d",
-              "_class": "ds_course_badge",
-              "badge_text": "Bestseller",
-              "badge_family": "bestseller",
-              "context_info": {
-                "label": {
-                  "id": 6368,
-                  "url": "/topic/javascript/",
-                  "title": "JavaScript",
-                  "display_name": "JavaScript",
-                  "topic_channel_url": "/topic/javascript/",
-                  "tracking_object_type": "cl"
+              "id": "a9d5d6a6-188f-4d90-a511-777372c146de",
+              "title": "The beginning",
+              "lessons": [
+                {
+                  "id": "a8e50a88-da43-412c-a65c-2cbe152f3430",
+                  "title": "The one",
+                  "videoUrl": "https://youtu.be/A7ExfGcXLf0?si=B2O1fwYoQOcdzlC4",
+                  "duration": "8:28",
+                  "description": "Lesson 1, this video teach you all you need about the basic of becoming a pro"
                 },
-                "category": {
-                  "id": 288,
-                  "url": "/courses/development/",
-                  "title": "Development",
-                  "tracking_object_type": "cat"
-                },
-                "subcategory": null
-              }
+                {
+                  "id": "25320918-8fc4-4d9c-87e8-5676c8e1976f",
+                  "title": "The second",
+                  "videoUrl": "https://youtu.be/GhPhQNYCU2o?si=RrLb5R3VFgTjqmlX",
+                  "duration": "9:19",
+                  "description": "Lesson 2, we will be covering the power of knowledge in this lesson, also Artermis 2 space program is success."
+                }
+              ]
+            },
+            {
+              "id": "d2f8b8f1-271f-4f3c-9cdf-697411858a17",
+              "title": "The New Dawn",
+              "lessons": [
+                {
+                  "id": "71fe44d0-fe6b-4156-b401-0787bb50c09c",
+                  "title": "Whats next?",
+                  "videoUrl": "https://youtu.be/4_eUXwJM5eU?si=JEj6Eslph1gK_ddD",
+                  "duration": "8:37",
+                  "description": "Whats next? you decide, the possibility is endless and its your to decide"
+                }
+              ]
             }
           ],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.780233,
-          "created": "2016-05-17T09:31:26Z",
-          "is_paid": true,
-          "headline": "The modern JavaScript course for everyone! Master JavaScript with projects, challenges and theory. Many courses in one!",
-          "learn_url": "/course/the-complete-javascript-course/learn/",
-          "avg_rating": 4.77693,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/851712_fc61_6.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/851712_fc61_6.jpg",
-          "num_reviews": 148950,
-          "preview_url": "/course/851712/preview/",
-          "tracking_id": "FBqgcvnCRJecXxvJAko_1w",
-          "content_info": "69 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/851712_fc61_6.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/851712_fc61_6.jpg",
+          "price": 75.99,
+          "discount": 30,
+          "token": "ETH",
+          "status": "Published",
+          "updatedAt": "2026-04-16T02:54:57.052Z",
+          "publishedAt": "2026-04-16T02:54:57.052Z",
+          "ownerWalletAddress": "0xA4f0fA32F7bA19EfA72fD8B601845513d19b42ag",
+          "ownerDisplayName": "Boima"
+        },
+        {
+          "id": "bwl-solidity-bootcamp",
+          "url": "/course/bwl-solidity-bootcamp/",
+          "title": "Solidity Bootcamp: Build and Deploy Smart Contracts",
+          "_class": "course",
+          "rating": 4.8,
+          "headline": "Master Solidity fundamentals, test-driven contract development, and deployment workflows.",
+          "content_info": "12 lessons",
           "image_304x171": "https://img-c.udemycdn.com/course/304x171/851712_fc61_6.jpg",
           "image_480x270": "https://img-c.udemycdn.com/course/480x270/851712_fc61_6.jpg",
           "image_750x422": "https://img-c.udemycdn.com/course/750x422/851712_fc61_6.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2016-10-14T22:52:23Z",
-          "caption_locales": [
-            {
-              "title": "العربية",
-              "_class": "locale",
-              "locale": "ar_AR",
-              "english_title": "Arabic"
-            },
-            {
-              "title": "Deutsch",
-              "_class": "locale",
-              "locale": "de_DE",
-              "english_title": "German"
-            },
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            },
-            {
-              "title": "Español (España)",
-              "_class": "locale",
-              "locale": "es_ES",
-              "english_title": "Spanish (Spain)"
-            },
-            {
-              "title": "Français (France)",
-              "_class": "locale",
-              "locale": "fr_FR",
-              "english_title": "French (France)"
-            },
-            {
-              "title": "Bahasa Indonesia",
-              "_class": "locale",
-              "locale": "id_ID",
-              "english_title": "Indonesian"
-            },
-            {
-              "title": "Italiano",
-              "_class": "locale",
-              "locale": "it_IT",
-              "english_title": "Italian"
-            },
-            {
-              "title": "日本語",
-              "_class": "locale",
-              "locale": "ja_JP",
-              "english_title": "Japanese"
-            },
-            {
-              "title": "Nederlands",
-              "_class": "locale",
-              "locale": "nl_NL",
-              "english_title": "Dutch"
-            },
-            {
-              "title": "Polski",
-              "_class": "locale",
-              "locale": "pl_PL",
-              "english_title": "Polish"
-            },
-            {
-              "title": "Português (Brasil)",
-              "_class": "locale",
-              "locale": "pt_BR",
-              "english_title": "Portuguese (Brazil)"
-            },
-            {
-              "title": "ภาษาไทย",
-              "_class": "locale",
-              "locale": "th_TH",
-              "english_title": "Thai"
-            },
-            {
-              "title": "Türkçe",
-              "_class": "locale",
-              "locale": "tr_TR",
-              "english_title": "Turkish"
-            },
-            {
-              "title": "Tiếng Việt",
-              "_class": "locale",
-              "locale": "vi_VN",
-              "english_title": "Vietnamese"
-            },
-            {
-              "title": "中文(简体)",
-              "_class": "locale",
-              "locale": "zh_CN",
-              "english_title": "Simplified Chinese (China)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 672427,
-          "published_title": "the-complete-javascript-course",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2022-06-03",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.780233,
+          "num_subscribers": 2140,
+          "last_update_date": "2026-04-12",
           "caption_languages": [
-            "English",
-            "Arabic [Auto]",
-            "Dutch [Auto]",
-            "French [Auto]",
-            "German [Auto]",
-            "Indonesian [Auto]",
-            "Italian [Auto]",
-            "Japanese [Auto]",
-            "Polish [Auto]",
-            "Portuguese [Auto]",
-            "Simplified Chinese [Auto]",
-            "Spanish [Auto]",
-            "Thai [Auto]",
-            "Turkish [Auto]",
-            "Vietnamese [Auto]"
+            "English"
           ],
-          "content_info_short": "69 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
           "objectives_summary": [
-            "Become an advanced, confident, and modern JavaScript developer from scratch",
-            "Build 6 beautiful real-world projects for your portfolio (not boring toy apps)",
-            "Become job-ready by understanding how JavaScript really works behind the scenes"
+            "Understand Solidity syntax and EVM execution model",
+            "Write, test, and deploy production-ready smart contracts",
+            "Use secure coding practices to avoid common vulnerabilities"
           ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "All Levels",
           "visible_instructors": [
             {
-              "id": 7799204,
-              "url": "/user/jonasschmedtmann/",
-              "name": "Jonas",
-              "title": "Jonas Schmedtmann",
-              "_class": "user",
-              "initials": "JS",
-              "job_title": "Web Developer, Designer, and Teacher",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/7799204_2091_5.jpg",
-              "display_name": "Jonas Schmedtmann",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/7799204_2091_5.jpg"
+              "id": "0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0",
+              "name": "Blockchain Student",
+              "title": "Blockchain Student",
+              "display_name": "Blockchain Student"
             }
           ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 320,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": {
-            "id": "aef7ad9c902345a9bcf51041697e387d",
-            "_class": "ds_course_badge",
-            "badge_text": "Bestseller",
-            "badge_family": "bestseller",
-            "context_info": {
-              "label": {
-                "id": 6368,
-                "url": "/topic/javascript/",
-                "title": "JavaScript",
-                "display_name": "JavaScript",
-                "topic_channel_url": "/topic/javascript/",
-                "tracking_object_type": "cl"
-              },
-              "category": {
-                "id": 288,
-                "url": "/courses/development/",
-                "title": "Development",
-                "tracking_object_type": "cat"
-              },
-              "subcategory": null
-            }
-          },
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "All Levels",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 860812,
-          "url": "/course/javascript-the-basics-for-beginners/",
-          "title": "JavaScript Beginner Bootcamp (2022)",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.432276,
-          "created": "2016-05-26T18:24:53Z",
-          "is_paid": true,
-          "headline": "JavaScript for Beginners: Projects based learning, whiteboard animations, coding in the browser and quizzes.",
-          "learn_url": "/course/javascript-the-basics-for-beginners/learn/",
-          "avg_rating": 4.548387,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/860812_f16e_23.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/860812_f16e_23.jpg",
-          "num_reviews": 5567,
-          "preview_url": "/course/860812/preview/",
-          "tracking_id": "9KlQ28WpSv6REpn6t1VmmA",
-          "content_info": "38.5 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/860812_f16e_23.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/860812_f16e_23.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/860812_f16e_23.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/860812_f16e_23.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/860812_f16e_23.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2016-06-09T15:13:54Z",
-          "caption_locales": [
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 24619,
-          "published_title": "javascript-the-basics-for-beginners",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2022-01-04",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.432276,
-          "caption_languages": [
-            "English [Auto]"
-          ],
-          "content_info_short": "38.5 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Learn basics of JavaScript",
-            "Create Interactive Webpage and deploy to the web",
-            "Build projects as you learn concepts to get a taste of building applications on a small scale"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "Beginner Level",
-          "visible_instructors": [
-            {
-              "id": 15156806,
-              "url": "/user/robgmerrill/",
-              "name": "Rob",
-              "title": "Rob Merrill",
-              "_class": "user",
-              "initials": "RM",
-              "job_title": "Front End Engineer",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/15156806_9489_2.jpg",
-              "display_name": "Rob Merrill",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/15156806_9489_2.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 385,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
+          "instructional_level": "Beginner",
           "instructional_level_simple": "Beginner",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
-        },
-        {
-          "id": 861624,
-          "url": "/course/javascript-es6-tutorial/",
-          "title": "ES6 Javascript: The Complete Developer's Guide",
-          "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.686474,
-          "created": "2016-05-27T17:33:00Z",
-          "is_paid": true,
-          "headline": "ES6 Javascript Development from scratch.  Get practice with live examples and learn exactly where to apply ES6 features.",
-          "learn_url": "/course/javascript-es6-tutorial/learn/",
-          "avg_rating": 4.6813064,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/861624_864d_2.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/861624_864d_2.jpg",
-          "num_reviews": 12211,
-          "preview_url": "/course/861624/preview/",
-          "tracking_id": "WliAhCkITiqAOiCz5Qf4Lg",
-          "content_info": "6.5 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/861624_864d_2.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/861624_864d_2.jpg",
-          "image_304x171": "https://img-c.udemycdn.com/course/304x171/861624_864d_2.jpg",
-          "image_480x270": "https://img-c.udemycdn.com/course/480x270/861624_864d_2.jpg",
-          "image_750x422": "https://img-c.udemycdn.com/course/750x422/861624_864d_2.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2016-07-12T15:29:32Z",
-          "caption_locales": [
+          "subtitle": "From first contract to deployment-ready Solidity workflows",
+          "category": "Solidity",
+          "level": "Beginner",
+          "language": "English",
+          "thumbnailUrl": "https://img-c.udemycdn.com/course/750x422/851712_fc61_6.jpg",
+          "description": "This course walks through Solidity from absolute basics to practical workflows. You will build multiple smart contracts, write tests, and understand how to structure contracts for maintainability and safety.",
+          "objectives": [
+            "Write secure Solidity contracts",
+            "Run contract unit tests",
+            "Deploy contracts with confidence"
+          ],
+          "requirements": [
+            "Basic JavaScript knowledge",
+            "A computer with internet access"
+          ],
+          "curriculum": [
             {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
+              "id": "sol-module-1",
+              "title": "Solidity Foundations",
+              "lessons": [
+                {
+                  "id": "sol-lesson-1",
+                  "title": "How Smart Contracts Execute",
+                  "videoUrl": "https://www.youtube.com/watch?v=gyMwXuJrbJQ",
+                  "duration": "16 min",
+                  "description": "Learn the smart contract lifecycle and transaction execution flow."
+                },
+                {
+                  "id": "sol-lesson-2",
+                  "title": "Solidity Data Types and State",
+                  "videoUrl": "https://www.youtube.com/watch?v=Qqx_wzMmFeA",
+                  "duration": "18 min",
+                  "description": "Model state safely with value/reference types and visibility controls."
+                }
+              ]
             },
             {
-              "title": "Español (España)",
-              "_class": "locale",
-              "locale": "es_ES",
-              "english_title": "Spanish (Spain)"
-            },
-            {
-              "title": "Português (Brasil)",
-              "_class": "locale",
-              "locale": "pt_BR",
-              "english_title": "Portuguese (Brazil)"
+              "id": "sol-module-2",
+              "title": "Build, Test, Deploy",
+              "lessons": [
+                {
+                  "id": "sol-lesson-3",
+                  "title": "Testing Strategy for Contracts",
+                  "videoUrl": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+                  "duration": "21 min",
+                  "description": "Design happy-path and adversarial tests for robust contracts."
+                },
+                {
+                  "id": "sol-lesson-4",
+                  "title": "Deployment and Verification",
+                  "videoUrl": "https://www.youtube.com/watch?v=PkZNo7MFNFg",
+                  "duration": "19 min",
+                  "description": "Deploy and verify contracts for transparent usage."
+                }
+              ]
             }
           ],
-          "instructor_name": null,
-          "num_subscribers": 51601,
-          "published_title": "javascript-es6-tutorial",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2022-08-01",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.686474,
-          "caption_languages": [
-            "English [Auto]",
-            "Portuguese [Auto]",
-            "Spanish [Auto]"
-          ],
-          "content_info_short": "6.5 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
-          "objectives_summary": [
-            "Learn how to apply each feature of ES6 in practical situations",
-            "Understand the major features of ES6",
-            "Have total mastery of generators"
-          ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "Beginner Level",
-          "visible_instructors": [
-            {
-              "id": 5487312,
-              "url": "/user/sgslo/",
-              "name": "Stephen",
-              "title": "Stephen Grider",
-              "_class": "user",
-              "initials": "SG",
-              "job_title": "Engineering Architect",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/5487312_0554.jpg",
-              "display_name": "Stephen Grider",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/5487312_0554.jpg"
-            }
-          ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 70,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "Beginner",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
+          "price": 69,
+          "discount": 10,
+          "token": "MATIC",
+          "status": "Published",
+          "updatedAt": "2026-04-12T09:00:00.000Z",
+          "publishedAt": "2026-04-02T09:00:00.000Z",
+          "ownerWalletAddress": "0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0",
+          "ownerDisplayName": "Blockchain Student"
         },
         {
-          "id": 886300,
-          "url": "/course/javascript-bootcamp-2016/",
-          "title": "Accelerated JavaScript Training",
+          "id": "bwl-defi-staking-dapp",
+          "url": "/course/bwl-defi-staking-dapp/",
+          "title": "Build a DeFi Staking DApp End-to-End",
           "_class": "course",
-          "badges": [],
-          "locale": {
-            "title": "English (US)",
-            "_class": "locale",
-            "locale": "en_US",
-            "english_title": "English (US)",
-            "simple_english_title": "English"
-          },
-          "rating": 4.689083,
-          "created": "2016-06-23T13:56:39Z",
-          "is_paid": true,
-          "headline": "Take a deep dive into JavaScript, a Must-Know Language in Web Development, with a Hands-on, Example-driven Approach",
-          "learn_url": "/course/javascript-bootcamp-2016/learn/",
-          "avg_rating": 4.565934,
-          "image_125_H": "https://img-c.udemycdn.com/course/125_H/886300_3557.jpg",
-          "image_50x50": "https://img-c.udemycdn.com/course/50x50/886300_3557.jpg",
-          "num_reviews": 5980,
-          "preview_url": "/course/886300/preview/",
-          "tracking_id": "nmmm8NAORE25K6InnETQeg",
-          "content_info": "7.5 total hours",
-          "context_info": {
-            "label": {
-              "id": 6368,
-              "url": "/topic/javascript/",
-              "title": "JavaScript",
-              "display_name": "JavaScript",
-              "topic_channel_url": "/topic/javascript/",
-              "tracking_object_type": "cl"
-            },
-            "category": {
-              "id": 288,
-              "url": "/courses/development/",
-              "title": "Development",
-              "tracking_object_type": "cat"
-            },
-            "subcategory": null
-          },
-          "image_100x100": "https://img-c.udemycdn.com/course/100x100/886300_3557.jpg",
-          "image_240x135": "https://img-c.udemycdn.com/course/240x135/886300_3557.jpg",
+          "rating": 4.7,
+          "headline": "Design token economics and build a staking dApp with contract + frontend integration.",
+          "content_info": "10 lessons",
           "image_304x171": "https://img-c.udemycdn.com/course/304x171/886300_3557.jpg",
           "image_480x270": "https://img-c.udemycdn.com/course/480x270/886300_3557.jpg",
           "image_750x422": "https://img-c.udemycdn.com/course/750x422/886300_3557.jpg",
-          "is_in_premium": false,
-          "is_wishlisted": false,
-          "input_features": null,
-          "published_time": "2016-07-12T18:23:35Z",
-          "caption_locales": [
-            {
-              "title": "English (US)",
-              "_class": "locale",
-              "locale": "en_US",
-              "english_title": "English (US)"
-            },
-            {
-              "title": "Español (España)",
-              "_class": "locale",
-              "locale": "es_ES",
-              "english_title": "Spanish (Spain)"
-            },
-            {
-              "title": "Português (Brasil)",
-              "_class": "locale",
-              "locale": "pt_BR",
-              "english_title": "Portuguese (Brazil)"
-            }
-          ],
-          "instructor_name": null,
-          "num_subscribers": 27883,
-          "published_title": "javascript-bootcamp-2016",
-          "relevancy_score": null,
-          "curriculum_items": [],
-          "last_update_date": "2020-11-09",
-          "order_in_results": null,
-          "predictive_score": null,
-          "avg_rating_recent": 4.689083,
+          "num_subscribers": 1740,
+          "last_update_date": "2026-04-10",
           "caption_languages": [
-            "English",
-            "Portuguese [Auto]",
-            "Spanish [Auto]"
+            "English"
           ],
-          "content_info_short": "7.5 hours",
-          "has_closed_caption": true,
-          "is_user_subscribed": false,
           "objectives_summary": [
-            "Use JavaScript to write modern, reactive Websites",
-            "Understand how JavaScript works and how to use its many advantages",
-            "Dive into JavaScript Libraries like jQuery or Frameworks like Angular 2 or React"
+            "Model staking rewards and lock mechanics",
+            "Build the smart contract architecture for staking",
+            "Connect frontend state to contract events"
           ],
-          "buyable_object_type": "course",
-          "curriculum_lectures": [],
-          "instructional_level": "All Levels",
           "visible_instructors": [
             {
-              "id": 13952972,
-              "url": "/user/maximilian-schwarzmuller/",
-              "name": "Maximilian",
-              "title": "Maximilian Schwarzmüller",
-              "_class": "user",
-              "initials": "MS",
-              "job_title": "AWS certified, Professional Web Developer and Instructor",
-              "image_50x50": "https://img-c.udemycdn.com/user/50x50/13952972_e853.jpg",
-              "display_name": "Maximilian Schwarzmüller",
-              "image_100x100": "https://img-c.udemycdn.com/user/100x100/13952972_e853.jpg"
+              "id": "chainlab-academy",
+              "name": "ChainLab Academy",
+              "title": "ChainLab Academy",
+              "display_name": "ChainLab Academy"
             }
           ],
-          "is_recently_published": false,
-          "lecture_search_result": null,
-          "num_published_lectures": 128,
-          "is_in_user_subscription": false,
-          "is_practice_test_course": false,
-          "bestseller_badge_content": null,
-          "free_course_subscribe_url": null,
-          "instructional_level_simple": "All Levels",
-          "num_published_practice_tests": 0,
-          "is_in_personal_plan_collection": false,
-          "content_length_practice_test_questions": 0
+          "instructional_level": "Intermediate",
+          "instructional_level_simple": "Intermediate",
+          "subtitle": "From tokenomics sketch to full staking app delivery",
+          "category": "DeFi",
+          "level": "Intermediate",
+          "language": "English",
+          "thumbnailUrl": "https://img-c.udemycdn.com/course/750x422/886300_3557.jpg",
+          "description": "Build a complete DeFi staking product including reward logic, frontend contract reads/writes, and UX around staking lifecycle events.",
+          "objectives": [
+            "Ship a complete staking app",
+            "Understand reward formulas",
+            "Connect contract events to frontend updates"
+          ],
+          "requirements": [
+            "Basic Solidity and React fundamentals",
+            "MetaMask wallet"
+          ],
+          "curriculum": [
+            {
+              "id": "defi-module-1",
+              "title": "Tokenomics and Architecture",
+              "lessons": [
+                {
+                  "id": "defi-lesson-1",
+                  "title": "Reward Model Deep Dive",
+                  "videoUrl": "https://www.youtube.com/watch?v=Qqx_wzMmFeA",
+                  "duration": "17 min",
+                  "description": "Design fair and predictable staking rewards."
+                },
+                {
+                  "id": "defi-lesson-2",
+                  "title": "Contract Interfaces",
+                  "videoUrl": "https://www.youtube.com/watch?v=gyMwXuJrbJQ",
+                  "duration": "15 min",
+                  "description": "Plan interfaces and storage layout for staking contracts."
+                }
+              ]
+            },
+            {
+              "id": "defi-module-2",
+              "title": "Frontend Integration",
+              "lessons": [
+                {
+                  "id": "defi-lesson-3",
+                  "title": "Wallet Connect and Stake Flow",
+                  "videoUrl": "https://www.youtube.com/watch?v=PkZNo7MFNFg",
+                  "duration": "22 min",
+                  "description": "Connect wallet UX with stake and unstake actions."
+                },
+                {
+                  "id": "defi-lesson-4",
+                  "title": "Portfolio and Reward Dashboard",
+                  "videoUrl": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+                  "duration": "20 min",
+                  "description": "Visualize real-time staking positions and rewards."
+                }
+              ]
+            }
+          ],
+          "price": 79,
+          "discount": 15,
+          "token": "USDC",
+          "status": "Published",
+          "updatedAt": "2026-04-10T13:00:00.000Z",
+          "publishedAt": "2026-03-30T13:00:00.000Z",
+          "ownerWalletAddress": "0xDEADBEEF00112233445566778899AABBCCDDEE11",
+          "ownerDisplayName": "ChainLab Academy"
+        },
+        {
+          "id": "bwl-smart-contract-security",
+          "url": "/course/bwl-smart-contract-security/",
+          "title": "Smart Contract Security Playbook",
+          "_class": "course",
+          "rating": 4.9,
+          "headline": "Audit-oriented security mindset for Solidity projects and production checklists.",
+          "content_info": "9 lessons",
+          "image_304x171": "https://img-c.udemycdn.com/course/304x171/670034_ce04_6.jpg",
+          "image_480x270": "https://img-c.udemycdn.com/course/480x270/670034_ce04_6.jpg",
+          "image_750x422": "https://img-c.udemycdn.com/course/750x422/670034_ce04_6.jpg",
+          "num_subscribers": 1320,
+          "last_update_date": "2026-04-08",
+          "caption_languages": [
+            "English"
+          ],
+          "objectives_summary": [
+            "Identify common Solidity vulnerabilities",
+            "Apply practical mitigations and invariant testing",
+            "Build a security checklist before production"
+          ],
+          "visible_instructors": [
+            {
+              "id": "0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0",
+              "name": "Blockchain Student",
+              "title": "Blockchain Student",
+              "display_name": "Blockchain Student"
+            }
+          ],
+          "instructional_level": "Advanced",
+          "instructional_level_simple": "Advanced",
+          "subtitle": "Think like an auditor and secure contracts before deployment",
+          "category": "Security",
+          "level": "Advanced",
+          "language": "English",
+          "thumbnailUrl": "https://img-c.udemycdn.com/course/750x422/670034_ce04_6.jpg",
+          "description": "This advanced course focuses on practical smart contract hardening. You will review vulnerable patterns, test exploit paths, and add protections with confidence.",
+          "objectives": [
+            "Detect and fix contract vulnerabilities",
+            "Write security-oriented tests",
+            "Prepare deployment hardening checklist"
+          ],
+          "requirements": [
+            "Comfortable with Solidity basics",
+            "Basic understanding of unit testing"
+          ],
+          "curriculum": [
+            {
+              "id": "sec-module-1",
+              "title": "Threat Modeling",
+              "lessons": [
+                {
+                  "id": "sec-lesson-1",
+                  "title": "Vulnerability Taxonomy",
+                  "videoUrl": "https://www.youtube.com/watch?v=gyMwXuJrbJQ",
+                  "duration": "14 min",
+                  "description": "Classify vulnerability families and exploit surfaces."
+                },
+                {
+                  "id": "sec-lesson-2",
+                  "title": "Attack Path Design",
+                  "videoUrl": "https://www.youtube.com/watch?v=Qqx_wzMmFeA",
+                  "duration": "18 min",
+                  "description": "Map realistic attacker actions against your contracts."
+                }
+              ]
+            },
+            {
+              "id": "sec-module-2",
+              "title": "Hardening and Validation",
+              "lessons": [
+                {
+                  "id": "sec-lesson-3",
+                  "title": "Mitigation Patterns",
+                  "videoUrl": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+                  "duration": "19 min",
+                  "description": "Apply guards, checks-effects-interactions, and access controls."
+                },
+                {
+                  "id": "sec-lesson-4",
+                  "title": "Pre-Deployment Checklist",
+                  "videoUrl": "https://www.youtube.com/watch?v=PkZNo7MFNFg",
+                  "duration": "16 min",
+                  "description": "Finalize contract safety checklist for production launch."
+                }
+              ]
+            }
+          ],
+          "price": 99,
+          "discount": 20,
+          "token": "ETH",
+          "status": "Published",
+          "updatedAt": "2026-04-08T08:30:00.000Z",
+          "publishedAt": "2026-03-28T08:30:00.000Z",
+          "ownerWalletAddress": "0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0",
+          "ownerDisplayName": "Blockchain Student"
         }
-      ],
-      "title": "JavaScript",
-      "header": "Grow your software development skills with JavaScript",
-      "description": "JavaScript is a text-based computer programming language used to make dynamic web pages. A must-learn for aspiring web developers or programmers, JavaScript can be used for features like image carousels, displaying countdowns and timers, and playing media on a webpage. With JavaScript online classes, you can learn to build interactive web applications, choose the best framework, and work with other programming languages like HTML and CSS. "
+      ]
     }
   }
 }

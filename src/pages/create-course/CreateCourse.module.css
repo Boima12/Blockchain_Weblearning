@@ -1,3 +1,504 @@
 
+.main_CreateCourse {
+	--accent: #6a42d8;
+	--accent-soft: #efe9ff;
+	--ink: #1c1d1f;
+	--muted: #575a66;
+	--line: #e3dfef;
+	--surface: #ffffff;
+	--surface-alt: #f7f8fc;
+	min-height: calc(100vh - 6rem);
+	padding: 1.3rem;
+	background:
+		radial-gradient(circle at 10% 0%, #ece5ff 0%, transparent 40%),
+		linear-gradient(180deg, #f5f7ff 0%, #ffffff 75%);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-/*# sourceMappingURL=CreateCourse.module.css.map */
+.badge {
+	margin: 0;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.08rem;
+	color: var(--accent);
+}
+
+.wizardShell {
+	max-width: 1180px;
+	margin: 0 auto;
+	background: var(--surface);
+	border: 1px solid var(--line);
+	border-radius: 1rem;
+	box-shadow: 0 12px 28px rgba(59, 46, 91, 0.08);
+	padding: 1.25rem;
+}
+
+.wizardHeader h1 {
+	margin: 0.3rem 0;
+	color: var(--ink);
+	font-size: clamp(1.45rem, 1rem + 1.5vw, 2rem);
+}
+
+.wizardHeader p {
+	margin-top: 0.3rem;
+	color: var(--muted);
+}
+
+.stepper {
+	margin-top: 1rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.stepItem {
+	min-height: 2.4rem;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	background: #fff;
+	color: #313447;
+	font-weight: 700;
+	font-size: 0.88rem;
+	padding: 0.35rem 0.85rem 0.35rem 0.35rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	transition: all 0.2s ease;
+}
+
+.stepItem span {
+	width: 1.6rem;
+	height: 1.6rem;
+	border-radius: 999px;
+	background: var(--surface-alt);
+	border: 1px solid var(--line);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.78rem;
+}
+
+.stepActive {
+	border-color: var(--accent);
+	background: var(--accent-soft);
+	color: #3c2484;
+}
+
+.stepActive span {
+	border-color: var(--accent);
+	background: #fff;
+}
+
+.stepCompleted {
+	border-color: #c9b7f5;
+	color: #4a2aa6;
+}
+
+.feedback {
+	margin: 1rem 0 0;
+	padding: 0.65rem 0.8rem;
+	border-radius: 0.65rem;
+	font-weight: 600;
+}
+
+.feedbackInfo {
+	background: #f5f5fb;
+	color: #424659;
+}
+
+.feedbackSuccess {
+	background: #e9f9f2;
+	color: #1a7e4f;
+}
+
+.feedbackError {
+	background: #fff0f0;
+	color: #b02f2f;
+}
+
+.stepPanel {
+	margin-top: 1rem;
+	border: 1px solid var(--line);
+	border-radius: 0.9rem;
+	padding: 1rem;
+	background: var(--surface);
+}
+
+.stepPanel h2 {
+	margin: 0;
+	font-size: 1.3rem;
+	color: var(--ink);
+}
+
+.stepPanel > p {
+	margin-top: 0.4rem;
+	color: var(--muted);
+}
+
+.formGrid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.85rem;
+	margin-top: 0.8rem;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #313445;
+}
+
+.field input,
+.field select,
+.field textarea,
+.dynamicRow input {
+	border: 1px solid #d8d5e6;
+	border-radius: 0.55rem;
+	min-height: 2.5rem;
+	padding: 0.45rem 0.7rem;
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: #24252a;
+	background: #fff;
+}
+
+.field textarea {
+	resize: vertical;
+	min-height: 8rem;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.dynamicRow input:focus {
+	outline: 2px solid #a991ee;
+	border-color: #8d6ae8;
+}
+
+.invalidInput {
+	border-color: #cf3c3c !important;
+	outline-color: #ffb6b6 !important;
+}
+
+.errorText {
+	font-size: 0.8rem;
+	color: #bf2e2e;
+	font-weight: 700;
+}
+
+.fullWidth {
+	grid-column: 1 / -1;
+}
+
+.dynamicListBlock {
+	margin-top: 1rem;
+	padding: 0.9rem;
+	border-radius: 0.7rem;
+	border: 1px solid #e3e1ee;
+	background: #fcfcff;
+}
+
+.dynamicHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.8rem;
+}
+
+.dynamicHeader h3 {
+	margin: 0;
+	font-size: 1rem;
+	color: var(--ink);
+}
+
+.dynamicHeader button,
+.addModuleButton,
+.addLessonButton {
+	min-height: 2.25rem;
+	border: 1px solid #cfcae2;
+	background: #fff;
+	border-radius: 0.55rem;
+	font-weight: 700;
+	cursor: pointer;
+	padding: 0.35rem 0.65rem;
+	color: #33384c;
+}
+
+.dynamicHeader button:hover,
+.addModuleButton:hover,
+.addLessonButton:hover {
+	border-color: var(--accent);
+	color: #4e2bb6;
+}
+
+.dynamicRow {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 0.65rem;
+	align-items: center;
+}
+
+.dynamicRow input {
+	flex: 1;
+}
+
+.dynamicRow button {
+	min-height: 2.25rem;
+	border: 1px solid #d8d3e8;
+	background: #fff;
+	border-radius: 0.55rem;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 0.3rem 0.6rem;
+	color: #31364a;
+}
+
+.moduleStack {
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	margin-top: 0.8rem;
+}
+
+.moduleCard {
+	border: 1px solid #ddd9ea;
+	border-radius: 0.8rem;
+	background: #fff;
+	padding: 0.85rem;
+}
+
+.moduleHeader,
+.lessonHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.7rem;
+}
+
+.moduleHeader h3,
+.lessonHeader h4 {
+	margin: 0;
+	color: #1f2130;
+}
+
+.moduleHeader button,
+.lessonHeader button {
+	border: 1px solid #ded9ed;
+	background: #fff;
+	border-radius: 0.5rem;
+	min-height: 2.1rem;
+	padding: 0.25rem 0.6rem;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.moduleHeader button:disabled,
+.lessonHeader button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.lessonStack {
+	margin-top: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.lessonCard {
+	border: 1px solid #ece9f5;
+	border-radius: 0.75rem;
+	padding: 0.75rem;
+	background: var(--surface-alt);
+}
+
+.lessonGrid {
+	margin-top: 0.6rem;
+	display: grid;
+	gap: 0.65rem;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lessonDescription {
+	grid-column: 1 / -1;
+}
+
+.lessonDescription textarea {
+	min-height: 5rem;
+}
+
+.addLessonButton {
+	margin-top: 0.8rem;
+}
+
+.addModuleButton {
+	margin-top: 0.8rem;
+}
+
+.pricingPreview {
+	margin-top: 1rem;
+	padding: 0.9rem;
+	border: 1px solid #d9d5e9;
+	border-radius: 0.8rem;
+	background: linear-gradient(160deg, #f4f1ff 0%, #ffffff 80%);
+}
+
+.pricingPreview h3 {
+	margin: 0;
+	color: #2c2f44;
+}
+
+.pricingPreview p {
+	margin-top: 0.55rem;
+	margin-bottom: 0;
+	color: #4d5267;
+}
+
+.finalPrice {
+	font-size: 1.2rem;
+	font-weight: 800;
+	color: #43249f !important;
+}
+
+.reviewGrid {
+	margin-top: 0.8rem;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.7rem;
+}
+
+.reviewGrid article {
+	border: 1px solid #e4e0f1;
+	border-radius: 0.7rem;
+	padding: 0.8rem;
+	background: #fbfbff;
+}
+
+.reviewGrid article h3 {
+	margin: 0;
+	font-size: 1rem;
+	color: #272a3a;
+}
+
+.reviewGrid article p {
+	margin: 0.45rem 0 0;
+	color: #4e5160;
+	font-size: 0.92rem;
+}
+
+.moduleOutline {
+	margin-top: 1rem;
+	border: 1px solid #e1dcef;
+	border-radius: 0.75rem;
+	padding: 0.85rem;
+	background: #fff;
+}
+
+.moduleOutline h3 {
+	margin: 0;
+	color: #2a2d3f;
+}
+
+.outlineItem {
+	margin-top: 0.7rem;
+	padding-top: 0.7rem;
+	border-top: 1px dashed #dfd9ef;
+}
+
+.outlineItem p {
+	margin: 0;
+	color: #33364a;
+}
+
+.outlineItem ul {
+	margin: 0.5rem 0 0;
+	padding-left: 1.15rem;
+	color: #5a5d6b;
+}
+
+.footerActions {
+	margin-top: 1rem;
+	padding-top: 0.8rem;
+	border-top: 1px solid #e4e0f0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.8rem;
+}
+
+.leftActions,
+.rightActions {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	flex-wrap: wrap;
+}
+
+.secondaryButton,
+.primaryButton {
+	min-height: 2.5rem;
+	border-radius: 0.6rem;
+	font-weight: 700;
+	cursor: pointer;
+	padding: 0.45rem 0.95rem;
+	transition: transform 0.2s ease;
+}
+
+.secondaryButton {
+	border: 1px solid #cfc9e4;
+	background: #fff;
+	color: #2f3348;
+}
+
+.primaryButton {
+	border: 1px solid #2b2d3b;
+	background: #1c1d1f;
+	color: #fff;
+}
+
+.secondaryButton:hover,
+.primaryButton:hover {
+	transform: translateY(-1px);
+}
+
+@media only screen and (max-width: 1000px) {
+	.reviewGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.lessonGrid,
+	.formGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media only screen and (max-width: 700px) {
+	.main_CreateCourse {
+		padding: 0.8rem;
+	}
+
+	.wizardShell,
+	.stepPanel {
+		padding: 0.8rem;
+	}
+
+	.footerActions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.leftActions,
+	.rightActions {
+		width: 100%;
+	}
+
+	.leftActions button,
+	.rightActions button {
+		flex: 1;
+	}
+}

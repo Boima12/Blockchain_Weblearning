@@ -3,18 +3,25 @@ import {useParams} from 'react-router-dom';
 import LoadingSpinner from '../../components/loading-spinner/LoadingSpinner';
 import CourseDetailsPage from '../../components/course-details-page/CourseDetailsPage';
 import styles from './SingleCoursePage.module.css';
-import coursesJson from '../../materials/data.json';
+import usePublishedCourses from '../../hooks/usePublishedCourses';
 
 function SingleCoursePage() {
     const {courseId} = useParams();
-    const sections = Object.values(coursesJson?.data ?? {});
-    const allCourses = sections.flatMap((section) => section?.items ?? []);
+    const { courses: allCourses, isLoading, error } = usePublishedCourses();
     const courseDetails = allCourses.find(
-        (course) => course.id.toString() === courseId,
+        (course) => String(course?.id) === String(courseId),
     );
 
-    const fetched = allCourses.length > 0;
+    const fetched = !isLoading;
     const notFound = fetched && !courseDetails;
+
+    if (error) {
+        return (
+            <main className={styles.main}>
+                <h1 className={styles.message}>can't fetch data from MongoDB</h1>
+            </main>
+        );
+    }
 
     return fetched ? (
         notFound ? (

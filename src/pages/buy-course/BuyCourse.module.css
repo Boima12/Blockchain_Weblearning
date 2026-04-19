@@ -1,0 +1,237 @@
+.main_buyCourse {
+	min-height: calc(100vh - 6rem);
+	padding: 1.5rem;
+	background: radial-gradient(circle at 20% 0%, #edf0ff 0%, #f8fafc 40%, #ffffff 100%);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.buyShell {
+	max-width: 1150px;
+	margin: 0 auto;
+}
+
+.headerSection {
+	border: 1px solid #e4e9f6;
+	border-radius: 1rem;
+	background-color: #ffffff;
+	padding: 1rem 1.2rem;
+	box-shadow: 0 10px 25px rgba(36, 71, 149, 0.08);
+}
+
+.badge {
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.6rem;
+	border-radius: 999px;
+	background-color: #e6ecff;
+	color: #1f3b83;
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.04rem;
+	text-transform: uppercase;
+}
+
+.headerSection h1 {
+	margin: 0.5rem 0;
+	font-size: 2rem;
+}
+
+.headerSection p {
+	margin: 0;
+	color: #4e5565;
+}
+
+.gridSection {
+	margin-top: 1rem;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+.card {
+	border: 1px solid #e7ebf3;
+	border-radius: 1rem;
+	background-color: #ffffff;
+	padding: 1rem;
+	box-shadow: 0 8px 20px rgba(44, 75, 140, 0.06);
+}
+
+.card h2 {
+	margin: 0 0 0.75rem;
+	font-size: 1.35rem;
+}
+
+.priceRows p {
+	margin: 0.45rem 0;
+	display: flex;
+	justify-content: space-between;
+	color: #4e5565;
+}
+
+.priceRows span {
+	color: #101828;
+	font-weight: 700;
+}
+
+.totalRow {
+	border-top: 1px solid #ebeff8;
+	padding-top: 0.6rem;
+	margin-top: 0.7rem;
+}
+
+.walletBox {
+	margin-top: 0.9rem;
+	padding: 0.75rem;
+	border-radius: 0.75rem;
+	border: 1px solid #d9e3ff;
+	background-color: #f8faff;
+}
+
+.walletLabel {
+	margin: 0;
+	font-size: 0.8rem;
+	color: #4360a8;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04rem;
+}
+
+.walletBox p {
+	margin: 0.35rem 0 0;
+	color: #132248;
+}
+
+.simulationControls {
+	margin-top: 1rem;
+	display: grid;
+	gap: 0.6rem;
+}
+
+.simulationControls label {
+	font-size: 0.86rem;
+	color: #27324b;
+	font-weight: 700;
+}
+
+.simulationControls select {
+	min-height: 2.4rem;
+	border-radius: 0.6rem;
+	border: 1px solid #ccd6ef;
+	padding: 0.4rem 0.6rem;
+	background-color: #fff;
+}
+
+.primaryButton,
+.secondaryButton {
+	min-height: 2.6rem;
+	border-radius: 0.65rem;
+	border: none;
+	cursor: pointer;
+	font-weight: 700;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primaryButton {
+	color: #ffffff;
+	background: linear-gradient(90deg, #102a70 0%, #2249ad 100%);
+}
+
+.secondaryButton {
+	color: #1c2d59;
+	background: #edf2ff;
+	border: 1px solid #c8d6fd;
+}
+
+.primaryButton:hover,
+.secondaryButton:hover {
+	transform: translateY(-1px);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.statusText {
+	margin: 0;
+	color: #44506a;
+}
+
+.hashBox {
+	margin-top: 0.9rem;
+	border-radius: 0.8rem;
+	border: 1px solid #dbe6ff;
+	background-color: #f8faff;
+	padding: 0.7rem;
+}
+
+.hashBox p {
+	margin: 0;
+	font-size: 0.82rem;
+	color: #274891;
+	font-weight: 700;
+}
+
+.hashBox code {
+	display: block;
+	margin-top: 0.45rem;
+	font-size: 0.85rem;
+	white-space: break-spaces;
+	color: #182748;
+}
+
+.statusActions {
+	margin-top: 1rem;
+	display: grid;
+	gap: 0.6rem;
+}
+
+.stateCard {
+	max-width: 700px;
+	margin: 3rem auto;
+	border: 1px solid #e6eaf4;
+	border-radius: 1rem;
+	background-color: #ffffff;
+	box-shadow: 0 10px 30px rgba(50, 70, 120, 0.08);
+	padding: 1.2rem;
+}
+
+.stateCard h1 {
+	margin: 0;
+}
+
+.stateCard p {
+	margin-top: 0.5rem;
+	color: #4e5565;
+}
+
+.stateActions {
+	margin-top: 1rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.stateActions button {
+	min-height: 2.5rem;
+	padding: 0.45rem 0.9rem;
+	border-radius: 0.6rem;
+	border: 1px solid #ccd6ef;
+	background-color: #f4f7ff;
+	color: #1c2d59;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 900px) {
+	.gridSection {
+		grid-template-columns: 1fr;
+	}
+
+	.headerSection h1 {
+		font-size: 1.55rem;
+	}
+}

@@ -8,18 +8,36 @@ function SingleCourseHeader({courseDetails}) {
 
     const navigate = useNavigate();
 
-    const {
-        title,
-        headline,
-        rating,
-        num_subscribers: subscribers,
-        visible_instructors: instructors,
-        last_update_date: lastUpdate,
-        caption_languages: languages,
-    } = courseDetails;
+    const title = courseDetails?.title ?? 'Untitled Course';
+    const headline =
+        courseDetails?.headline || courseDetails?.subtitle || courseDetails?.description;
 
-    const [year, month] = lastUpdate.split('-');
-    const date = new Date(year, month - 1);
+    const ratingValue = Number(courseDetails?.rating ?? 4.5);
+    const subscribers = Number(courseDetails?.num_subscribers ?? 0);
+
+    const instructors = Array.isArray(courseDetails?.visible_instructors)
+        ? courseDetails.visible_instructors
+        : [
+            {
+                name: courseDetails?.ownerDisplayName ?? 'Instructor',
+            },
+        ];
+
+    const lastUpdate =
+        courseDetails?.last_update_date ||
+        String(courseDetails?.updatedAt ?? new Date().toISOString()).slice(0, 10);
+
+    const [year, month] = String(lastUpdate).split('-');
+    const parsedDate = new Date(Number(year), Number(month) - 1);
+    const date = Number.isNaN(parsedDate.getTime())
+        ? new Date()
+        : parsedDate;
+
+    const languages =
+        Array.isArray(courseDetails?.caption_languages) &&
+        courseDetails.caption_languages.length > 0
+            ? courseDetails.caption_languages
+            : [courseDetails?.language ?? 'English'];
 
     return (
         <>
@@ -41,10 +59,10 @@ function SingleCourseHeader({courseDetails}) {
                             <h1 className={styles.title}>{title}</h1>
                             <p>{headline}</p>
                             <p className={styles.rating}>
-                                {rating.toPrecision(2)}
+                                {ratingValue.toPrecision(2)}
                             </p>
 
-                            <StarsRating rating={rating}/>
+                            <StarsRating rating={ratingValue}/>
                             <p className={styles.linkLikeText}>
                                 (2,305 ratings)
                             </p>
@@ -60,7 +78,9 @@ function SingleCourseHeader({courseDetails}) {
                                 Created by{' '}
                                 <span className={styles.linkLikeText}>
 									{instructors
-                                        .map((instructor) => instructor.name)
+                                        .map((instructor) =>
+                                            instructor?.name ?? instructor?.title,
+                                        )
                                         .join(', ')}
 								</span>
                             </p>

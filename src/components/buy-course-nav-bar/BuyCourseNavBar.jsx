@@ -2,30 +2,44 @@ import React, {useEffect, useState} from 'react';
 import styles from './BuyCourseNavBar.module.css';
 import StarsRating from '../stars-rating/StarsRating';
 
-function BuyCourseNavBar({details}) {
+const toCurrencyLabel = (value, token) =>
+    `${Number(value ?? 0).toFixed(2)} ${token}`;
+
+function BuyCourseNavBar({details, onBuyNow, buyButtonLabel = 'Buy now'}) {
     const [hidden, toggleHidden] = useState(true);
 
-    const hideNav = () => {
-        if (window.scrollY > 150 && hidden) {
-            toggleHidden(false);
-        }
-        if (window.scrollY <= 150) {
-            toggleHidden(true);
-        }
-    };
-
-    const editMargin = () => {
-        const footer = document.querySelector('#page-footer');
-        if (window.innerWidth >= 1080) {
-            footer.style.marginBottom = 0;
-        } else {
-            footer.style.marginBottom = '4rem';
-        }
-    }
+    const token = String(details?.token ?? 'MATIC').toUpperCase();
+    const basePrice = Number(details?.price ?? 199.99);
+    const discount = Math.min(99, Math.max(0, Number(details?.discount ?? 0)));
+    const finalPrice = basePrice * (1 - discount / 100);
 
     useEffect(() => {
+        const hideNav = () => {
+            toggleHidden(window.scrollY <= 150);
+        };
+
+        const editMargin = () => {
+            const footer = document.querySelector('#page-footer');
+            if (!footer) {
+                return;
+            }
+
+            if (window.innerWidth >= 1080) {
+                footer.style.marginBottom = 0;
+            } else {
+                footer.style.marginBottom = '4rem';
+            }
+        };
+
+        hideNav();
+        editMargin();
         window.addEventListener('scroll', hideNav);
         window.addEventListener('resize', editMargin);
+
+        return () => {
+            window.removeEventListener('scroll', hideNav);
+            window.removeEventListener('resize', editMargin);
+        };
     }, []);
 
     const {title, rating, num_subscribers: subscribers} = details;
@@ -54,14 +68,17 @@ function BuyCourseNavBar({details}) {
             {/* barRightContent là cho mobile, mà làm Blockchain thì chắc không cần Responsive :d */}
             <div className={styles.barRightContent}>
                 <div className={styles.price}>
-                    <span className={styles.newPrice}>E£199.99</span>
-                    <span className={styles.oldPrice}>E£679.99</span>
+                    <span className={styles.newPrice}>{toCurrencyLabel(finalPrice, token)}</span>
+                    {discount > 0 ? (
+                        <span className={styles.oldPrice}>{toCurrencyLabel(basePrice, token)}</span>
+                    ) : null}
                 </div>
                 <button
                     type='button'
                     className={styles.buyNowButton}
+                    onClick={onBuyNow}
                 >
-                    Buy now
+                    {buyButtonLabel}
                 </button>
             </div>
         </div>

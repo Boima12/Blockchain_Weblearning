@@ -2,18 +2,44 @@ import React from 'react';
 import styles from './NavBar.module.css';
 import SearchBar from '../search-bar/SearchBar';
 import { useNavigate } from 'react-router-dom';
+import {
+    clearAuthSession,
+    formatWalletAddress,
+    getAppState,
+    getAuthSession,
+    resetAppState,
+} from '../../utils/appLocalState';
+import blockchainWeblearningIcon from '../../assets/Blockchain_weblearning_icon.png';
+import { logoutUserAccount } from '../../utils/userAccountApi';
 
 function NavBar() {
 
     const navigate = useNavigate();
+    const authSession = getAuthSession();
+
+    const isAuthenticated = Boolean(authSession?.accountId);
+    const walletAddress =
+        authSession?.walletAddress || getAppState().profile.walletAddress;
+
+    const onLogout = async () => {
+        try {
+            await logoutUserAccount();
+        } catch {
+            // Proceed with local logout even when network request fails.
+        }
+
+        clearAuthSession();
+        resetAppState();
+        navigate('/login');
+    };
 
     return (
         <nav className={styles.nav}>
             <ul className={styles.ul}>
                 <li className={styles.logo}>
                     <img
-                        src='https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg'
-                        alt='udemy-logo'
+                        src={blockchainWeblearningIcon}
+                        alt='blockchain-weblearning-logo'
                         onClick={() => navigate('/')}
                     />
                 </li>
@@ -34,6 +60,13 @@ function NavBar() {
                     <button
                         type='button'
                         name='create-course-button'
+                        onClick={() =>
+                            navigate(
+                                isAuthenticated
+                                    ? '/create-course'
+                                    : '/login',
+                            )
+                        }
                     >
                         Create Course
                     </button>
@@ -43,8 +76,11 @@ function NavBar() {
                     <button
                         type='button'
                         name='profile-button'
+                        onClick={() =>
+                            navigate(isAuthenticated ? '/profile' : '/login')
+                        }
                     >
-                        Profile
+                        {isAuthenticated ? 'Profile' : 'Login'}
                     </button>
                 </li>
 
@@ -52,8 +88,15 @@ function NavBar() {
                     <button
                         type='button'
                         name='wallet-logout-button'
+                        onClick={() =>
+                            isAuthenticated
+                                ? onLogout()
+                                : navigate('/login')
+                        }
                     >
-                        Wallet name and logout
+                        {isAuthenticated
+                            ? `Logout (${formatWalletAddress(walletAddress)})`
+                            : 'Register / Login'}
                     </button>
                 </li>
             </ul>
