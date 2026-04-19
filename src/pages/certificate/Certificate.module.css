@@ -2,26 +2,85 @@
 .main_Certificate {
 	min-height: calc(100vh - 6rem);
 	padding: 1.5rem;
-	background: linear-gradient(180deg, #f8f9ff 0%, #fff 70%);
+	background: radial-gradient(circle at 15% 5%, #f4f6ff 0%, #ffffff 42%);
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.placeholderBox {
+.certificateShell,
+.stateCard {
 	max-width: 900px;
 	margin: 0 auto;
-	border: 1px solid #e8e7f4;
+	border: 1px solid #e7eaf6;
 	border-radius: 1rem;
 	background: #fff;
 	padding: 1.2rem;
+	box-shadow: 0 12px 30px rgba(46, 71, 129, 0.08);
 }
 
-.placeholderBox h1 {
-	margin: 0.2rem 0 0.8rem;
+
+.certificateCanvas {
+	border: 8px double #274690;
+	border-radius: 0.85rem;
+	padding: 2rem 1.4rem;
+	text-align: center;
+	background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+}
+
+.certificateLabel {
+	margin: 0;
+	text-transform: uppercase;
+	letter-spacing: 0.18rem;
+	font-size: 0.78rem;
+	font-weight: 700;
+	color: #4660a8;
+}
+
+.certificateCanvas h1 {
+	margin: 0.8rem 0 0.2rem;
+	font-size: 2.1rem;
 	color: #1e1e22;
 }
 
-.placeholderBox p {
-	color: #50525b;
+.subtitle {
+	margin: 0.3rem 0;
+	color: #5a6376;
+}
+
+.certificateCanvas h2 {
+	margin: 0.45rem 0;
+	font-size: 1.8rem;
+	color: #1f356f;
+}
+
+.metaGrid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0.75rem;
+	margin-top: 1.25rem;
+}
+
+.metaGrid article {
+	border: 1px solid #dbe2f5;
+	border-radius: 0.7rem;
+	background-color: #f9fbff;
+	padding: 0.65rem;
+}
+
+.metaGrid article p {
+	margin: 0;
+	font-size: 0.78rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04rem;
+	font-weight: 700;
+	color: #4f618b;
+}
+
+.metaGrid article strong {
+	display: block;
+	margin-top: 0.4rem;
+	font-size: 0.95rem;
+	color: #102248;
+	word-break: break-word;
 }
 
 .badge {
@@ -33,9 +92,19 @@
 	color: #6b42d9;
 }
 
+.stateCard h1 {
+	margin: 0.3rem 0 0.7rem;
+}
+
+.stateCard p {
+	color: #50525b;
+}
+
 .actions {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 0.75rem;
+	margin-top: 1rem;
 }
 
 .actions button {
@@ -47,9 +116,41 @@
 	font-weight: 700;
 	cursor: pointer;
 	padding: 0.45rem 0.9rem;
+	transition: all 0.2s ease;
 }
 
 .actions button:hover {
+	transform: translateY(-1px);
 	border-color: #6d42d8;
 	color: #6d42d8;
+}
+
+.actions button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.errorText {
+	margin: 0.75rem 0 0;
+	padding: 0.65rem 0.8rem;
+	border: 1px solid #f1b7b7;
+	background: #fff4f4;
+	border-radius: 0.6rem;
+	color: #8f2525;
+	font-weight: 600;
+}
+
+@media only screen and (max-width: 820px) {
+	.metaGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.certificateCanvas h1 {
+		font-size: 1.65rem;
+	}
+
+	.certificateCanvas h2 {
+		font-size: 1.4rem;
+	}
 }

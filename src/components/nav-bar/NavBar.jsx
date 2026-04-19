@@ -3,6 +3,7 @@ import styles from './NavBar.module.css';
 import SearchBar from '../search-bar/SearchBar';
 import { useNavigate } from 'react-router-dom';
 import { formatWalletAddress, getAppState } from '../../utils/appLocalState';
+import blockchainWeblearningIcon from '../../assets/Blockchain_weblearning_icon.png';
 
 function NavBar() {
 
@@ -14,8 +15,8 @@ function NavBar() {
             <ul className={styles.ul}>
                 <li className={styles.logo}>
                     <img
-                        src='https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg'
-                        alt='udemy-logo'
+                        src={blockchainWeblearningIcon}
+                        alt='blockchain-weblearning-logo'
                         onClick={() => navigate('/')}
                     />
                 </li>
