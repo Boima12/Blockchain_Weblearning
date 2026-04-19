@@ -2,9 +2,17 @@ import React, {useEffect, useState} from 'react';
 import styles from './StickyCardContent.module.css';
 import ThisCourseIncludes from '../this-course-includes/ThisCourseIncludes';
 
-function StickyCardContent({details, additionalDetails}) {
+const toCurrencyLabel = (value, token) =>
+    `${Number(value ?? 0).toFixed(2)} ${token}`;
+
+function StickyCardContent({details, additionalDetails, onBuyNow, buyButtonLabel = 'Buy now'}) {
     const image =
         details?.image_750x422 ?? details?.thumbnailUrl ?? details?.image_480x270;
+
+    const token = String(details?.token ?? 'MATIC').toUpperCase();
+    const basePrice = Number(details?.price ?? 199.99);
+    const discount = Math.min(99, Math.max(0, Number(details?.discount ?? 0)));
+    const finalPrice = basePrice * (1 - discount / 100);
 
     const [hidden, toggleHidden] = useState(false);
 
@@ -38,9 +46,17 @@ function StickyCardContent({details, additionalDetails}) {
             </figure>
 
             <div className={styles.cardBody}>
-                <p className={styles.price}>E£679.99</p>
-                <button className={[styles.buyNowButton, styles.button].join(' ')}>
-                    Buy now
+                <p className={styles.price}>{toCurrencyLabel(finalPrice, token)}</p>
+                {discount > 0 ? (
+                    <p className={styles.oldPrice}>{toCurrencyLabel(basePrice, token)}</p>
+                ) : null}
+
+                <button
+                    type='button'
+                    className={[styles.buyNowButton, styles.button].join(' ')}
+                    onClick={onBuyNow}
+                >
+                    {buyButtonLabel}
                 </button>
 
                 <ThisCourseIncludes details={additionalDetails}/>

@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styles from './CourseDetailsPage.module.css';
+import { useNavigate } from 'react-router-dom';
+import { getAppState } from '../../utils/appLocalState';
 
 import Sticky from 'react-stickynode';
 import StickyCardContent from '../sticky-card-content/StickyCardContent';
@@ -11,8 +13,26 @@ import BuyCourseNavBar from '../buy-course-nav-bar/BuyCourseNavBar';
 import LoadingSpinner from '../loading-spinner/LoadingSpinner';
 
 function CourseDetailsPage({courseDetails}) {
+    const navigate = useNavigate();
     const [fetched, setAsFetched] = useState(false);
     const [additionalDetails, setAdditionalDetails] = useState({});
+
+    const courseId = String(courseDetails?.id ?? '');
+    const isPurchased = getAppState().purchasedCourses.some(
+        (purchaseItem) => String(purchaseItem.courseId) === courseId,
+    );
+
+    const handleBuyNow = () => {
+        if (!courseId) {
+            return;
+        }
+
+        navigate(
+            isPurchased
+                ? `/learn-course/${courseId}`
+                : `/buy-course/${courseId}`,
+        );
+    };
 
     useEffect(() => {
         fetch('https://api.npoint.io/427e24cf2470da9aecca')
@@ -32,7 +52,12 @@ function CourseDetailsPage({courseDetails}) {
                     innerZ={300}
                     enabled={true}
                 >
-                    <StickyCardContent details={courseDetails} additionalDetails={additionalDetails}/>
+                    <StickyCardContent
+                        details={courseDetails}
+                        additionalDetails={additionalDetails}
+                        onBuyNow={handleBuyNow}
+                        buyButtonLabel={isPurchased ? 'Go to course' : 'Buy now'}
+                    />
                 </Sticky>
 
                 <SingleCourseHeader courseDetails={courseDetails} additionalDetails={additionalDetails}/>
@@ -43,7 +68,11 @@ function CourseDetailsPage({courseDetails}) {
                     <CourseRequirements details={additionalDetails}/>
                 </div>
 
-                <BuyCourseNavBar details={courseDetails}/>
+                <BuyCourseNavBar
+                    details={courseDetails}
+                    onBuyNow={handleBuyNow}
+                    buyButtonLabel={isPurchased ? 'Go to course' : 'Buy now'}
+                />
             </section>
         </main>
     ) : (

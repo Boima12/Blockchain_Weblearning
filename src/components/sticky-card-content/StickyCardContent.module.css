@@ -12,6 +12,13 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 700;
   font-size: 2rem;
+  margin: 0;
+}
+.cardBody .oldPrice {
+  margin: 0.1rem 0 0.5rem;
+  color: #6a6f73;
+  text-decoration: line-through;
+  font-size: 1rem;
 }
 .cardBody .buyNowButton {
   border: none;
