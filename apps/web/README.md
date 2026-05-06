@@ -1,5 +1,4 @@
-# Blockchain Weblearning
-- Dự án bài tập lớn cho học phần Chuyên đề Blockchain
+# Blockchain Weblearning - Frontend React Vite
 
 
 <br> <br> <br>

@@ -101,4 +101,3 @@ Completion check: regression pass, lint/build pass, contract tests pass, setup d
 2. Blockchain stores proof and payment-critical data; Mongo stores high-volume mutable app data.  
 3. Pinata secrets remain server-side only.
 
-If you want, next step I can give you Step 1 as a ready-to-fill template: exact on-chain/off-chain fields, event names, and Mongo-to-contract ID mapping so your team can approve it quickly.
