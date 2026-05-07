@@ -14,10 +14,13 @@ contract CourseRegistry is Ownable, Pausable {
 
     uint256 public nextCourseId;
     mapping(uint256 => Course) public courses;
+    mapping(uint256 => bytes32) private courseMetadataHash;
+    mapping(bytes32 => bool) private usedMetadata;
 
     error InvalidMetadata();
     error CourseNotFound();
     error NotCreator();
+    error DuplicateMetadata();
 
     event CourseCreated(
         uint256 indexed courseId,
@@ -50,6 +53,11 @@ contract CourseRegistry is Ownable, Pausable {
             revert InvalidMetadata();
         }
 
+        bytes32 metadataHash = keccak256(bytes(metadataCID));
+        if (usedMetadata[metadataHash]) {
+            revert DuplicateMetadata();
+        }
+
         uint256 courseId = nextCourseId++;
         courses[courseId] = Course({
             creator: msg.sender,
@@ -57,6 +65,8 @@ contract CourseRegistry is Ownable, Pausable {
             priceWei: priceWei,
             active: true
         });
+        courseMetadataHash[courseId] = metadataHash;
+        usedMetadata[metadataHash] = true;
 
         emit CourseCreated(courseId, msg.sender, metadataCID, priceWei);
         return courseId;
@@ -79,9 +89,19 @@ contract CourseRegistry is Ownable, Pausable {
             revert InvalidMetadata();
         }
 
+        bytes32 metadataHash = keccak256(bytes(metadataCID));
+        bytes32 previousHash = courseMetadataHash[courseId];
+        if (metadataHash != previousHash && usedMetadata[metadataHash]) {
+            revert DuplicateMetadata();
+        }
+
         course.metadataCID = metadataCID;
         course.priceWei = priceWei;
         course.active = active;
+        if (metadataHash != previousHash) {
+            courseMetadataHash[courseId] = metadataHash;
+            usedMetadata[metadataHash] = true;
+        }
 
         emit CourseUpdated(courseId, metadataCID, priceWei, active);
     }

@@ -25,6 +25,7 @@ contract CoursePurchase is Ownable, Pausable, ReentrancyGuard {
     error AlreadyEnrolled();
     error WrongPrice();
     error PaymentFailed();
+    error InvalidRegistry();
 
     event CoursePurchased(
         uint256 indexed courseId,
@@ -34,6 +35,9 @@ contract CoursePurchase is Ownable, Pausable, ReentrancyGuard {
     );
 
     constructor(address registryAddress) Ownable(msg.sender) {
+        if (registryAddress == address(0)) {
+            revert InvalidRegistry();
+        }
         registry = ICourseRegistry(registryAddress);
     }
 
@@ -46,6 +50,9 @@ contract CoursePurchase is Ownable, Pausable, ReentrancyGuard {
     }
 
     function updateRegistry(address registryAddress) external onlyOwner {
+        if (registryAddress == address(0)) {
+            revert InvalidRegistry();
+        }
         registry = ICourseRegistry(registryAddress);
     }
 

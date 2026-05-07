@@ -16,6 +16,7 @@ contract CertificateNFT is ERC721URIStorage, AccessControl, Pausable {
     error Soulbound();
     error AlreadyIssued();
     error InvalidMetadata();
+    error InvalidStudent();
 
     event CertificateIssued(
         uint256 indexed tokenId,
@@ -44,6 +45,9 @@ contract CertificateNFT is ERC721URIStorage, AccessControl, Pausable {
         uint256 courseId,
         string calldata metadataURI
     ) external whenNotPaused onlyRole(MINTER_ROLE) returns (uint256) {
+        if (student == address(0)) {
+            revert InvalidStudent();
+        }
         if (issued[courseId][student]) {
             revert AlreadyIssued();
         }

@@ -22,6 +22,10 @@ describe("CourseRegistry", function () {
       registry.connect(bob).updateCourse(0n, "cid-2", 200n, false),
     ).to.be.revertedWithCustomError(registry, "NotCreator");
 
+    await expect(
+      registry.connect(bob).createCourse("cid-1", 50n),
+    ).to.be.revertedWithCustomError(registry, "DuplicateMetadata");
+
     await expect(registry.connect(alice).updateCourse(0n, "cid-2", 200n, false))
       .to.emit(registry, "CourseUpdated")
       .withArgs(0n, "cid-2", 200n, false);
@@ -72,6 +76,15 @@ describe("CoursePurchase", function () {
       purchase.connect(bob).buyCourse(0n, { value: price - 1n }),
     ).to.be.revertedWithCustomError(purchase, "WrongPrice");
   });
+
+  it("rejects invalid registry updates", async function () {
+    const registry = await ethers.deployContract("CourseRegistry");
+    const purchase = await ethers.deployContract("CoursePurchase", [registry]);
+
+    await expect(
+      purchase.updateRegistry(ethers.ZeroAddress),
+    ).to.be.revertedWithCustomError(purchase, "InvalidRegistry");
+  });
 });
 
 describe("CertificateNFT", function () {
@@ -95,6 +108,10 @@ describe("CertificateNFT", function () {
     )
       .to.emit(cert, "CertificateIssued")
       .withArgs(0n, 7n, alice.address, "ipfs://cid");
+
+    await expect(
+      cert.connect(owner).mintCertificate(ethers.ZeroAddress, 9n, "ipfs://cid"),
+    ).to.be.revertedWithCustomError(cert, "InvalidStudent");
 
     await expect(
       cert.connect(alice).transferFrom(alice.address, bob.address, 0n),
