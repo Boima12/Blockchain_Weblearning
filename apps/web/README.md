@@ -19,14 +19,4 @@ npm run dev
 
 <br> <br> <br>
 
-# Cách cập nhật mới nhất từ GitHub vào branch main <br>
-```
-git checkout main
-git fetch --all --prune
-git pull origin main
-```
-
-
-<br> <br> <br>
-
 <b>Note: Thỉnh thoảng lần đầu chạy có gặp thông báo "Can't fetch from MongoDB" thì chờ một síu để app kết nối với MongoDB rồi click lại 1 lần nữa là được</b>
