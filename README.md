@@ -2,32 +2,11 @@
 - Dự án bài tập lớn cho học phần Chuyên đề Blockchain
 
 
-<br> <br> <br>
-
-# Cách chạy
-1. Chạy lần lượt các lệnh sau đây trong terminal có directory là project root của Blockchain_Weblearning
-
-```
-# Tải các thư viện node liên quan (chỉ cần chạy 1 lần duy nhất)
-npm install
-
-# Host chương trình local
-npm run dev
-```
-
-2. lên http://localhost:5173/ để xem, xong rồi thì vào terminal Ctrl + C để tắt local host
-
-
-<br> <br> <br>
-
-# Cách cập nhật mới nhất từ GitHub vào branch main <br>
-```
-git checkout main
-git fetch --all --prune
-git pull origin main
-```
-
-
-<br> <br> <br>
-
-<b>Note: Thỉnh thoảng lần đầu chạy có gặp thông báo "Can't fetch from MongoDB" thì chờ một síu để app kết nối với MongoDB rồi click lại 1 lần nữa là được</b>
+## Các công nghệ được sử dụng
+- React + Vite: Xay dung giao dien web, phat trien nhanh va hot reload.
+- Wagmi + Ethers.js + MetaMask: Ket noi vi, ky giao dich va tuong tac hop dong tu frontend.
+- Solidity + OpenZeppelin: Viet smart contract va su dung cac mau bao mat chuan.
+- Hardhat: Cong cu phat trien, test, deploy hop dong va quan ly moi truong.
+- Polygon (Matic): Mang blockchain trien khai va chay smart contract.
+- Pinata IPFS: Luu tru metadata bat bien (CID) cho khoa hoc/chung chi.
+- MongoDB: Luu tru du lieu linh hoat va truy van nhanh (nguoi dung, tien do, khoa hoc).
