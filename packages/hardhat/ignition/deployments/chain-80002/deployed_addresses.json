@@ -1,3 +1,6 @@
 {
-  "CounterModule#Counter": "0x8A38e55E93B7F808F174a72aFC124A2E3D954dEA"
+  "CounterModule#Counter": "0x8A38e55E93B7F808F174a72aFC124A2E3D954dEA",
+  "CourseStack#CertificateNFT": "0xe84924796b305F4AD09224080b80Fe010160AA61",
+  "CourseStack#CourseRegistry": "0x376c19198e8e7EB7E30B792C9cEA37C427849FcF",
+  "CourseStack#CoursePurchase": "0x10b02b638556d82ba3E20dBA6c6A8Ae5D1dbFe43"
 }

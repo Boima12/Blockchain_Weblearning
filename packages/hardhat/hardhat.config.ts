@@ -1,5 +1,5 @@
 import hardhatToolboxMochaEthersPlugin from "@nomicfoundation/hardhat-toolbox-mocha-ethers";
-import { defineConfig } from "hardhat/config";
+import { configVariable, defineConfig } from "hardhat/config";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -40,6 +40,11 @@ export default defineConfig({
             chainId: 80002,
             url: process.env.POLYGON_AMOY_RPC_URL!,
             accounts: [process.env.PRIVATE_KEY!],
+        },
+    },
+    verify: {
+        etherscan: {
+            apiKey: process.env.POLYGONSCAN_API_KEY!,
         },
     },
 });
