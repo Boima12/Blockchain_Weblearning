@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './NavBar.module.css';
 import SearchBar from '../search-bar/SearchBar';
 import { useNavigate } from 'react-router-dom';
 import {
+    useAccount,
+    useChainId,
+    useConnect,
+    useDisconnect,
+    useSwitchChain,
+} from 'wagmi';
+import { polygonAmoy } from 'wagmi/chains';
+import {
     clearAuthSession,
+    clearProfileWalletAddress,
     formatWalletAddress,
-    getAppState,
     getAuthSession,
     resetAppState,
+    setProfileWalletAddress,
 } from '../../utils/appLocalState';
 import blockchainWeblearningIcon from '../../assets/Blockchain_weblearning_icon.png';
 import { logoutUserAccount } from '../../utils/userAccountApi';
@@ -17,9 +26,28 @@ function NavBar() {
     const navigate = useNavigate();
     const authSession = getAuthSession();
 
+    const { address, isConnected } = useAccount();
+    const { connect, connectors, isPending: isConnecting } = useConnect();
+    const { disconnect } = useDisconnect();
+    const chainId = useChainId();
+    const { switchChain, isPending: isSwitching } = useSwitchChain();
+
     const isAuthenticated = Boolean(authSession?.accountId);
-    const walletAddress =
-        authSession?.walletAddress || getAppState().profile.walletAddress;
+    const isCorrectNetwork = chainId === polygonAmoy.id;
+    const metaMaskConnector =
+        connectors.find(
+            (connector) =>
+                connector.id === 'metaMask' || connector.name === 'MetaMask',
+        ) ?? connectors[0];
+
+    useEffect(() => {
+        if (isConnected && address) {
+            setProfileWalletAddress(address);
+            return;
+        }
+
+        clearProfileWalletAddress();
+    }, [address, isConnected]);
 
     const onLogout = async () => {
         try {
@@ -32,6 +60,36 @@ function NavBar() {
         resetAppState();
         navigate('/login');
     };
+
+    const onWalletAction = () => {
+        if (!isConnected) {
+            if (metaMaskConnector) {
+                connect({ connector: metaMaskConnector });
+            }
+            return;
+        }
+
+        if (!isCorrectNetwork && switchChain) {
+            switchChain({ chainId: polygonAmoy.id });
+            return;
+        }
+
+        disconnect();
+    };
+
+    const walletButtonDisabled =
+        isConnecting ||
+        isSwitching ||
+        (!metaMaskConnector && !isConnected);
+
+    let walletButtonLabel = 'Connect Wallet';
+    if (!metaMaskConnector && !isConnected) {
+        walletButtonLabel = 'Install MetaMask';
+    } else if (isConnected && !isCorrectNetwork) {
+        walletButtonLabel = 'Switch to Amoy';
+    } else if (isConnected) {
+        walletButtonLabel = `Disconnect ${formatWalletAddress(address ?? '')}`;
+    }
 
     return (
         <nav className={styles.nav}>
@@ -54,7 +112,7 @@ function NavBar() {
                     </button>
                 </li>
 
-                <SearchBar/>
+                <SearchBar />
 
                 <li className={styles.createCourseButton}>
                     <button
@@ -84,21 +142,28 @@ function NavBar() {
                     </button>
                 </li>
 
-                <li className={styles.walletLogoutButton}>
+                <li className={styles.walletButton}>
                     <button
                         type='button'
-                        name='wallet-logout-button'
-                        onClick={() =>
-                            isAuthenticated
-                                ? onLogout()
-                                : navigate('/login')
-                        }
+                        name='wallet-button'
+                        onClick={onWalletAction}
+                        disabled={walletButtonDisabled}
                     >
-                        {isAuthenticated
-                            ? `Logout (${formatWalletAddress(walletAddress)})`
-                            : 'Register / Login'}
+                        {walletButtonLabel}
                     </button>
                 </li>
+
+                {isAuthenticated ? (
+                    <li className={styles.accountLogoutButton}>
+                        <button
+                            type='button'
+                            name='account-logout-button'
+                            onClick={onLogout}
+                        >
+                            Logout Account
+                        </button>
+                    </li>
+                ) : null}
             </ul>
         </nav>
     );

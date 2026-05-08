@@ -283,6 +283,27 @@ export const updateAppState = (updater) => {
     return saveAppState(nextState);
 };
 
+export const setProfileWalletAddress = (walletAddress) => {
+    const normalizedAddress = String(walletAddress ?? '').trim();
+
+    return updateAppState((currentState) => ({
+        ...currentState,
+        profile: {
+            ...currentState.profile,
+            walletAddress: normalizedAddress,
+        },
+    }));
+};
+
+export const clearProfileWalletAddress = () =>
+    updateAppState((currentState) => ({
+        ...currentState,
+        profile: {
+            ...currentState.profile,
+            walletAddress: '',
+        },
+    }));
+
 export const formatWalletAddress = (walletAddress = '') => {
     if (!walletAddress) {
         return 'Connect Wallet';

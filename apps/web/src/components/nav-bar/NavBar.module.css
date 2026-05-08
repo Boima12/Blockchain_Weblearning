@@ -56,10 +56,44 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.nav .ul li.walletButton button {
+  display: inline-block;
+  width: 11rem;
+  height: 41px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #000;
+  border: 1px solid black;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 10px;
+  color: #fff;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nav .ul li.accountLogoutButton button {
+  display: inline-block;
+  width: 9rem;
+  height: 41px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid black;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 10px;
+  color: #000;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .coursesButton,
 .profileButton,
 .walletLogoutButton,
+.walletButton,
+.accountLogoutButton,
 .langButton,
 .teachOnUdemyButton,
 .createCourseButton {
@@ -115,6 +149,8 @@
   .coursesButton,
   .profileButton,
   .walletLogoutButton,
+  .walletButton,
+  .accountLogoutButton,
   .langButton {
     display: flex !important;
     justify-content: center;
@@ -140,6 +176,16 @@
     min-width: 6rem;
     background-color: #000;
     color: #fff;
+  }
+  .walletButton button {
+    min-width: 6rem;
+    background-color: #000;
+    color: #fff;
+  }
+  .accountLogoutButton button {
+    min-width: 6rem;
+    background-color: transparent;
+    color: #000;
   }
   .langButton button {
     font-size: 1.5rem;

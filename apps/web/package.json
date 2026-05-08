@@ -15,6 +15,7 @@
     "@mui/icons-material": "^9.0.0",
     "@mui/material": "^9.0.0",
     "@openzeppelin/contracts": "^5.6.1",
+    "@tanstack/react-query": "^5.100.9",
     "html-react-parser": "^6.0.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
@@ -23,7 +24,9 @@
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.0",
     "react-spinners": "^0.17.0",
-    "react-stickynode": "^5.0.2"
+    "react-stickynode": "^5.0.2",
+    "viem": "^2.48.11",
+    "wagmi": "^3.6.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
