@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingSpinner from '../../components/loading-spinner/LoadingSpinner';
+import { buyCourseOnChain } from '../../web3/ethersClient';
 import usePublishedCourses from '../../hooks/usePublishedCourses';
 import {
     formatWalletAddress,
@@ -146,6 +147,48 @@ function Co_BuyCourse() {
         timerHandles.current.push(signingTimer);
     };
 
+    const beginOnChainPurchase = async () => {
+        if (!selectedCourse) return;
+        if (isPurchased) {
+            navigate(`/learn-course/${courseIdKey}`);
+            return;
+        }
+
+        try {
+            clearTimers();
+            setTxHash('');
+            setTxState(TX_STATES.signing);
+
+            const result = await buyCourseOnChain(Number(courseIdKey), String(finalPrice));
+
+            setTxHash(result.txHash);
+            updateAppState((currentState) => {
+                const alreadyPurchased = currentState.purchasedCourses.some(
+                    (purchaseItem) => String(purchaseItem.courseId) === courseIdKey,
+                );
+
+                if (alreadyPurchased) return currentState;
+
+                return {
+                    ...currentState,
+                    purchasedCourses: [
+                        {
+                            courseId: courseIdKey,
+                            enrolledAt: new Date().toISOString(),
+                            progress: 0,
+                        },
+                        ...currentState.purchasedCourses,
+                    ],
+                };
+            });
+
+            setAppState(getAppState());
+            setTxState(TX_STATES.success);
+        } catch (err) {
+            setTxState(TX_STATES.failed);
+        }
+    };
+
     const txMessage =
         txState === TX_STATES.signing
             ? 'Waiting for wallet signature...'
@@ -258,6 +301,17 @@ function Co_BuyCourse() {
 
                             <button
                                 type='button'
+                                className={styles.primaryButton}
+                                onClick={beginOnChainPurchase}
+                                disabled={txState === TX_STATES.pending || txState === TX_STATES.signing}
+                            >
+                                {txState === TX_STATES.pending || txState === TX_STATES.signing
+                                    ? 'Processing on-chain...'
+                                    : 'Purchase On-chain'}
+                            </button>
+
+                            <button
+                                type='button'
                                 className={styles.secondaryButton}
                                 onClick={() => navigate(`/Blockchain-Weblearning/courses/${courseIdKey}`)}
                             >
@@ -272,7 +326,7 @@ function Co_BuyCourse() {
 
                         {txHash ? (
                             <div className={styles.hashBox}>
-                                <p>Mock Tx Hash</p>
+                                <p>Tx Hash</p>
                                 <code>{txHash}</code>
                             </div>
                         ) : null}

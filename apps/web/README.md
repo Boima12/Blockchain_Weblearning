@@ -11,6 +11,7 @@
 npm install
 
 # Host chương trình local
+cd apps\web
 npm run dev
 ```
 

@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { getAppState, updateAppState } from '../../../utils/appLocalState';
 import { upsertPublishedCourse } from '../../../utils/publishedCoursesApi';
+import { createCourseOnChain } from '../../../web3/ethersClient';
+import { parseEther } from 'ethers';
 import { STEP_ITEMS } from '../createCourseConstants';
 import {
     buildCourseRecord,
@@ -277,6 +279,27 @@ function useCreateCourseWizard() {
         try {
             const profile = getAppState().profile;
             await upsertPublishedCourse(publishedRecord, profile);
+
+            // Try to publish on-chain (best-effort). Uses placeholder metadata CID from env when available.
+            try {
+                const metadataCID =
+                    import.meta.env.VITE_PLACEHOLDER_METADATA_CID || `ipfs://draft/${publishedRecord.id}`;
+                const priceWei = parseEther(String(publishedRecord.price ?? 0));
+                const result = await createCourseOnChain(metadataCID, priceWei);
+                setFeedback({
+                    type: 'success',
+                    message: result.courseId
+                        ? `Course published on-chain (ID: ${result.courseId}). Tx: ${result.txHash}`
+                        : `Course published on-chain. Tx: ${result.txHash}`,
+                });
+            } catch (chainError) {
+                // Non-fatal: keep MongoDB publish as primary source
+                setFeedback((prev) => ({
+                    type: 'info',
+                    message:
+                        prev?.message || 'Course published, but on-chain publish failed or was skipped.',
+                }));
+            }
 
             updateAppState((currentState) => ({
                 ...currentState,
