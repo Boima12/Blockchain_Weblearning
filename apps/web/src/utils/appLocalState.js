@@ -1,9 +1,10 @@
 const APP_STORAGE_KEY = 'bwl.frontend.state.v1';
 const AUTH_STORAGE_KEY = 'bwl.auth.session.v1';
+const AUTH_SESSION_EVENT = 'bwl-auth-session';
+let cachedAuthSession = null;
 
 const DEFAULT_PROFILE = {
     displayName: 'Blockchain Student',
-    email: 'student@university.edu',
     walletAddress: '0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0',
     bio: 'University student building a Web3 learning platform.',
     avatarUrl: '',
@@ -78,7 +79,6 @@ const normalizeAuthSession = (input = {}) => {
     return {
         accountId,
         displayName: String(input.displayName ?? '').trim(),
-        email: String(input.email ?? '').trim().toLowerCase(),
         walletAddress: String(input.walletAddress ?? '').trim(),
         loggedInAt:
             String(input.loggedInAt ?? '').trim() ||
@@ -162,7 +162,8 @@ export const getAuthSession = () => {
             return null;
         }
 
-        return normalizeAuthSession(JSON.parse(rawValue));
+        cachedAuthSession = normalizeAuthSession(JSON.parse(rawValue));
+        return cachedAuthSession;
     } catch {
         return null;
     }
@@ -175,19 +176,42 @@ export const saveAuthSession = (nextSession) => {
         return normalized;
     }
 
+    cachedAuthSession = normalized;
+
     if (!normalized) {
         window.localStorage.removeItem(AUTH_STORAGE_KEY);
+        window.dispatchEvent(new Event(AUTH_SESSION_EVENT));
         return null;
     }
 
     window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(normalized));
+    window.dispatchEvent(new Event(AUTH_SESSION_EVENT));
     return normalized;
 };
 
 export const clearAuthSession = () => {
     if (typeof window !== 'undefined') {
         window.localStorage.removeItem(AUTH_STORAGE_KEY);
+        cachedAuthSession = null;
+        window.dispatchEvent(new Event(AUTH_SESSION_EVENT));
     }
+};
+
+export const subscribeToAuthSession = (callback) => {
+    if (typeof window === 'undefined') {
+        return () => {};
+    }
+
+    window.addEventListener(AUTH_SESSION_EVENT, callback);
+    return () => window.removeEventListener(AUTH_SESSION_EVENT, callback);
+};
+
+export const getAuthSessionSnapshot = () => {
+    if (cachedAuthSession !== null) {
+        return cachedAuthSession;
+    }
+
+    return getAuthSession();
 };
 
 const syncStateToAccountIfAuthenticated = (statePayload) => {

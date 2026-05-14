@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { getAppState, updateAppState } from '../../../utils/appLocalState';
 import { upsertPublishedCourse } from '../../../utils/publishedCoursesApi';
+import { uploadCourseMetadata } from '../../../utils/ipfsApi';
 import { createCourseOnChain } from '../../../web3/ethersClient';
 import { parseEther } from 'ethers';
 import { STEP_ITEMS } from '../createCourseConstants';
@@ -28,6 +29,7 @@ function useCreateCourseWizard() {
     const [errors, setErrors] = useState({});
     const [feedback, setFeedback] = useState(EMPTY_FEEDBACK);
     const [publishedCourseId, setPublishedCourseId] = useState(null);
+    const [publishErrorMessage, setPublishErrorMessage] = useState('');
 
     const finalPrice = useMemo(
         () => calculateFinalPrice(draft.price, draft.discount),
@@ -263,6 +265,7 @@ function useCreateCourseWizard() {
             message: 'Draft saved successfully. You can continue later.',
         });
         setPublishedCourseId(null);
+        setPublishErrorMessage('');
     };
 
     const onPublishCourse = async () => {
@@ -278,14 +281,37 @@ function useCreateCourseWizard() {
 
         try {
             const profile = getAppState().profile;
-            await upsertPublishedCourse(publishedRecord, profile);
+            const ipfsPayload = await uploadCourseMetadata({
+                course: publishedRecord,
+                profile,
+            });
+
+            const metadataCID = `ipfs://${ipfsPayload.cid}`;
+            const metadataUrl = String(ipfsPayload.ipfsUrl ?? '').trim();
+
+            const nextPublishedRecord = {
+                ...publishedRecord,
+                metadataCID,
+                metadataUrl,
+            };
+
+            await upsertPublishedCourse(nextPublishedRecord, profile);
+            setPublishErrorMessage('');
 
             // Try to publish on-chain (best-effort). Uses placeholder metadata CID from env when available.
             try {
-                const metadataCID =
-                    import.meta.env.VITE_PLACEHOLDER_METADATA_CID || `ipfs://draft/${publishedRecord.id}`;
                 const priceWei = parseEther(String(publishedRecord.price ?? 0));
                 const result = await createCourseOnChain(metadataCID, priceWei);
+                if (result.courseId !== null && result.courseId !== undefined) {
+                    const onChainCourseId = String(result.courseId);
+                    await upsertPublishedCourse(
+                        {
+                            ...nextPublishedRecord,
+                            onChainCourseId,
+                        },
+                        profile,
+                    );
+                }
                 setFeedback({
                     type: 'success',
                     message: result.courseId
@@ -293,6 +319,7 @@ function useCreateCourseWizard() {
                         : `Course published on-chain. Tx: ${result.txHash}`,
                 });
             } catch (chainError) {
+                console.error('On-chain publish failed:', chainError);
                 // Non-fatal: keep MongoDB publish as primary source
                 setFeedback((prev) => ({
                     type: 'info',
@@ -309,12 +336,14 @@ function useCreateCourseWizard() {
                 ),
             }));
         } catch (error) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'Publishing failed. Ensure Vite dev server is running with a valid MongoDB connection.';
+            setPublishErrorMessage(message);
             setFeedback({
                 type: 'error',
-                message:
-                    error instanceof Error
-                        ? error.message
-                        : 'Publishing failed. Ensure Vite dev server is running with a valid MongoDB connection.',
+                message,
             });
             return;
         }
@@ -343,10 +372,16 @@ function useCreateCourseWizard() {
         setActiveStep(0);
         setErrors({});
         setPublishedCourseId(null);
+        setPublishErrorMessage('');
         setFeedback({
             type: 'info',
             message: 'Started a new draft course.',
         });
+    };
+
+    const clearPublishError = () => {
+        setPublishErrorMessage('');
+        setFeedback(EMPTY_FEEDBACK);
     };
 
     return {
@@ -356,6 +391,7 @@ function useCreateCourseWizard() {
         feedback,
         finalPrice,
         publishedCourseId,
+        publishErrorMessage,
         setActiveStep,
         setErrors,
         setDraftField,
@@ -373,6 +409,7 @@ function useCreateCourseWizard() {
         onSaveDraft,
         onPublishCourse,
         onStartNewDraft,
+        clearPublishError,
     };
 }
 

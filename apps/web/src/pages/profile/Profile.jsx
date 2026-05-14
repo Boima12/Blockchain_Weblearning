@@ -139,9 +139,8 @@ function Co_Profile() {
         const normalizedProfile = {
             ...draftProfile,
             displayName: draftProfile.displayName?.trim() || 'Blockchain Student',
-            email: draftProfile.email?.trim() || 'student@university.edu',
             walletAddress:
-                draftProfile.walletAddress?.trim() ||
+                appState.profile.walletAddress ||
                 '0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0',
             bio:
                 draftProfile.bio?.trim() ||
@@ -270,18 +269,20 @@ function Co_Profile() {
                                 {course.token ?? 'MATIC'}
                             </p>
                             <div className={styles.actionsRow}>
-                                <button
-                                    type='button'
-                                    onClick={() =>
-                                        navigate(
-                                            course.id
-                                                ? `/edit-course/${course.id}`
-                                                : '/create-course',
-                                        )
-                                    }
-                                >
-                                    Edit Course
-                                </button>
+                                {String(course.status ?? '') !== 'Published' ? (
+                                    <button
+                                        type='button'
+                                        onClick={() =>
+                                            navigate(
+                                                course.id
+                                                    ? `/edit-course/${course.id}`
+                                                    : '/create-course',
+                                            )
+                                        }
+                                    >
+                                        Edit Course
+                                    </button>
+                                ) : null}
                             </div>
                         </div>
                     </article>
@@ -383,7 +384,6 @@ function Co_Profile() {
                     <div className={styles.identityMeta}>
                         <p className={styles.identityLabel}>Account Profile</p>
                         <h1>{appState.profile.displayName}</h1>
-                        <p>{appState.profile.email}</p>
                         <p className={styles.walletAddress}>
                             Wallet: {formatWalletAddress(appState.profile.walletAddress)}
                         </p>
@@ -438,30 +438,12 @@ function Co_Profile() {
                             }
                         />
 
-                        <label htmlFor='email'>Email</label>
-                        <input
-                            id='email'
-                            type='email'
-                            value={draftProfile.email}
-                            onChange={(event) =>
-                                setDraftProfile((previous) => ({
-                                    ...previous,
-                                    email: event.target.value,
-                                }))
-                            }
-                        />
-
                         <label htmlFor='walletAddress'>Wallet Address</label>
                         <input
                             id='walletAddress'
                             type='text'
                             value={draftProfile.walletAddress}
-                            onChange={(event) =>
-                                setDraftProfile((previous) => ({
-                                    ...previous,
-                                    walletAddress: event.target.value,
-                                }))
-                            }
+                            disabled
                         />
 
                         <label htmlFor='bio'>Bio</label>

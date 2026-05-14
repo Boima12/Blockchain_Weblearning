@@ -17,41 +17,19 @@ const parseApiResponse = async (response, fallbackErrorMessage) => {
     return payload;
 };
 
-export const registerUserAccount = async ({
-    displayName,
-    email,
-    walletAddress,
-    password,
-}) => {
-    const response = await fetch(`${AUTH_API_BASE}/register`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            displayName,
-            email,
-            walletAddress,
-            password,
-        }),
-    });
-
-    return parseApiResponse(response, 'Unable to register account.');
-};
-
-export const loginUserAccount = async ({ identifier, password }) => {
+export const loginUserAccount = async ({ walletAddress, displayName }) => {
     const response = await fetch(`${AUTH_API_BASE}/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            identifier,
-            password,
+            walletAddress,
+            displayName,
         }),
     });
 
-    return parseApiResponse(response, 'Unable to login with those credentials.');
+    return parseApiResponse(response, 'Unable to login with that wallet.');
 };
 
 export const logoutUserAccount = async () => {

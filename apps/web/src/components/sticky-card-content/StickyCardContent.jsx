@@ -5,7 +5,13 @@ import ThisCourseIncludes from '../this-course-includes/ThisCourseIncludes';
 const toCurrencyLabel = (value, token) =>
     `${Number(value ?? 0).toFixed(2)} ${token}`;
 
-function StickyCardContent({details, additionalDetails, onBuyNow, buyButtonLabel = 'Buy now'}) {
+function StickyCardContent({
+    details,
+    additionalDetails,
+    onBuyNow,
+    buyButtonLabel = 'Buy now',
+    isBuyDisabled = false,
+}) {
     const image =
         details?.image_750x422 ?? details?.thumbnailUrl ?? details?.image_480x270;
 
@@ -55,6 +61,7 @@ function StickyCardContent({details, additionalDetails, onBuyNow, buyButtonLabel
                     type='button'
                     className={[styles.buyNowButton, styles.button].join(' ')}
                     onClick={onBuyNow}
+                    disabled={isBuyDisabled}
                 >
                     {buyButtonLabel}
                 </button>

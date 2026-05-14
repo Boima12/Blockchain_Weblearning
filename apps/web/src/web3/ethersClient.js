@@ -1,10 +1,12 @@
-import { BrowserProvider, Contract, Interface, isAddress, parseEther } from 'ethers';
+import { BrowserProvider, Contract, Interface, isAddress, parseEther, parseUnits } from 'ethers';
 import { courseRegistryAbi } from './abi/courseRegistryAbi';
 import { coursePurchaseAbi } from './abi/coursePurchaseAbi';
 import { certificateNftAbi } from './abi/certificateNftAbi';
 import { getContractAddresses } from './contractAddresses';
 
 const AMOY_CHAIN_ID = 80002n;
+const MIN_PRIORITY_FEE = parseUnits('30', 'gwei');
+const MIN_MAX_FEE = parseUnits('60', 'gwei');
 
 const getInjectedProvider = () => {
     if (!window?.ethereum) {
@@ -28,6 +30,27 @@ const getSigner = async () => {
     const provider = getProvider();
     await ensureAmoyNetwork(provider);
     return provider.getSigner();
+};
+
+const buildGasOverrides = async () => {
+    const provider = getProvider();
+    await ensureAmoyNetwork(provider);
+
+    const feeData = await provider.getFeeData();
+    const maxPriorityFeePerGas =
+        feeData.maxPriorityFeePerGas && feeData.maxPriorityFeePerGas > MIN_PRIORITY_FEE
+            ? feeData.maxPriorityFeePerGas
+            : MIN_PRIORITY_FEE;
+
+    const maxFeePerGas =
+        feeData.maxFeePerGas && feeData.maxFeePerGas > maxPriorityFeePerGas
+            ? feeData.maxFeePerGas
+            : maxPriorityFeePerGas * 2n;
+
+    return {
+        maxPriorityFeePerGas,
+        maxFeePerGas: maxFeePerGas > MIN_MAX_FEE ? maxFeePerGas : MIN_MAX_FEE,
+    };
 };
 
 const getReadOnlyContracts = async () => {
@@ -81,7 +104,8 @@ export const createCourseOnChain = async (metadataCID, priceWei) => {
     }
 
     const { registry } = await getSignerContracts();
-    const tx = await registry.createCourse(metadataCID, priceWei);
+    const gasOverrides = await buildGasOverrides();
+    const tx = await registry.createCourse(metadataCID, priceWei, gasOverrides);
     const receipt = await tx.wait();
 
     return {
@@ -101,7 +125,8 @@ export const buyCourseOnChain = async (courseId, priceInMatic) => {
             ? priceInMatic
             : parseEther(String(priceInMatic));
 
-    const tx = await purchase.buyCourse(courseId, { value: priceWei });
+    const gasOverrides = await buildGasOverrides();
+    const tx = await purchase.buyCourse(courseId, { value: priceWei, ...gasOverrides });
     await tx.wait();
 
     return {
@@ -136,7 +161,8 @@ export const mintCertificateOnChain = async (courseId, studentAddress, metadataU
     }
 
     const { certificate } = await getSignerContracts();
-    const tx = await certificate.mintCertificate(studentAddress, courseId, metadataURI);
+    const gasOverrides = await buildGasOverrides();
+    const tx = await certificate.mintCertificate(studentAddress, courseId, metadataURI, gasOverrides);
     await tx.wait();
 
     return {

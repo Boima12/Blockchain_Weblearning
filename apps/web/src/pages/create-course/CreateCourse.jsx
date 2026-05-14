@@ -4,6 +4,8 @@ import BasicInfoStep from './components/BasicInfoStep';
 import CurriculumStep from './components/CurriculumStep';
 import PricingStep from './components/PricingStep';
 import ReviewStep from './components/ReviewStep';
+import PublishSuccessDialog from './components/PublishSuccessDialog';
+import PublishFailureDialog from './components/PublishFailureDialog';
 import { STEP_ITEMS } from './createCourseConstants';
 import useCreateCourseWizard from './hooks/useCreateCourseWizard';
 
@@ -17,6 +19,7 @@ function Co_CreateCourse() {
         feedback,
         finalPrice,
         publishedCourseId,
+        publishErrorMessage,
         setActiveStep,
         setErrors,
         setDraftField,
@@ -34,6 +37,7 @@ function Co_CreateCourse() {
         onSaveDraft,
         onPublishCourse,
         onStartNewDraft,
+        clearPublishError,
     } = useCreateCourseWizard();
 
     const feedbackClass =
@@ -86,8 +90,27 @@ function Co_CreateCourse() {
         return <ReviewStep draft={draft} finalPrice={finalPrice} />;
     };
 
+    const onViewPublishedCourse = () => {
+        if (!publishedCourseId) {
+            return;
+        }
+
+        onStartNewDraft();
+        navigate(`/Blockchain-Weblearning/courses/${publishedCourseId}`);
+    };
+
     return (
         <main className={styles.main_CreateCourse}>
+            <PublishSuccessDialog
+                isOpen={Boolean(publishedCourseId)}
+                courseId={publishedCourseId}
+                onViewCourse={onViewPublishedCourse}
+            />
+            <PublishFailureDialog
+                isOpen={Boolean(publishErrorMessage)}
+                message={publishErrorMessage}
+                onClose={clearPublishError}
+            />
             <section className={styles.wizardShell}>
                 <div className={styles.wizardHeader}>
                     <p className={styles.badge}>Creator Studio</p>

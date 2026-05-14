@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useSyncExternalStore } from 'react';
 import styles from './NavBar.module.css';
 import SearchBar from '../search-bar/SearchBar';
 import { useNavigate } from 'react-router-dom';
@@ -14,19 +14,29 @@ import {
     clearAuthSession,
     clearProfileWalletAddress,
     formatWalletAddress,
-    getAuthSession,
+    getAuthSessionSnapshot,
+    loadAppStateFromAccount,
     resetAppState,
+    saveAuthSession,
     setProfileWalletAddress,
+    subscribeToAuthSession,
 } from '../../utils/appLocalState';
 import blockchainWeblearningIcon from '../../assets/Blockchain_weblearning_icon.png';
-import { logoutUserAccount } from '../../utils/userAccountApi';
+import coursesIcon from '../../assets/courses.png';
+import create_courseIcon from '../../assets/create_course.png';
+import { loginUserAccount, logoutUserAccount } from '../../utils/userAccountApi';
 
 function NavBar() {
 
     const navigate = useNavigate();
-    const authSession = getAuthSession();
+    const authSession = useSyncExternalStore(
+        subscribeToAuthSession,
+        getAuthSessionSnapshot,
+        () => null,
+    );
+    const lastLoginRef = useRef({ walletAddress: '', inFlight: false });
 
-    const { address, isConnected } = useAccount();
+    const { address, isConnected, status } = useAccount();
     const { connect, connectors, isPending: isConnecting } = useConnect();
     const { disconnect } = useDisconnect();
     const chainId = useChainId();
@@ -49,19 +59,63 @@ function NavBar() {
         clearProfileWalletAddress();
     }, [address, isConnected]);
 
-    const onLogout = async () => {
-        try {
-            await logoutUserAccount();
-        } catch {
-            // Proceed with local logout even when network request fails.
+    useEffect(() => {
+        if (status !== 'disconnected') {
+            return;
+        }
+
+        if (!authSession?.accountId) {
+            return;
         }
 
         clearAuthSession();
         resetAppState();
-        navigate('/login');
-    };
+    }, [authSession, status]);
 
-    const onWalletAction = () => {
+    useEffect(() => {
+        if (!isConnected || !address || !isCorrectNetwork) {
+            return;
+        }
+
+        if (
+            authSession?.accountId &&
+            String(authSession.walletAddress) === String(address)
+        ) {
+            return;
+        }
+
+        if (lastLoginRef.current.inFlight && lastLoginRef.current.walletAddress === address) {
+            return;
+        }
+
+        lastLoginRef.current = { walletAddress: address, inFlight: true };
+
+        loginUserAccount({ walletAddress: address })
+            .then((payload) => {
+                const account = payload?.account;
+                if (!account?.accountId) {
+                    return;
+                }
+
+                const session = saveAuthSession({
+                    accountId: String(account.accountId),
+                    displayName: String(account?.profile?.displayName ?? ''),
+                    walletAddress: String(
+                        account?.walletAddress ?? account?.profile?.walletAddress ?? '',
+                    ),
+                    loggedInAt: new Date().toISOString(),
+                });
+                loadAppStateFromAccount(account);
+            })
+            .catch(() => {
+                // Keep UI responsive even if auth sync fails.
+            })
+            .finally(() => {
+                lastLoginRef.current = { walletAddress: address, inFlight: false };
+            });
+    }, [address, authSession, isConnected, isCorrectNetwork]);
+
+    const onWalletAction = async () => {
         if (!isConnected) {
             if (metaMaskConnector) {
                 connect({ connector: metaMaskConnector });
@@ -74,7 +128,16 @@ function NavBar() {
             return;
         }
 
+        try {
+            await logoutUserAccount();
+        } catch {
+            // Continue with local sign out if API call fails.
+        }
+
+        clearAuthSession();
+        resetAppState();
         disconnect();
+        navigate('/');
     };
 
     const walletButtonDisabled =
@@ -94,56 +157,59 @@ function NavBar() {
     return (
         <nav className={styles.nav}>
             <ul className={styles.ul}>
-                <li className={styles.logo}>
+                <li className={styles.leftSection}>
                     <img
+                        className={styles.logo}
                         src={blockchainWeblearningIcon}
                         alt='blockchain-weblearning-logo'
                         onClick={() => navigate('/')}
                     />
-                </li>
 
-                <li className={styles.coursesButton}>
                     <button
+                        className={styles.coursesButton}
                         type='button'
                         name='courses-button'
                         onClick={() => navigate('/')}
                     >
-                        Courses
+                        <img src={coursesIcon} alt='courses-icon' />
+                        <p>Courses</p>
                     </button>
                 </li>
 
-                <SearchBar />
+                <li className={styles.rightSection}>
+                    {isAuthenticated ? (
+                        <>
+                            <button
+                                className={styles.createCourseButton}
+                                type='button'
+                                name='create-course-button'
+                                onClick={() =>
+                                    navigate(
+                                        isAuthenticated
+                                            ? '/create-course'
+                                            : '/login',
+                                    )
+                                }
+                            >
+                                <img src={create_courseIcon} alt='create-course-icon' />
+                                <p>Create Course</p>
+                            </button>
 
-                <li className={styles.createCourseButton}>
-                    <button
-                        type='button'
-                        name='create-course-button'
-                        onClick={() =>
-                            navigate(
-                                isAuthenticated
-                                    ? '/create-course'
-                                    : '/login',
-                            )
-                        }
-                    >
-                        Create Course
-                    </button>
-                </li>
+                            <button
+                                className={styles.profileButton}
+                                type='button'
+                                name='profile-button'
+                                onClick={() =>
+                                    navigate(isAuthenticated ? '/profile' : '/login')
+                                }
+                            >
+                                Profile
+                            </button>
+                        </>
+                    ) : null}
 
-                <li className={styles.profileButton}>
                     <button
-                        type='button'
-                        name='profile-button'
-                        onClick={() =>
-                            navigate(isAuthenticated ? '/profile' : '/login')
-                        }
-                    >
-                        {isAuthenticated ? 'Profile' : 'Login'}
-                    </button>
-                </li>
-
-                <li className={styles.walletButton}>
-                    <button
+                        className={styles.walletButton}
                         type='button'
                         name='wallet-button'
                         onClick={onWalletAction}
@@ -151,19 +217,8 @@ function NavBar() {
                     >
                         {walletButtonLabel}
                     </button>
-                </li>
 
-                {isAuthenticated ? (
-                    <li className={styles.accountLogoutButton}>
-                        <button
-                            type='button'
-                            name='account-logout-button'
-                            onClick={onLogout}
-                        >
-                            Logout Account
-                        </button>
-                    </li>
-                ) : null}
+                </li>
             </ul>
         </nav>
     );

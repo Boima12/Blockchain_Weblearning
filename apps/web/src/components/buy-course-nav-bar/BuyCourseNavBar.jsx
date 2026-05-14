@@ -5,7 +5,12 @@ import StarsRating from '../stars-rating/StarsRating';
 const toCurrencyLabel = (value, token) =>
     `${Number(value ?? 0).toFixed(2)} ${token}`;
 
-function BuyCourseNavBar({details, onBuyNow, buyButtonLabel = 'Buy now'}) {
+function BuyCourseNavBar({
+    details,
+    onBuyNow,
+    buyButtonLabel = 'Buy now',
+    isBuyDisabled = false,
+}) {
     const [hidden, toggleHidden] = useState(true);
 
     const token = String(details?.token ?? 'MATIC').toUpperCase();
@@ -77,6 +82,7 @@ function BuyCourseNavBar({details, onBuyNow, buyButtonLabel = 'Buy now'}) {
                     type='button'
                     className={styles.buyNowButton}
                     onClick={onBuyNow}
+                    disabled={isBuyDisabled}
                 >
                     {buyButtonLabel}
                 </button>

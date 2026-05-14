@@ -17,6 +17,7 @@ import Co_LearnCourse from './pages/learn-course/LearnCourse';
 import Co_Certificate from './pages/certificate/Certificate';
 import Co_BuyCourse from './pages/buy-course/BuyCourse';
 import Co_Login from './pages/login/Login';
+import IpfsDebug from './pages/ipfs-debug/IpfsDebug';
 
 const queryClient = new QueryClient();
 
@@ -151,6 +152,24 @@ createRoot(document.getElementById("root")).render(
                                 <>
                                     <NavBar />
                                     <Co_BuyCourse />
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/ipfs-debug"
+                            element={
+                                <>
+                                    <NavBar />
+                                    <IpfsDebug />
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/Blockchain-Weblearning/ipfs-debug"
+                            element={
+                                <>
+                                    <NavBar />
+                                    <IpfsDebug />
                                 </>
                             }
                         />
