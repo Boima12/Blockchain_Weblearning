@@ -14,17 +14,76 @@
 .nav .ul {
   height: 100%;
   width: 100%;
-  padding: 0;
+  padding: 0 20px;
   margin: 0;
   list-style: none;
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
-.nav .ul li.coursesButton button {
+.nav .ul li.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+.nav .ul li.leftSection .logo {
+  flex-grow: 2;
+  display: block;
+  width: 7rem;
+}
+.nav .ul li.leftSection .coursesButton {
+  border: none;
+  background-color: transparent;
+  padding: 10px;
   cursor: pointer;
+  transition: all 0.4s ease;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.nav .ul li.profileButton button {
+.nav .ul li.leftSection .coursesButton img {
+  width: 2rem;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.nav .ul li.leftSection .coursesButton p {
+  margin: 2px;
+}
+.nav .ul li.leftSection .coursesButton:hover {
+  background-color: #f5f5f5;
+  color: #401b9c;
+}
+.nav .ul li.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+.nav .ul li.rightSection .createCourseButton {
+  background-color: transparent;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.nav .ul li.rightSection .createCourseButton img {
+  width: 2rem;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.nav .ul li.rightSection .createCourseButton p {
+  margin: 2px;
+}
+.nav .ul li.rightSection .createCourseButton:hover {
+  background-color: #f5f5f5;
+  color: #401b9c;
+}
+.nav .ul li.rightSection .profileButton {
   display: inline-block;
   width: 5rem;
   height: 41px;
@@ -40,7 +99,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.nav .ul li.walletLogoutButton button {
+.nav .ul li.rightSection .profileButton:hover {
+  background-color: whitesmoke;
+}
+.nav .ul li.rightSection .walletButton {
   display: inline-block;
   width: 11rem;
   height: 41px;
@@ -57,12 +119,8 @@
   white-space: nowrap;
 }
 
-.coursesButton,
-.profileButton,
-.walletLogoutButton,
 .langButton,
-.teachOnUdemyButton,
-.createCourseButton {
+.teachOnUdemyButton {
   /* font-size: 0.8rem !important; */
   display: none !important;
 }
@@ -75,15 +133,6 @@
   margin: 0 auto 0 auto;
   background-color: transparent;
   border: none;
-}
-
-.logo {
-  flex-grow: 2;
-}
-
-.logo img {
-  display: block;
-  width: 5rem;
 }
 
 .nav li {
@@ -112,9 +161,6 @@
   .menuButton {
     display: none !important;
   }
-  .coursesButton,
-  .profileButton,
-  .walletLogoutButton,
   .langButton {
     display: flex !important;
     justify-content: center;
@@ -123,23 +169,8 @@
   .logo {
     flex-grow: initial;
   }
-  .coursesButton button {
-    border: none;
-    background-color: transparent;
-    padding: 10px;
-  }
-  .coursesButton button:hover,
-  .cartButton button:hover,
-  .createCourseButton button:hover {
+  .cartButton button:hover {
     color: #401b9c;
-  }
-  .profileButton button:hover {
-    background-color: whitesmoke;
-  }
-  .walletLogoutButton button {
-    min-width: 6rem;
-    background-color: #000;
-    color: #fff;
   }
   .langButton button {
     font-size: 1.5rem;
@@ -168,19 +199,6 @@
   }
 }
 @media only screen and (min-width: 1081px) {
-  .createCourseButton {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-  .createCourseButton button {
-    background-color: transparent;
-    border: none;
-    min-width: 8rem !important;
-    /* font-size: 0.8rem !important; */
-    cursor: pointer;
-  }
   .teachOnUdemyButton button:hover {
     color: #401b9c;
   }

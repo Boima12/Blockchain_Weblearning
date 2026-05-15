@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import ActionProgressPanel from '../../components/action-progress-panel/ActionProgressPanel';
 import LoadingSpinner from '../../components/loading-spinner/LoadingSpinner';
+import { buyCourseOnChain } from '../../web3/ethersClient';
 import usePublishedCourses from '../../hooks/usePublishedCourses';
 import {
     formatWalletAddress,
@@ -17,13 +19,31 @@ const TX_STATES = {
     failed: 'failed',
 };
 
+const BUY_PROGRESS_STEPS = [
+    {
+        id: 'switch-network',
+        label: 'Switch wallet to Polygon Amoy',
+        hint: 'MetaMask may need to switch networks before the purchase can start.',
+    },
+    {
+        id: 'signing',
+        label: 'Approve the purchase transaction',
+        hint: 'Confirm the payment in MetaMask.',
+    },
+    {
+        id: 'submitted',
+        label: 'Wait for chain confirmation',
+        hint: 'The purchase is submitted and waiting for final confirmation.',
+    },
+    {
+        id: 'confirmed',
+        label: 'Sync local enrollment',
+        hint: 'Mark the course as purchased inside the app.',
+    },
+];
+
 const toCurrencyLabel = (value, token) =>
     `${Number(value ?? 0).toFixed(2)} ${token}`;
-
-const buildMockTxHash = () => {
-    const randomHex = Math.random().toString(16).slice(2).padEnd(64, '0').slice(0, 64);
-    return `0x${randomHex}`;
-};
 
 const getInstructorLabel = (course) => {
     const instructorNames = Array.isArray(course?.visible_instructors)
@@ -46,25 +66,9 @@ function Co_BuyCourse() {
 
     const { courses, isLoading, error } = usePublishedCourses();
     const [appState, setAppState] = useState(() => getAppState());
-    const [simulationOutcome, setSimulationOutcome] = useState('success');
     const [txState, setTxState] = useState(TX_STATES.idle);
     const [txHash, setTxHash] = useState('');
-
-    const timerHandles = useRef([]);
-
-    const clearTimers = () => {
-        timerHandles.current.forEach((timerId) => {
-            window.clearTimeout(timerId);
-        });
-        timerHandles.current = [];
-    };
-
-    useEffect(
-        () => () => {
-            clearTimers();
-        },
-        [],
-    );
+    const [buyProgress, setBuyProgress] = useState(null);
 
     const selectedCourse = useMemo(
         () =>
@@ -86,76 +90,124 @@ function Co_BuyCourse() {
     const basePrice = Number(selectedCourse?.price ?? 0);
     const discount = Math.min(99, Math.max(0, Number(selectedCourse?.discount ?? 0)));
     const finalPrice = basePrice * (1 - discount / 100);
+    const onChainCourseId = Number(
+        selectedCourse?.onChainCourseId ?? selectedCourse?.chainCourseId ?? courseIdKey,
+    );
+    const hasValidOnChainId = Number.isFinite(onChainCourseId);
 
-    const beginMockTransaction = () => {
-        if (!selectedCourse) {
-            return;
-        }
-
+    const beginOnChainPurchase = async () => {
+        if (!selectedCourse) return;
         if (isPurchased) {
             navigate(`/learn-course/${courseIdKey}`);
             return;
         }
 
-        clearTimers();
-        setTxHash('');
-        setTxState(TX_STATES.signing);
+        if (!hasValidOnChainId) {
+            console.error('On-chain purchase failed: Missing on-chain course id.', {
+                courseId: courseIdKey,
+                onChainCourseId: selectedCourse?.onChainCourseId,
+            });
+            setTxState(TX_STATES.failed);
+            setBuyProgress({
+                stage: 'failed',
+                note: 'Course is not published on-chain yet.',
+                txHash: '',
+            });
+            return;
+        }
 
-        const signingTimer = window.setTimeout(() => {
-            setTxState(TX_STATES.pending);
+        try {
+            setTxHash('');
+            setTxState(TX_STATES.signing);
+            setBuyProgress({
+                stage: 'switch-network',
+                note: 'Open MetaMask to switch to Polygon Amoy if needed.',
+                txHash: '',
+            });
 
-            const pendingTimer = window.setTimeout(() => {
-                if (simulationOutcome === 'failed') {
-                    setTxState(TX_STATES.failed);
-                    return;
-                }
+            const result = await buyCourseOnChain(onChainCourseId, String(finalPrice), {
+                onStatus: (stage, nextTxHash) => {
+                    const progressNotes = {
+                        'switch-network': 'Approve the Polygon Amoy network switch in MetaMask.',
+                        signing: 'Approve the transaction in MetaMask.',
+                        submitted: 'Transaction submitted. Waiting for confirmation...',
+                        confirmed: 'Transaction confirmed. Syncing local enrollment...',
+                    };
 
-                const nextTxHash = buildMockTxHash();
-
-                updateAppState((currentState) => {
-                    const alreadyPurchased = currentState.purchasedCourses.some(
-                        (purchaseItem) =>
-                            String(purchaseItem.courseId) === courseIdKey,
-                    );
-
-                    if (alreadyPurchased) {
-                        return currentState;
+                    if (stage === 'submitted') {
+                        setTxState(TX_STATES.pending);
                     }
 
-                    return {
-                        ...currentState,
-                        purchasedCourses: [
-                            {
-                                courseId: courseIdKey,
-                                enrolledAt: new Date().toISOString(),
-                                progress: 0,
-                            },
-                            ...currentState.purchasedCourses,
-                        ],
-                    };
-                });
+                    if (stage === 'confirmed') {
+                        setTxState(TX_STATES.success);
+                    }
 
-                setAppState(getAppState());
-                setTxHash(nextTxHash);
-                setTxState(TX_STATES.success);
-            }, 1600);
+                    setBuyProgress((previous) => ({
+                        ...(previous ?? {}),
+                        stage,
+                        txHash: nextTxHash ?? previous?.txHash ?? '',
+                        note: progressNotes[stage] ?? previous?.note ?? '',
+                    }));
+                },
+            });
 
-            timerHandles.current.push(pendingTimer);
-        }, 900);
+            setTxHash(result.txHash);
+            updateAppState((currentState) => {
+                const alreadyPurchased = currentState.purchasedCourses.some(
+                    (purchaseItem) => String(purchaseItem.courseId) === courseIdKey,
+                );
 
-        timerHandles.current.push(signingTimer);
+                if (alreadyPurchased) return currentState;
+
+                return {
+                    ...currentState,
+                    purchasedCourses: [
+                        {
+                            courseId: courseIdKey,
+                            enrolledAt: new Date().toISOString(),
+                            progress: 0,
+                        },
+                        ...currentState.purchasedCourses,
+                    ],
+                };
+            });
+
+            setAppState(getAppState());
+            setTxState(TX_STATES.success);
+            setBuyProgress({
+                stage: 'confirmed',
+                note: 'Transaction confirmed. Enrollment completed.',
+                txHash: result.txHash,
+            });
+        } catch (err) {
+            console.error('On-chain purchase failed:', err);
+            setTxState(TX_STATES.failed);
+            setBuyProgress({
+                stage: 'failed',
+                note:
+                    err instanceof Error
+                        ? err.message
+                        : 'Transaction failed. Please try again.',
+                txHash,
+            });
+        }
     };
 
-    const txMessage =
-        txState === TX_STATES.signing
-            ? 'Waiting for wallet signature...'
-            : txState === TX_STATES.pending
-                ? 'Transaction submitted. Waiting for block confirmation...'
-                : txState === TX_STATES.success
-                    ? 'Transaction confirmed. Enrollment completed.'
-                    : txState === TX_STATES.failed
-                        ? 'Transaction failed in simulation. Retry with Success to continue.'
-                        : 'Ready to simulate a purchase transaction.';
+    let txMessage = 'Ready to complete your purchase.';
+
+    if (buyProgress?.note) {
+        txMessage = buyProgress.note;
+    } else if (txState === TX_STATES.signing) {
+        txMessage = 'Waiting for wallet signature...';
+    } else if (txState === TX_STATES.pending) {
+        txMessage = 'Transaction submitted. Waiting for block confirmation...';
+    } else if (txState === TX_STATES.success) {
+        txMessage = 'Transaction confirmed. Enrollment completed.';
+    } else if (txState === TX_STATES.failed) {
+        txMessage = hasValidOnChainId
+            ? 'Transaction failed. Please try again.'
+            : 'Course is not published on-chain yet.';
+    }
 
     if (isLoading) {
         return <LoadingSpinner />;
@@ -199,12 +251,23 @@ function Co_BuyCourse() {
         <main className={styles.main_buyCourse}>
             <section className={styles.buyShell}>
                 <header className={styles.headerSection}>
-                    <p className={styles.badge}>Checkout Simulation</p>
+                    <p className={styles.badge}>Checkout</p>
                     <h1>{selectedCourse.title}</h1>
                     <p>
                         Instructor: <strong>{getInstructorLabel(selectedCourse)}</strong>
                     </p>
                 </header>
+
+                {buyProgress ? (
+                    <ActionProgressPanel
+                        title="Buying course"
+                        description={buyProgress.note}
+                        currentStage={buyProgress.stage}
+                        steps={BUY_PROGRESS_STEPS}
+                        txHash={buyProgress.txHash}
+                        tone={buyProgress.stage === 'failed' ? 'error' : buyProgress.stage === 'confirmed' ? 'success' : 'info'}
+                    />
+                ) : null}
 
                 <section className={styles.gridSection}>
                     <article className={styles.card}>
@@ -230,30 +293,21 @@ function Co_BuyCourse() {
                         </div>
 
                         <div className={styles.simulationControls}>
-                            <label htmlFor='simulationOutcome'>Simulation Outcome</label>
-                            <select
-                                id='simulationOutcome'
-                                value={simulationOutcome}
-                                onChange={(event) =>
-                                    setSimulationOutcome(event.target.value)
-                                }
-                                disabled={isPurchased || txState === TX_STATES.pending || txState === TX_STATES.signing}
-                            >
-                                <option value='success'>Success</option>
-                                <option value='failed'>Fail</option>
-                            </select>
-
                             <button
                                 type='button'
                                 className={styles.primaryButton}
-                                onClick={beginMockTransaction}
-                                disabled={txState === TX_STATES.pending || txState === TX_STATES.signing}
+                                onClick={beginOnChainPurchase}
+                                disabled={
+                                    !hasValidOnChainId ||
+                                    txState === TX_STATES.pending ||
+                                    txState === TX_STATES.signing
+                                }
                             >
                                 {isPurchased
                                     ? 'Open Learn Course'
                                     : txState === TX_STATES.pending || txState === TX_STATES.signing
-                                        ? 'Processing...'
-                                        : 'Simulate Transaction'}
+                                        ? 'Processing on-chain...'
+                                        : 'Purchase On-chain'}
                             </button>
 
                             <button
@@ -272,7 +326,7 @@ function Co_BuyCourse() {
 
                         {txHash ? (
                             <div className={styles.hashBox}>
-                                <p>Mock Tx Hash</p>
+                                <p>Tx Hash</p>
                                 <code>{txHash}</code>
                             </div>
                         ) : null}

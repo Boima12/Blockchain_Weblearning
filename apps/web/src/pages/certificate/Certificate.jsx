@@ -8,6 +8,7 @@ import {
     getAppState,
     updateAppState,
 } from '../../utils/appLocalState';
+import { hasAccessOnChain } from '../../web3/ethersClient';
 
 const buildCourseCode = (courseId) =>
     String(courseId ?? '')
@@ -169,6 +170,26 @@ function Co_Certificate() {
         }
     };
 
+    const onVerifyOnChain = async () => {
+        setActionError('');
+        if (!appState.profile?.walletAddress) {
+            setActionError('Connect a wallet to verify on-chain enrollment.');
+            return;
+        }
+
+        try {
+            const ok = await hasAccessOnChain(Number(courseIdKey), appState.profile.walletAddress);
+            if (!ok) {
+                setActionError('No on-chain enrollment found for this account.');
+                return;
+            }
+
+            ensureCertificateRecord();
+        } catch (err) {
+            setActionError('Unable to verify on-chain enrollment right now.');
+        }
+    };
+
     if (isLoading) {
         return <LoadingSpinner />;
     }
@@ -275,6 +296,12 @@ function Co_Certificate() {
                 {actionError ? <p className={styles.errorText}>{actionError}</p> : null}
 
                 <div className={styles.actions}>
+                    <button
+                        type='button'
+                        onClick={onVerifyOnChain}
+                    >
+                        Verify On-chain Enrollment
+                    </button>
                     <button
                         type='button'
                         onClick={onDownloadPdf}

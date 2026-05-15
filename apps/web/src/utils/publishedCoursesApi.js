@@ -111,6 +111,9 @@ export const buildPublishedCoursePayload = (courseRecord, profile = {}) => {
         status: 'Published',
         updatedAt,
         publishedAt,
+        metadataCID: String(courseRecord.metadataCID ?? ''),
+        metadataUrl: String(courseRecord.metadataUrl ?? ''),
+        onChainCourseId: String(courseRecord.onChainCourseId ?? ''),
         ownerWalletAddress: String(profile.walletAddress ?? ''),
         ownerDisplayName: instructorName,
     };

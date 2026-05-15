@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 import { getAppState, updateAppState } from '../../../utils/appLocalState';
 import { upsertPublishedCourse } from '../../../utils/publishedCoursesApi';
+import { uploadCourseMetadata } from '../../../utils/ipfsApi';
+import { createCourseOnChain } from '../../../web3/ethersClient';
+import { parseEther } from 'ethers';
 import { STEP_ITEMS } from '../createCourseConstants';
 import {
     buildCourseRecord,
@@ -26,6 +29,8 @@ function useCreateCourseWizard() {
     const [errors, setErrors] = useState({});
     const [feedback, setFeedback] = useState(EMPTY_FEEDBACK);
     const [publishedCourseId, setPublishedCourseId] = useState(null);
+    const [publishErrorMessage, setPublishErrorMessage] = useState('');
+    const [publishProgress, setPublishProgress] = useState(null);
 
     const finalPrice = useMemo(
         () => calculateFinalPrice(draft.price, draft.discount),
@@ -261,6 +266,8 @@ function useCreateCourseWizard() {
             message: 'Draft saved successfully. You can continue later.',
         });
         setPublishedCourseId(null);
+        setPublishErrorMessage('');
+        setPublishProgress(null);
     };
 
     const onPublishCourse = async () => {
@@ -275,8 +282,79 @@ function useCreateCourseWizard() {
         const publishedRecord = buildCourseRecord(draft, 'Published');
 
         try {
+            setPublishProgress({
+                stage: 'uploading-metadata',
+                note: 'Uploading course metadata to IPFS...',
+                txHash: '',
+            });
+
             const profile = getAppState().profile;
-            await upsertPublishedCourse(publishedRecord, profile);
+            const ipfsPayload = await uploadCourseMetadata({
+                course: publishedRecord,
+                profile,
+            });
+
+            const metadataCID = `ipfs://${ipfsPayload.cid}`;
+            const metadataUrl = String(ipfsPayload.ipfsUrl ?? '').trim();
+
+            const nextPublishedRecord = {
+                ...publishedRecord,
+                metadataCID,
+                metadataUrl,
+            };
+
+            const priceWei = parseEther(String(publishedRecord.price ?? 0));
+            setPublishProgress({
+                stage: 'switch-network',
+                note: 'MetaMask may ask to switch to Polygon Amoy.',
+                txHash: '',
+            });
+
+            const result = await createCourseOnChain(metadataCID, priceWei, {
+                onStatus: (stage, txHash) => {
+                    const progressMap = {
+                        'switch-network': 'switch-network',
+                        signing: 'signing',
+                        submitted: 'submitted',
+                        confirmed: 'confirmed',
+                    };
+
+                    setPublishProgress((previous) => ({
+                        ...(previous ?? {}),
+                        stage: progressMap[stage] ?? stage,
+                        txHash: txHash ?? previous?.txHash ?? '',
+                        note:
+                            stage === 'switch-network'
+                                ? 'Approve the network switch in MetaMask.'
+                                : stage === 'signing'
+                                    ? 'Approve the transaction in MetaMask.'
+                                    : stage === 'submitted'
+                                        ? 'Transaction submitted. Waiting for confirmation...'
+                                        : stage === 'confirmed'
+                                            ? 'Transaction confirmed. Saving the published course...'
+                                            : previous?.note ?? '',
+                    }));
+                },
+            });
+
+            if (result.courseId !== null && result.courseId !== undefined) {
+                nextPublishedRecord.onChainCourseId = String(result.courseId);
+            }
+
+            setPublishProgress({
+                stage: 'saving-mongo',
+                note: 'Writing the published course to MongoDB...',
+                txHash: result.txHash,
+            });
+
+            await upsertPublishedCourse(nextPublishedRecord, profile);
+            setPublishErrorMessage('');
+            setFeedback({
+                type: 'success',
+                message: result.courseId
+                    ? `Course published on-chain (ID: ${result.courseId}). Tx: ${result.txHash}`
+                    : `Course published on-chain. Tx: ${result.txHash}`,
+            });
 
             updateAppState((currentState) => ({
                 ...currentState,
@@ -286,12 +364,16 @@ function useCreateCourseWizard() {
                 ),
             }));
         } catch (error) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : 'Publishing failed. Ensure Vite dev server is running with a valid MongoDB connection.';
+            console.error('Course publish failed:', error);
+            setPublishErrorMessage(message);
+            setPublishProgress(null);
             setFeedback({
                 type: 'error',
-                message:
-                    error instanceof Error
-                        ? error.message
-                        : 'Publishing failed. Ensure Vite dev server is running with a valid MongoDB connection.',
+                message,
             });
             return;
         }
@@ -306,6 +388,7 @@ function useCreateCourseWizard() {
         clearDraftStorage();
         setDraft(nextDraft);
         setPublishedCourseId(publishedRecord.id);
+        setPublishProgress(null);
         setFeedback({
             type: 'success',
             message:
@@ -320,10 +403,18 @@ function useCreateCourseWizard() {
         setActiveStep(0);
         setErrors({});
         setPublishedCourseId(null);
+        setPublishErrorMessage('');
+        setPublishProgress(null);
         setFeedback({
             type: 'info',
             message: 'Started a new draft course.',
         });
+    };
+
+    const clearPublishError = () => {
+        setPublishErrorMessage('');
+        setFeedback(EMPTY_FEEDBACK);
+        setPublishProgress(null);
     };
 
     return {
@@ -333,6 +424,8 @@ function useCreateCourseWizard() {
         feedback,
         finalPrice,
         publishedCourseId,
+        publishErrorMessage,
+        publishProgress,
         setActiveStep,
         setErrors,
         setDraftField,
@@ -350,6 +443,7 @@ function useCreateCourseWizard() {
         onSaveDraft,
         onPublishCourse,
         onStartNewDraft,
+        clearPublishError,
     };
 }
 

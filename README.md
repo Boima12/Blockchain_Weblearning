@@ -10,3 +10,13 @@
 - Polygon (Matic): Mang blockchain trien khai va chay smart contract.
 - Pinata IPFS: Luu tru metadata bat bien (CID) cho khoa hoc/chung chi.
 - MongoDB: Luu tru du lieu linh hoat va truy van nhanh (nguoi dung, tien do, khoa hoc).
+
+
+<br> <br> <br>
+
+# Cách cập nhật mới nhất từ GitHub vào branch main <br>
+```
+git checkout main
+git fetch --all --prune
+git pull origin main
+```

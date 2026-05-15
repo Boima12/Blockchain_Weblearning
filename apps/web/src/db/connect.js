@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import UserAccount from './models/UserAccount.js';
+
 let connectionPromise = null;
 
 const connectDB = async (uri) => {
@@ -16,8 +18,11 @@ const connectDB = async (uri) => {
             .connect(uri, {
                 dbName: 'blockchain_weblearning',
             })
-            .then((connection) => {
+            .then(async (connection) => {
                 console.log('Connected to MongoDB');
+                // Drops DB indexes that are not in the schema (e.g. legacy unique
+                // `email` when accounts are wallet-only), fixing E11000 on email: null.
+                await UserAccount.syncIndexes();
                 return connection;
             })
             .catch((error) => {

@@ -4,8 +4,39 @@ import BasicInfoStep from './components/BasicInfoStep';
 import CurriculumStep from './components/CurriculumStep';
 import PricingStep from './components/PricingStep';
 import ReviewStep from './components/ReviewStep';
+import PublishSuccessDialog from './components/PublishSuccessDialog';
+import PublishFailureDialog from './components/PublishFailureDialog';
+import ActionProgressPanel from '../../components/action-progress-panel/ActionProgressPanel';
 import { STEP_ITEMS } from './createCourseConstants';
 import useCreateCourseWizard from './hooks/useCreateCourseWizard';
+
+const PUBLISH_PROGRESS_STEPS = [
+    {
+        id: 'uploading-metadata',
+        label: 'Upload course metadata to IPFS',
+        hint: 'Store the course record on Pinata before publishing on-chain.',
+    },
+    {
+        id: 'switch-network',
+        label: 'Switch wallet to Polygon Amoy',
+        hint: 'MetaMask may ask to change networks before the contract call.',
+    },
+    {
+        id: 'signing',
+        label: 'Approve the publish transaction',
+        hint: 'Confirm the course creation in MetaMask.',
+    },
+    {
+        id: 'submitted',
+        label: 'Wait for chain confirmation',
+        hint: 'The transaction is on-chain and waiting for final confirmation.',
+    },
+    {
+        id: 'saving-mongo',
+        label: 'Save the published course',
+        hint: 'Store the on-chain course ID back in MongoDB.',
+    },
+];
 
 function Co_CreateCourse() {
     const navigate = useNavigate();
@@ -17,6 +48,8 @@ function Co_CreateCourse() {
         feedback,
         finalPrice,
         publishedCourseId,
+        publishErrorMessage,
+        publishProgress,
         setActiveStep,
         setErrors,
         setDraftField,
@@ -34,6 +67,7 @@ function Co_CreateCourse() {
         onSaveDraft,
         onPublishCourse,
         onStartNewDraft,
+        clearPublishError,
     } = useCreateCourseWizard();
 
     const feedbackClass =
@@ -86,8 +120,27 @@ function Co_CreateCourse() {
         return <ReviewStep draft={draft} finalPrice={finalPrice} />;
     };
 
+    const onViewPublishedCourse = () => {
+        if (!publishedCourseId) {
+            return;
+        }
+
+        onStartNewDraft();
+        navigate(`/Blockchain-Weblearning/courses/${publishedCourseId}`);
+    };
+
     return (
         <main className={styles.main_CreateCourse}>
+            <PublishSuccessDialog
+                isOpen={Boolean(publishedCourseId)}
+                courseId={publishedCourseId}
+                onViewCourse={onViewPublishedCourse}
+            />
+            <PublishFailureDialog
+                isOpen={Boolean(publishErrorMessage)}
+                message={publishErrorMessage}
+                onClose={clearPublishError}
+            />
             <section className={styles.wizardShell}>
                 <div className={styles.wizardHeader}>
                     <p className={styles.badge}>Creator Studio</p>
@@ -130,6 +183,16 @@ function Co_CreateCourse() {
                     <p className={`${styles.feedback} ${feedbackClass}`}>
                         {feedback.message}
                     </p>
+                ) : null}
+
+                {publishProgress ? (
+                    <ActionProgressPanel
+                        title="Publishing course"
+                        description={publishProgress.note}
+                        currentStage={publishProgress.stage}
+                        steps={PUBLISH_PROGRESS_STEPS}
+                        txHash={publishProgress.txHash}
+                    />
                 ) : null}
 
                 {renderStepContent()}

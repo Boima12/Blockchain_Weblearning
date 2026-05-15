@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 import styles from './CourseDetailsPage.module.css';
 import { useNavigate } from 'react-router-dom';
-import { getAppState } from '../../utils/appLocalState';
+import {
+    getAppState,
+    getAuthSessionSnapshot,
+    subscribeToAuthSession,
+} from '../../utils/appLocalState';
 
 import Sticky from 'react-stickynode';
 import StickyCardContent from '../sticky-card-content/StickyCardContent';
@@ -13,14 +17,30 @@ import BuyCourseNavBar from '../buy-course-nav-bar/BuyCourseNavBar';
 
 function CourseDetailsPage({courseDetails}) {
     const navigate = useNavigate();
+    const authSession = useSyncExternalStore(
+        subscribeToAuthSession,
+        getAuthSessionSnapshot,
+        () => null,
+    );
 
     const courseId = String(courseDetails?.id ?? '');
     const isPurchased = getAppState().purchasedCourses.some(
         (purchaseItem) => String(purchaseItem.courseId) === courseId,
     );
+    const isAuthenticated = Boolean(authSession?.accountId);
+    const isBuyDisabled = !isAuthenticated && !isPurchased;
+    const buyButtonLabel = isBuyDisabled
+        ? 'Connect to wallet first'
+        : isPurchased
+            ? 'Go to course'
+            : 'Buy now';
 
     const handleBuyNow = () => {
         if (!courseId) {
+            return;
+        }
+
+        if (isBuyDisabled) {
             return;
         }
 
@@ -44,7 +64,8 @@ function CourseDetailsPage({courseDetails}) {
                         details={courseDetails}
                         additionalDetails={courseDetails}
                         onBuyNow={handleBuyNow}
-                        buyButtonLabel={isPurchased ? 'Go to course' : 'Buy now'}
+                        buyButtonLabel={buyButtonLabel}
+                        isBuyDisabled={isBuyDisabled}
                     />
                 </Sticky>
 
@@ -59,7 +80,8 @@ function CourseDetailsPage({courseDetails}) {
                 <BuyCourseNavBar
                     details={courseDetails}
                     onBuyNow={handleBuyNow}
-                    buyButtonLabel={isPurchased ? 'Go to course' : 'Buy now'}
+                    buyButtonLabel={buyButtonLabel}
+                    isBuyDisabled={isBuyDisabled}
                 />
             </section>
         </main>

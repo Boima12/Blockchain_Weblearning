@@ -2,7 +2,6 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import crypto from 'crypto';
 import connectDB from './src/db/connect.js';
 import PublishedCourse from './src/db/models/PublishedCourse.js';
 import UserAccount from './src/db/models/UserAccount.js';
@@ -42,13 +41,10 @@ const toPublicCourse = (courseDoc) => {
   };
 };
 
-const normalizeEmail = (value) => String(value ?? '').trim().toLowerCase();
-
 const normalizeWalletAddress = (value) => String(value ?? '').trim();
 
-const normalizeProfile = ({ displayName, email, walletAddress }) => ({
+const normalizeProfile = ({ displayName, walletAddress }) => ({
   displayName: String(displayName ?? '').trim() || 'Blockchain Student',
-  email: normalizeEmail(email) || 'student@university.edu',
   walletAddress:
     normalizeWalletAddress(walletAddress) ||
     '0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0',
@@ -63,9 +59,6 @@ const normalizeUserStatePayload = (payload = {}) => ({
           displayName:
             String(payload.profile.displayName ?? '').trim() ||
             'Blockchain Student',
-          email:
-            normalizeEmail(payload.profile.email) ||
-            'student@university.edu',
           walletAddress:
             normalizeWalletAddress(payload.profile.walletAddress) ||
             '0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0',
@@ -90,34 +83,12 @@ const normalizeUserStatePayload = (payload = {}) => ({
     : [],
 });
 
-const hashPassword = (password, passwordSalt) =>
-  crypto
-    .createHash('sha256')
-    .update(`${passwordSalt}:${String(password ?? '')}`)
-    .digest('hex');
-
-const createPasswordRecord = (password) => {
-  const passwordSalt = crypto.randomBytes(16).toString('hex');
-  return {
-    passwordSalt,
-    passwordHash: hashPassword(password, passwordSalt),
-  };
-};
-
 const toPublicUserAccount = (accountDoc) => {
   if (!accountDoc || typeof accountDoc !== 'object') {
     return null;
   }
 
   const { _id, __v, createdAt, updatedAt, ...account } = accountDoc;
-
-  if ('passwordHash' in account) {
-    delete account.passwordHash;
-  }
-
-  if ('passwordSalt' in account) {
-    delete account.passwordSalt;
-  }
 
   return {
     accountId: String(_id),
@@ -126,6 +97,114 @@ const toPublicUserAccount = (accountDoc) => {
     updatedAt: account.updatedAt ?? updatedAt ?? new Date().toISOString(),
   };
 };
+
+const normalizeGateway = (value) => {
+  const raw = String(value ?? '').trim();
+  if (!raw) {
+    return 'https://gateway.pinata.cloud';
+  }
+
+  return raw.endsWith('/') ? raw.slice(0, -1) : raw;
+};
+
+const buildCourseMetadataPayload = ({ course = {}, profile = {} } = {}) => {
+  const image =
+    course.thumbnailUrl ||
+    course.image_750x422 ||
+    course.image_480x270 ||
+    course.image_304x171 ||
+    'https://gateway.pinata.cloud/ipfs/bafkreihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtenxquvyku';
+
+  const ownerWalletAddress =
+    String(profile.walletAddress ?? course.ownerWalletAddress ?? '').trim();
+
+  return {
+    name: String(course.title ?? 'Untitled Course').trim(),
+    description: String(course.description ?? '').trim(),
+    image,
+    ownerWalletAddress,
+    price: Number(course.price ?? 0),
+    token: String(course.token ?? 'MATIC').trim(),
+    external_url: String(course.url ?? '').trim(),
+  };
+};
+
+const pinataIpfsApi = (pinataJwt, gatewayBase) => ({
+  name: 'pinata-ipfs-api',
+  configureServer(server) {
+    server.middlewares.use('/api/ipfs/course-metadata', async (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+
+      if (req.method !== 'POST') {
+        res.statusCode = 405;
+        res.end(JSON.stringify({ error: 'Method not allowed' }));
+        return;
+      }
+
+      if (!pinataJwt) {
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: 'PINATA_JWT is not configured.' }));
+        return;
+      }
+
+      const body = await readJsonBody(req);
+      const course = body?.course;
+      const profile = body?.profile;
+
+      if (!course) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: 'Course payload is required.' }));
+        return;
+      }
+
+      const metadata = buildCourseMetadataPayload({ course, profile });
+
+      try {
+        const response = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${pinataJwt}`,
+          },
+          body: JSON.stringify({
+            pinataContent: metadata,
+            pinataMetadata: {
+              name: `course-${String(course.id ?? (metadata.name || 'metadata'))}`,
+            },
+          }),
+        });
+
+        const payload = await response.json();
+        if (!response.ok) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: payload?.error || 'Pinata upload failed.' }));
+          return;
+        }
+
+        const cid = payload?.IpfsHash;
+        if (!cid) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: 'Pinata response missing CID.' }));
+          return;
+        }
+
+        const gateway = normalizeGateway(gatewayBase);
+        res.statusCode = 200;
+        res.end(JSON.stringify({ cid, ipfsUrl: `${gateway}/ipfs/${cid}` }));
+      } catch (error) {
+        res.statusCode = 500;
+        res.end(
+          JSON.stringify({
+            error:
+              error instanceof Error
+                ? `Pinata upload failed: ${error.message}`
+                : 'Pinata upload failed.',
+          }),
+        );
+      }
+    });
+  },
+});
 
 const publishedCoursesMongoApi = (mongoUri) => ({
   name: 'published-courses-mongo-api',
@@ -227,6 +306,24 @@ const publishedCoursesMongoApi = (mongoUri) => ({
           },
         );
 
+        // Update user's createdCourses in UserAccount if ownerWalletAddress is provided
+        const ownerWalletAddress = String(normalizedCourse.ownerWalletAddress ?? '').trim();
+        if (ownerWalletAddress) {
+          const userAccount = await UserAccount.findOne({ walletAddress: ownerWalletAddress });
+          if (userAccount) {
+            const courseIdStr = String(normalizedCourse.id);
+            // Only add if not already in createdCourses
+            if (!userAccount.createdCourses.some(c => String(c.id) === courseIdStr)) {
+              userAccount.createdCourses.push({
+                id: courseIdStr,
+                title: normalizedCourse.title,
+                publishedAt: normalizedCourse.publishedAt,
+              });
+              await userAccount.save();
+            }
+          }
+        }
+
         res.statusCode = 200;
         res.end(
           JSON.stringify({
@@ -282,51 +379,43 @@ const userAccountMongoApi = (mongoUri) => ({
 
       const body = await readJsonBody(req);
 
-      if (route === '/register') {
+      const upsertWalletAccount = async () => {
         const displayName = String(body?.displayName ?? '').trim();
-        const email = normalizeEmail(body?.email);
         const walletAddress = normalizeWalletAddress(body?.walletAddress);
-        const password = String(body?.password ?? '');
 
-        if (!displayName || !email || !walletAddress || password.length < 6) {
+        if (!walletAddress) {
           res.statusCode = 400;
           res.end(
             JSON.stringify({
-              error:
-                'Display name, email, wallet address, and a password with at least 6 characters are required.',
+              error: 'Wallet address is required.',
             }),
           );
-          return;
+          return null;
         }
 
-        const existing = await UserAccount.findOne({
-          $or: [
-            { email },
-            { walletAddress },
-          ],
-        }).lean();
+        const existing = await UserAccount.findOne({ walletAddress });
 
         if (existing) {
-          res.statusCode = 409;
-          res.end(
-            JSON.stringify({
-              error: 'An account with that email or wallet address already exists.',
-            }),
-          );
-          return;
+          if (displayName) {
+            existing.profile = {
+              ...existing.profile,
+              displayName,
+              walletAddress,
+            };
+          }
+
+          existing.lastLoginAt = new Date();
+          await existing.save();
+          return toPublicUserAccount(existing.toObject());
         }
 
-        const passwordRecord = createPasswordRecord(password);
         const profile = normalizeProfile({
           displayName,
-          email,
           walletAddress,
         });
 
         const created = await UserAccount.create({
-          email,
           walletAddress,
-          ...passwordRecord,
           profile,
           createdCourses: [],
           purchasedCourses: [],
@@ -335,68 +424,20 @@ const userAccountMongoApi = (mongoUri) => ({
           lastLoginAt: new Date(),
         });
 
-        res.statusCode = 201;
-        res.end(
-          JSON.stringify({
-            ok: true,
-            account: toPublicUserAccount(created.toObject()),
-          }),
-        );
-        return;
-      }
+        return toPublicUserAccount(created.toObject());
+      };
 
-      if (route === '/login') {
-        const identifier = String(body?.identifier ?? '').trim();
-        const password = String(body?.password ?? '');
-
-        if (!identifier || !password) {
-          res.statusCode = 400;
-          res.end(
-            JSON.stringify({
-              error: 'Identifier and password are required.',
-            }),
-          );
-          return;
-        }
-
-        const normalizedIdentifier = normalizeEmail(identifier);
-
-        const account = await UserAccount.findOne({
-          $or: [
-            { email: normalizedIdentifier },
-            { walletAddress: identifier },
-          ],
-        });
-
+      if (route === '/register' || route === '/login') {
+        const account = await upsertWalletAccount();
         if (!account) {
-          res.statusCode = 401;
-          res.end(
-            JSON.stringify({
-              error: 'Invalid login credentials.',
-            }),
-          );
           return;
         }
 
-        const incomingPasswordHash = hashPassword(password, account.passwordSalt);
-        if (incomingPasswordHash !== account.passwordHash) {
-          res.statusCode = 401;
-          res.end(
-            JSON.stringify({
-              error: 'Invalid login credentials.',
-            }),
-          );
-          return;
-        }
-
-        account.lastLoginAt = new Date();
-        await account.save();
-
-        res.statusCode = 200;
+        res.statusCode = route === '/register' ? 201 : 200;
         res.end(
           JSON.stringify({
             ok: true,
-            account: toPublicUserAccount(account.toObject()),
+            account,
           }),
         );
         return;
@@ -526,12 +567,15 @@ const userAccountMongoApi = (mongoUri) => ({
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, __dirname, '');
   const mongoUri = env.MONGO_URI;
+  const pinataJwt = env.PINATA_JWT;
+  const pinataGateway = env.PINATA_GATEWAY;
 
   return {
     plugins: [
       react(),
       publishedCoursesMongoApi(mongoUri),
       userAccountMongoApi(mongoUri),
+      pinataIpfsApi(pinataJwt, pinataGateway),
     ],
     resolve: {
       alias: {

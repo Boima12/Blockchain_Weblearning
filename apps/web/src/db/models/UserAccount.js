@@ -26,10 +26,6 @@ const profileSchema = new mongoose.Schema(
             type: String,
             default: 'Blockchain Student',
         },
-        email: {
-            type: String,
-            default: 'student@university.edu',
-        },
         walletAddress: {
             type: String,
             default: '0xA4f0fA32F7bA19EfA72fD8B601845513d19b4aD0',
@@ -50,28 +46,12 @@ const profileSchema = new mongoose.Schema(
 
 const userAccountSchema = new mongoose.Schema(
     {
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            index: true,
-            lowercase: true,
-            trim: true,
-        },
         walletAddress: {
             type: String,
             required: true,
             unique: true,
             index: true,
             trim: true,
-        },
-        passwordHash: {
-            type: String,
-            required: true,
-        },
-        passwordSalt: {
-            type: String,
-            required: true,
         },
         profile: {
             type: profileSchema,
