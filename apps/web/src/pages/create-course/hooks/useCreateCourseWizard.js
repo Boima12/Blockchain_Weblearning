@@ -30,6 +30,7 @@ function useCreateCourseWizard() {
     const [feedback, setFeedback] = useState(EMPTY_FEEDBACK);
     const [publishedCourseId, setPublishedCourseId] = useState(null);
     const [publishErrorMessage, setPublishErrorMessage] = useState('');
+    const [publishProgress, setPublishProgress] = useState(null);
 
     const finalPrice = useMemo(
         () => calculateFinalPrice(draft.price, draft.discount),
@@ -266,6 +267,7 @@ function useCreateCourseWizard() {
         });
         setPublishedCourseId(null);
         setPublishErrorMessage('');
+        setPublishProgress(null);
     };
 
     const onPublishCourse = async () => {
@@ -280,6 +282,12 @@ function useCreateCourseWizard() {
         const publishedRecord = buildCourseRecord(draft, 'Published');
 
         try {
+            setPublishProgress({
+                stage: 'uploading-metadata',
+                note: 'Uploading course metadata to IPFS...',
+                txHash: '',
+            });
+
             const profile = getAppState().profile;
             const ipfsPayload = await uploadCourseMetadata({
                 course: publishedRecord,
@@ -295,38 +303,58 @@ function useCreateCourseWizard() {
                 metadataUrl,
             };
 
+            const priceWei = parseEther(String(publishedRecord.price ?? 0));
+            setPublishProgress({
+                stage: 'switch-network',
+                note: 'MetaMask may ask to switch to Polygon Amoy.',
+                txHash: '',
+            });
+
+            const result = await createCourseOnChain(metadataCID, priceWei, {
+                onStatus: (stage, txHash) => {
+                    const progressMap = {
+                        'switch-network': 'switch-network',
+                        signing: 'signing',
+                        submitted: 'submitted',
+                        confirmed: 'confirmed',
+                    };
+
+                    setPublishProgress((previous) => ({
+                        ...(previous ?? {}),
+                        stage: progressMap[stage] ?? stage,
+                        txHash: txHash ?? previous?.txHash ?? '',
+                        note:
+                            stage === 'switch-network'
+                                ? 'Approve the network switch in MetaMask.'
+                                : stage === 'signing'
+                                    ? 'Approve the transaction in MetaMask.'
+                                    : stage === 'submitted'
+                                        ? 'Transaction submitted. Waiting for confirmation...'
+                                        : stage === 'confirmed'
+                                            ? 'Transaction confirmed. Saving the published course...'
+                                            : previous?.note ?? '',
+                    }));
+                },
+            });
+
+            if (result.courseId !== null && result.courseId !== undefined) {
+                nextPublishedRecord.onChainCourseId = String(result.courseId);
+            }
+
+            setPublishProgress({
+                stage: 'saving-mongo',
+                note: 'Writing the published course to MongoDB...',
+                txHash: result.txHash,
+            });
+
             await upsertPublishedCourse(nextPublishedRecord, profile);
             setPublishErrorMessage('');
-
-            // Try to publish on-chain (best-effort). Uses placeholder metadata CID from env when available.
-            try {
-                const priceWei = parseEther(String(publishedRecord.price ?? 0));
-                const result = await createCourseOnChain(metadataCID, priceWei);
-                if (result.courseId !== null && result.courseId !== undefined) {
-                    const onChainCourseId = String(result.courseId);
-                    await upsertPublishedCourse(
-                        {
-                            ...nextPublishedRecord,
-                            onChainCourseId,
-                        },
-                        profile,
-                    );
-                }
-                setFeedback({
-                    type: 'success',
-                    message: result.courseId
-                        ? `Course published on-chain (ID: ${result.courseId}). Tx: ${result.txHash}`
-                        : `Course published on-chain. Tx: ${result.txHash}`,
-                });
-            } catch (chainError) {
-                console.error('On-chain publish failed:', chainError);
-                // Non-fatal: keep MongoDB publish as primary source
-                setFeedback((prev) => ({
-                    type: 'info',
-                    message:
-                        prev?.message || 'Course published, but on-chain publish failed or was skipped.',
-                }));
-            }
+            setFeedback({
+                type: 'success',
+                message: result.courseId
+                    ? `Course published on-chain (ID: ${result.courseId}). Tx: ${result.txHash}`
+                    : `Course published on-chain. Tx: ${result.txHash}`,
+            });
 
             updateAppState((currentState) => ({
                 ...currentState,
@@ -340,7 +368,9 @@ function useCreateCourseWizard() {
                 error instanceof Error
                     ? error.message
                     : 'Publishing failed. Ensure Vite dev server is running with a valid MongoDB connection.';
+            console.error('Course publish failed:', error);
             setPublishErrorMessage(message);
+            setPublishProgress(null);
             setFeedback({
                 type: 'error',
                 message,
@@ -358,6 +388,7 @@ function useCreateCourseWizard() {
         clearDraftStorage();
         setDraft(nextDraft);
         setPublishedCourseId(publishedRecord.id);
+        setPublishProgress(null);
         setFeedback({
             type: 'success',
             message:
@@ -373,6 +404,7 @@ function useCreateCourseWizard() {
         setErrors({});
         setPublishedCourseId(null);
         setPublishErrorMessage('');
+        setPublishProgress(null);
         setFeedback({
             type: 'info',
             message: 'Started a new draft course.',
@@ -382,6 +414,7 @@ function useCreateCourseWizard() {
     const clearPublishError = () => {
         setPublishErrorMessage('');
         setFeedback(EMPTY_FEEDBACK);
+        setPublishProgress(null);
     };
 
     return {
@@ -392,6 +425,7 @@ function useCreateCourseWizard() {
         finalPrice,
         publishedCourseId,
         publishErrorMessage,
+        publishProgress,
         setActiveStep,
         setErrors,
         setDraftField,

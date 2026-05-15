@@ -5,6 +5,18 @@ import { certificateNftAbi } from './abi/certificateNftAbi';
 import { getContractAddresses } from './contractAddresses';
 
 const AMOY_CHAIN_ID = 80002n;
+const AMOY_CHAIN_ID_HEX = '0x13882';
+const AMOY_CHAIN_PARAMS = {
+    chainId: AMOY_CHAIN_ID_HEX,
+    chainName: 'Polygon Amoy',
+    nativeCurrency: {
+        name: 'POL',
+        symbol: 'POL',
+        decimals: 18,
+    },
+    rpcUrls: ['https://rpc-amoy.polygon.technology/'],
+    blockExplorerUrls: ['https://amoy.polygonscan.com/'],
+};
 const MIN_PRIORITY_FEE = parseUnits('30', 'gwei');
 const MIN_MAX_FEE = parseUnits('60', 'gwei');
 
@@ -18,44 +30,99 @@ const getInjectedProvider = () => {
 
 const getProvider = () => new BrowserProvider(getInjectedProvider());
 
-const ensureAmoyNetwork = async (provider) => {
+const requestAmoyNetworkSwitch = async () => {
+    const injectedProvider = getInjectedProvider();
+
+    try {
+        await injectedProvider.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: AMOY_CHAIN_ID_HEX }],
+        });
+        return;
+    } catch (error) {
+        if (error?.code !== 4902) {
+            throw error;
+        }
+    }
+
+    await injectedProvider.request({
+        method: 'wallet_addEthereumChain',
+        params: [AMOY_CHAIN_PARAMS],
+    });
+};
+
+const ensureAmoyNetwork = async (provider, { promptSwitch = false } = {}) => {
     const { chainId } = await provider.getNetwork();
 
     if (chainId !== AMOY_CHAIN_ID) {
-        throw new Error('Please switch your wallet to Polygon Amoy and try again.');
+        if (!promptSwitch) {
+            throw new Error('Please switch your wallet to Polygon Amoy and try again.');
+        }
+
+        await requestAmoyNetworkSwitch();
+
+        const refreshedNetwork = await provider.getNetwork();
+        if (refreshedNetwork.chainId !== AMOY_CHAIN_ID) {
+            throw new Error('Please switch your wallet to Polygon Amoy and try again.');
+        }
     }
 };
 
-const getSigner = async () => {
+const getSigner = async (options = {}) => {
     const provider = getProvider();
-    await ensureAmoyNetwork(provider);
+    await ensureAmoyNetwork(provider, options);
     return provider.getSigner();
 };
 
-const buildGasOverrides = async () => {
+const buildGasOverrides = async (options = {}) => {
     const provider = getProvider();
-    await ensureAmoyNetwork(provider);
+    await ensureAmoyNetwork(provider, options);
 
-    const feeData = await provider.getFeeData();
-    const maxPriorityFeePerGas =
-        feeData.maxPriorityFeePerGas && feeData.maxPriorityFeePerGas > MIN_PRIORITY_FEE
-            ? feeData.maxPriorityFeePerGas
-            : MIN_PRIORITY_FEE;
+    // MetaMask / some RPCs do not implement eth_maxPriorityFeePerGas (EIP-1559).
+    // getFeeData() may throw or return nulls; fall back to legacy gasPrice.
+    try {
+        const feeData = await provider.getFeeData();
+        const maxPriorityFeePerGas = feeData.maxPriorityFeePerGas;
+        const maxFeePerGas = feeData.maxFeePerGas;
 
-    const maxFeePerGas =
-        feeData.maxFeePerGas && feeData.maxFeePerGas > maxPriorityFeePerGas
-            ? feeData.maxFeePerGas
-            : maxPriorityFeePerGas * 2n;
+        if (
+            maxPriorityFeePerGas != null &&
+            maxFeePerGas != null &&
+            maxPriorityFeePerGas > 0n &&
+            maxFeePerGas > 0n
+        ) {
+            const priority =
+                maxPriorityFeePerGas > MIN_PRIORITY_FEE
+                    ? maxPriorityFeePerGas
+                    : MIN_PRIORITY_FEE;
+            const feeCap =
+                maxFeePerGas > priority ? maxFeePerGas : priority * 2n;
 
-    return {
-        maxPriorityFeePerGas,
-        maxFeePerGas: maxFeePerGas > MIN_MAX_FEE ? maxFeePerGas : MIN_MAX_FEE,
-    };
+            return {
+                maxPriorityFeePerGas: priority,
+                maxFeePerGas: feeCap > MIN_MAX_FEE ? feeCap : MIN_MAX_FEE,
+            };
+        }
+    } catch {
+        // Fall through to legacy gas price.
+    }
+
+    let gasPrice = MIN_MAX_FEE;
+    try {
+        const fromNetwork = await provider.getGasPrice();
+        if (fromNetwork > gasPrice) {
+            gasPrice = fromNetwork;
+        }
+    } catch {
+        // Use minimum floor.
+    }
+
+    return { gasPrice };
 };
 
-const getReadOnlyContracts = async () => {
+const getReadOnlyContracts = async (options = {}) => {
     const provider = getProvider();
-    await ensureAmoyNetwork(provider);
+    await ensureAmoyNetwork(provider, options);
 
     const addresses = getContractAddresses();
 
@@ -66,8 +133,8 @@ const getReadOnlyContracts = async () => {
     };
 };
 
-const getSignerContracts = async () => {
-    const signer = await getSigner();
+const getSignerContracts = async (options = {}) => {
+    const signer = await getSigner(options);
     const addresses = getContractAddresses();
 
     return {
@@ -98,15 +165,21 @@ const parseCourseCreatedEvent = (receipt) => {
     return null;
 };
 
-export const createCourseOnChain = async (metadataCID, priceWei) => {
+export const createCourseOnChain = async (metadataCID, priceWei, options = {}) => {
     if (!metadataCID) {
         throw new Error('Metadata CID is required to publish on-chain.');
     }
 
-    const { registry } = await getSignerContracts();
-    const gasOverrides = await buildGasOverrides();
+    const onStatus = typeof options.onStatus === 'function' ? options.onStatus : null;
+
+    onStatus?.('switch-network');
+    const { registry } = await getSignerContracts({ promptSwitch: true });
+    onStatus?.('signing');
+    const gasOverrides = await buildGasOverrides({ promptSwitch: true });
     const tx = await registry.createCourse(metadataCID, priceWei, gasOverrides);
+    onStatus?.('submitted', tx.hash);
     const receipt = await tx.wait();
+    onStatus?.('confirmed', tx.hash);
 
     return {
         txHash: tx.hash,
@@ -114,20 +187,26 @@ export const createCourseOnChain = async (metadataCID, priceWei) => {
     };
 };
 
-export const buyCourseOnChain = async (courseId, priceInMatic) => {
+export const buyCourseOnChain = async (courseId, priceInMatic, options = {}) => {
     if (!Number.isFinite(Number(courseId))) {
         throw new Error('Invalid course id.');
     }
 
-    const { purchase } = await getSignerContracts();
+    const onStatus = typeof options.onStatus === 'function' ? options.onStatus : null;
+
+    onStatus?.('switch-network');
+    const { purchase } = await getSignerContracts({ promptSwitch: true });
     const priceWei =
         typeof priceInMatic === 'bigint'
             ? priceInMatic
             : parseEther(String(priceInMatic));
 
-    const gasOverrides = await buildGasOverrides();
+    onStatus?.('signing');
+    const gasOverrides = await buildGasOverrides({ promptSwitch: true });
     const tx = await purchase.buyCourse(courseId, { value: priceWei, ...gasOverrides });
+    onStatus?.('submitted', tx.hash);
     await tx.wait();
+    onStatus?.('confirmed', tx.hash);
 
     return {
         txHash: tx.hash,
@@ -143,11 +222,11 @@ export const hasAccessOnChain = async (courseId, walletAddress) => {
         throw new Error('Invalid wallet address.');
     }
 
-    const { purchase } = await getReadOnlyContracts();
+    const { purchase } = await getReadOnlyContracts({ promptSwitch: false });
     return purchase.hasAccess(courseId, walletAddress);
 };
 
-export const mintCertificateOnChain = async (courseId, studentAddress, metadataURI) => {
+export const mintCertificateOnChain = async (courseId, studentAddress, metadataURI, options = {}) => {
     if (!Number.isFinite(Number(courseId))) {
         throw new Error('Invalid course id.');
     }
@@ -160,10 +239,16 @@ export const mintCertificateOnChain = async (courseId, studentAddress, metadataU
         throw new Error('Metadata URI is required to mint a certificate.');
     }
 
-    const { certificate } = await getSignerContracts();
-    const gasOverrides = await buildGasOverrides();
+    const onStatus = typeof options.onStatus === 'function' ? options.onStatus : null;
+
+    onStatus?.('switch-network');
+    const { certificate } = await getSignerContracts({ promptSwitch: true });
+    onStatus?.('signing');
+    const gasOverrides = await buildGasOverrides({ promptSwitch: true });
     const tx = await certificate.mintCertificate(studentAddress, courseId, metadataURI, gasOverrides);
+    onStatus?.('submitted', tx.hash);
     await tx.wait();
+    onStatus?.('confirmed', tx.hash);
 
     return {
         txHash: tx.hash,
