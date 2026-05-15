@@ -306,6 +306,24 @@ const publishedCoursesMongoApi = (mongoUri) => ({
           },
         );
 
+        // Update user's createdCourses in UserAccount if ownerWalletAddress is provided
+        const ownerWalletAddress = String(normalizedCourse.ownerWalletAddress ?? '').trim();
+        if (ownerWalletAddress) {
+          const userAccount = await UserAccount.findOne({ walletAddress: ownerWalletAddress });
+          if (userAccount) {
+            const courseIdStr = String(normalizedCourse.id);
+            // Only add if not already in createdCourses
+            if (!userAccount.createdCourses.some(c => String(c.id) === courseIdStr)) {
+              userAccount.createdCourses.push({
+                id: courseIdStr,
+                title: normalizedCourse.title,
+                publishedAt: normalizedCourse.publishedAt,
+              });
+              await userAccount.save();
+            }
+          }
+        }
+
         res.statusCode = 200;
         res.end(
           JSON.stringify({
